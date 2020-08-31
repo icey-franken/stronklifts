@@ -1,33 +1,15 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Exercises', {
+    return queryInterface.createTable('WorkingWeights', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      workoutId: {
-				type: Sequelize.INTEGER,
-				references: {model:'Workouts'}
-      },
-      exerciseNameId: {
-				type: Sequelize.INTEGER,
-				references: {model: 'ExerciseNames'}
-      },
-      exerciseOrder: {
+      weight: {
         type: Sequelize.INTEGER
-      },
-      numSets: {
-        type: Sequelize.INTEGER
-      },
-      numRepsGoal: {
-        type: Sequelize.INTEGER
-      },
-      workingWeightId: {
-				type: Sequelize.INTEGER,
-				references: {model: 'WorkingWeights'}
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +24,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Exercises');
+    return queryInterface.dropTable('WorkingWeights');
   }
 };
