@@ -18,13 +18,26 @@ export const login = (username, password) => {
 				'Content-Type': 'application/json',
 				'XSRF-TOKEN': Cookies.get('XSRF-TOKEN'),
 			},
-			body: JSON.stringify({username,password});
+			body: JSON.stringify({username,password}),
 		});
 		res.data = await res.json()//this should be everything EXCEPT hashed password (see user model)
 		//now we put user data in our redux store.
 		if(res.ok) {
-			dispatch(setUser(res.data));
+			dispatch(setUser(res.data.user));
 		}
 		return res;
 	};
 };
+
+//test out actions on store
+// window.login = login;
+
+export default function authReducer(state={}, action) {
+	Object.freeze(state);//possibly unnecessary
+	switch(action.type) {
+		case SET_USER:
+			return action.user;
+		default:
+			return state;
+	}
+}
