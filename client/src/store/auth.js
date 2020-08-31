@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';//this module allows us to grab cookies
 const SET_USER = 'auth/SET_USER';
 
 // action pojo creator function
-const setUser = (user) => ({type:SET_USER,user});
+export const setUser = (user) => ({type:SET_USER,user});
 
 //thunk action creator
 export const login = (username, password) => {
