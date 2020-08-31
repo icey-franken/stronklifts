@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   User.associate = function (models) {
-    User.hasMany(models.Workouts, {
+    User.hasMany(models.Workout, {
       foreignKey: "userId",
     });
   };

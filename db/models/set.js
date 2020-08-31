@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Sets = sequelize.define(
-    "Sets",
+  const Set = sequelize.define(
+    "Set",
     {
       exerciseId: {
         type: DataTypes.INTEGER,
@@ -21,10 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Sets.associate = function (models) {
-    Sets.belongsTo(models.Exercises, {
+  Set.associate = function (models) {
+    Set.belongsTo(models.Exercise, {
       foreignKey: "exerciseId",
     });
   };
-  return Sets;
+  return Set;
 };

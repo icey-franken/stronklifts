@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       workoutId: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				references: {model:'Workouts'}
       },
       exerciseName: {
         type: Sequelize.STRING
@@ -28,11 +29,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+				defaultValue: Sequelize.fn("NOW"),
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+				defaultValue: Sequelize.fn("NOW"),
       }
     });
   },

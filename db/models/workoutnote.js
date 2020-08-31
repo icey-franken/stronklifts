@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const WorkoutNotes = sequelize.define(
-    "WorkoutNotes",
+  const WorkoutNote = sequelize.define(
+    "WorkoutNote",
     {
       workoutId: {
         type: DataTypes.INTEGER,
@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  WorkoutNotes.associate = function (models) {
-    WorkoutNotes.belongsTo(models.Workouts, {
+  WorkoutNote.associate = function (models) {
+    WorkoutNote.belongsTo(models.Workout, {
       foreignKey: "workoutId",
     });
   };
-  return WorkoutNotes;
+  return WorkoutNote;
 };
