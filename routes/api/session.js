@@ -43,8 +43,10 @@ router.put(
       return res.json({
         user,
       });
-    }
-    return next(new Error('Invalid credentials'));
+		}
+		const err = new Error('Invalid credentials');
+		err.status = 422;
+    return next(err);
   })
 );
 
