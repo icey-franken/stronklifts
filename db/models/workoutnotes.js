@@ -1,11 +1,26 @@
-'use strict';
+"use strict";
 module.exports = (sequelize, DataTypes) => {
-  const WorkoutNotes = sequelize.define('WorkoutNotes', {
-    workoutId: DataTypes.INTEGER,
-    description: DataTypes.TEXT
-  }, {});
-  WorkoutNotes.associate = function(models) {
-    // associations can be defined here
+  const WorkoutNotes = sequelize.define(
+    "WorkoutNotes",
+    {
+      workoutId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Workouts",
+        },
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+    },
+    {}
+  );
+  WorkoutNotes.associate = function (models) {
+    WorkoutNotes.belongsTo(models.Workouts, {
+      foreignKey: "workoutId",
+    });
   };
   return WorkoutNotes;
 };
