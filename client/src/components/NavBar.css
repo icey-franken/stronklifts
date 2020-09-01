@@ -5,9 +5,11 @@ nav {
 	height: 40px;
 	display: flex;
 	background-color: rgb(210,46,46);
+	margin-bottom: 18.76px;
+	padding: 0 6px;
 }
 
-.rando{
+.nav{
 	color: white;
 	background-color: rgb(210,46,46);
 	text-decoration: none;
@@ -17,9 +19,12 @@ nav {
 	/* line-height: 100%; */
 	/* text-align: center; */
 	padding: 8px 16px;
+	white-space: nowrap;
+	/* flex-wrap: nowrap; */
+	margin: 0 6px;
 }
 
-.activeRando {
+.navActive {
 	background-color:rgb(240,46,46);
 	border-bottom: 2px white solid;
 }
