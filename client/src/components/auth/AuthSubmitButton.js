@@ -26,6 +26,7 @@ const colors = {
 const useStyles = makeStyles({
   //define different ways we can style the button
   root: {
+		"font-size": "1.4rem",
     color: colors.text,
 		backgroundColor: colors.backgroundColor, //I think colors has our defaults e.g. color and then here we define customs e.g. background color for root. Root is on button - some material UI stuff
 		"&:hover": {

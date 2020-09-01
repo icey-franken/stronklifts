@@ -34,14 +34,12 @@ export default function LoginPage() {
   return (
 		<Container
 			fixed
-			maxWidth="sm"
+			maxWidth="xs"
 			classes={{ root: classes.container }}
 		>
       <SLLogo />
-      <h1>Log in here if you want to Liiiift!</h1>
-      {/* <Grid container flexDirection='column' justify='center' alignItems='center' spacing={10}> */}
+      <h1>Log in to Stronklifts</h1>
         <form onSubmit={handleSubmit}>
-          {/* <Grid container item spacing={3}> */}
             <TextField
               variant="filled"
               label="Username"
@@ -51,8 +49,6 @@ export default function LoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               required
             />
-          {/* </Grid> */}
-          {/* <Grid item> */}
             <TextField
               variant="filled"
               label="Password"
@@ -62,12 +58,8 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          {/* </Grid> */}
-          {/* <Grid item> */}
             <AuthSubmitButton>Get Yoked</AuthSubmitButton>
-          {/* </Grid> */}
         </form>
-      {/* </Grid> */}
     </Container>
   );
 }
