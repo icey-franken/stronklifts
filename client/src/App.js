@@ -6,11 +6,11 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { setUser } from "./store/auth";
 import { useDispatch } from "react-redux";
-
 import { Container } from "@material-ui/core";
-
+import { AuthNavBar, RandoNavBar } from "./components/NavBar";
 import Footer from "./components/Footer";
-// import "./App.css";
+import "./App.css";
+
 //pass in an object with overrides - override MuiCssBaseline
 const theme = createMuiTheme({
   overrides: {
@@ -21,10 +21,10 @@ const theme = createMuiTheme({
         },
       },
     },
-    palette: {
-      primary: {
-        main: "#D22E2E",
-      },
+  },
+  palette: {
+    primary: {
+      main: "#D22E2E",
     },
   },
 });
@@ -32,6 +32,7 @@ const theme = createMuiTheme({
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
+  const needLogin = useSelector((state) => !state.auth.id);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -53,15 +54,15 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          {/* <Container className="pageContainer" fluid="true" maxWidth={false}> */}
-
-          {/* <div className="content"> */}
-          <Pages />
-          {/* </div> */}
-          {/* <div className="footer"> */}
-          <Footer />
-          {/* </div> */}
-          {/* </Container> */}
+          <Container className="pageContainer" fluid="true" maxWidth={false}>
+            {needLogin ? <RandoNavBar /> : <AuthNavBar />}
+            <div className="content">
+              <Pages />
+            </div>
+            <div className="footer">
+              <Footer />
+            </div>
+          </Container>
         </BrowserRouter>
       </ThemeProvider>
     </>
