@@ -30,6 +30,7 @@ export const login = (username, password) => {
 			dispatch(setUser(res.data.user));
 		}
 		return res;
+		//instead should I put errors on user object, then in store I can have an error and grab the error array and display?
 	};
 };
 

@@ -8,3 +8,9 @@ form {
 	flex-direction: column;
 	width: 100%;
 }
+
+.errorsList{
+	margin-top: 0px;
+	margin-bottom: 18.76px;
+	color: red;
+}
