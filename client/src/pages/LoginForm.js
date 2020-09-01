@@ -6,14 +6,14 @@ import AuthSubmitButton from "../components/auth/AuthSubmitButton";
 import Errors from '../components/auth/Errors';
 
 //changing textfield formatting
-import { makeStyles } from "@material-ui/core/styles";
-const useStyles = makeStyles({
-  textfield: {
-    display: "flex",
-    flexDirection: "column",
-		alignItems: "center",
-	},
-});
+// import { makeStyles } from "@material-ui/core/styles";
+// const useStyles = makeStyles({
+//   textfield: {
+//     display: "flex",
+//     flexDirection: "column",
+// 		alignItems: "center",
+// 	},
+// });
 
 //need to remove autofill formatting from textfield boxes for login and signup
 // TextField: {
@@ -43,7 +43,7 @@ export default function LoginForm() {
     <>
       <h1>Log in to Stronklifts</h1>
 			{errors ? <Errors errors={errors}/> : null}
-      <form onSubmit={handleSubmit} autocomplete="off">
+      <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
           variant="outlined"
           label="Username"

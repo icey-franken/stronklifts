@@ -7,7 +7,15 @@ nav {
 	background-color: rgb(210,46,46);
 	margin-bottom: 18.76px;
 	padding: 0 6px;
+
+}
+
+.randoNav {
 	justify-content: flex-end;
+}
+
+.userNav {
+	justify-content: space-around;
 }
 
 .nav{

@@ -7,7 +7,7 @@ import "./NavBar.css";
 
 export function AuthNavBar() {
   return (
-    <nav>
+    <nav className='userNav'>
       <NavLink className="nav" activeClassName="navActive" exact to="/">
         Home
       </NavLink>
@@ -27,7 +27,7 @@ export function AuthNavBar() {
 
 export function RandoNavBar() {
   return (
-    <nav>
+    <nav className='randoNav'>
       <NavLink className="nav" activeClassName="navActive" to="/signup">
         Sign Up
       </NavLink>

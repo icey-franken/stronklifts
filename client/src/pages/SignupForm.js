@@ -28,7 +28,7 @@ export default function SignupForm() {
     <>
       <h1>Sign up for Stronklifts</h1>
 			{errors ? <Errors errors={errors}/> : null}
-      <form onSubmit={handleSubmit} autocomplete="off">
+      <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
           variant="outlined"
           label="Username"
