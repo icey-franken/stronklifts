@@ -1,1 +1,10 @@
 /* only need if I choose to use pure css instead of material ui */
+.lg-logo {
+	width: 100px;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	width: 80%;
+}

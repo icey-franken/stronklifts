@@ -6,7 +6,7 @@ import LoginPage from './LoginPage';
 export default function Pages() {
   return (
     <>
-			<Route exact path='/' component={HomePage} />
+			{/* <Route exact path='/' component={HomePage} /> */}
       <Route path='/login' component={LoginPage} />
     </>
   );

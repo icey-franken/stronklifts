@@ -1,9 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { setUser } from "./store/auth";
 import { useDispatch } from "react-redux";
+
+//pass in an object with overrides - override MuiCssBaseline
+const theme = createMuiTheme({
+  overrides: {
+    MuiCssBaseline: {
+      "@global": {
+        body: {
+          backgroundColor: "pink",
+        },
+      },
+    },
+    // MuiTextField: {
+    //   text: {
+    //     color: "#000000",
+    //   },
+    // },
+    // palette: {
+    //   primary: {
+    //     main: "#000000",
+    //   },
+    // },
+  },
+});
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -26,10 +50,12 @@ function App() {
 
   return (
     <>
-      <CssBaseline />
-      <BrowserRouter>
-        <Pages />
-      </BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <Pages />
+        </BrowserRouter>
+      </ThemeProvider>
     </>
   );
 }
