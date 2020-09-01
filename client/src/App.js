@@ -15,18 +15,13 @@ const theme = createMuiTheme({
           backgroundColor: "pink",
         },
       },
-    },
-    // MuiTextField: {
-    //   text: {
-    //     color: "#000000",
-    //   },
-    // },
-    // palette: {
-    //   primary: {
-    //     main: "#000000",
-    //   },
-    // },
-  },
+		},
+	},
+	palette: {
+		primary: {
+			main: "#D22E2E"
+			}
+		},
 });
 
 function App() {

@@ -43,7 +43,7 @@ export default function LoginForm() {
     <>
       <h1>Log in to Stronklifts</h1>
 			{errors ? <Errors errors={errors}/> : null}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autocomplete="off">
         <TextField
           variant="outlined"
           label="Username"
