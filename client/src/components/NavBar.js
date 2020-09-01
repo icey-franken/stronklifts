@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import LogoutButton from "../components/LogoutButton";
-import {Button} from '@material-ui/core';
+import './NavBar.css';
 
 export function AuthNavBar() {
   return (
@@ -19,8 +19,20 @@ export function RandoNavBar() {
   return (
     <nav>
       <h1>navbar for losers</h1>
-			<NavLink to='/login'><Button>Log In</Button></NavLink>
-			<NavLink to='/signup'><Button>Sign Up</Button></NavLink>
+      <NavLink
+        className="randoNavLink"
+        activeClassName="randoAuthNavLink"
+        to="/login"
+      >
+        Log In
+      </NavLink>
+      <NavLink
+        className="randoNavLink"
+        activeClassName="randoAuthNavLink"
+        to="/signup"
+      >
+        Sign Up
+      </NavLink>
     </nav>
   );
 }

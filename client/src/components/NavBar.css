@@ -1,0 +1,7 @@
+.randoNavLink,
+.activeRandoNavLink {
+	color: "white";
+  background-color: "rgb(210,46,46)";
+}
+/* backgroundover: "rgb(240,46,46)",
+backgroundDisabled: "rgba(210,46,46,0.5)", */
