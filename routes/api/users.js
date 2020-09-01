@@ -1,5 +1,5 @@
-const express = require('express');
-const asyncHandler = require('express-async-handler');
+const express = require("express");
+const asyncHandler = require("express-async-handler");
 const { check } = require("express-validator");
 
 const { User } = require("../../db/models");
@@ -9,26 +9,34 @@ const {
   jwtConfig: { expiresIn },
 } = require("../../config");
 
-
 const validateSignup = [
-  check("username", "must be between 5 and 70 characters")
-    .isLength({ min: 5, max: 70 }),
-  check("email", "must be a valid email")
-    .exists()
-    .isEmail(),
+  check("username", "must be between 5 and 55 characters").isLength({
+    min: 5,
+    max: 55,
+  }),
+  check("email", "must be a valid email").exists().isEmail(),
+  check("email", "must be between 3 and 255 characters").isLength({
+    min: 3,
+    max: 255,
+  }),
   check("password", "must be 6 or more characters")
     .exists()
     .isLength({ min: 6, max: 70 }),
-  check('confirmPassword', 'must have the same value as the password field')
-    .custom((value, { req }) => value === req.body.password)
+  check(
+    "confirmPassword",
+    "must have the same value as the password field"
+  ).custom((value, { req }) => value === req.body.password),
 ];
 
 const router = express.Router();
 
-router.get('/', asyncHandler(async function (_req, res, _next) {
-  const users = await User.findAll();
-  res.json({ users });
-}));
+router.get(
+  "/",
+  asyncHandler(async function (_req, res, _next) {
+    const users = await User.findAll();
+    res.json({ users });
+  })
+);
 
 router.post(
   "/",

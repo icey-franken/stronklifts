@@ -1,0 +1,26 @@
+/* only need if I choose to use pure css instead of material ui */
+.lg-logo {
+  width: 100px;
+}
+
+h1 {
+  text-align: center;
+}
+
+form,
+TextField:-webkit-autofill
+ {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+div.MuiInputBase-root {
+	margin: 0 0 8px;
+}
+
+.errorsList {
+  margin-top: 0px;
+  margin-bottom: 18.76px;
+  color: red;
+}

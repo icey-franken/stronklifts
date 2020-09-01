@@ -4,15 +4,18 @@ const { check } = require("express-validator");
 
 const { User } = require("../../db/models");
 const { handleValidationErrors } = require("../util/validation");
-const { requireUser, generateToken, AuthenticationError } = require("../util/auth");
-const { jwtConfig: { expiresIn }} = require('../../config');
+const {
+  requireUser,
+  generateToken,
+  AuthenticationError,
+} = require("../util/auth");
+const {
+  jwtConfig: { expiresIn },
+} = require("../../config");
 
 const router = express.Router();
 
-const validateLogin = [
-  check("username").exists(),
-  check("password").exists(),
-];
+const validateLogin = [check("username").exists(), check("password").exists()];
 
 router.get(
   "/",
@@ -20,7 +23,7 @@ router.get(
   asyncHandler(async function (req, res, next) {
     if (req.user) {
       return res.json({
-        user: req.user
+        user: req.user,
       });
     }
     next(new AuthenticationError());
@@ -44,7 +47,17 @@ router.put(
         user,
       });
     }
-    return next(new Error('Invalid credentials'));
+    const err = new Error("Invalid credentials");
+    err.status = 422;
+    return next(err);
+  })
+);
+
+router.delete(
+  "/",
+  asyncHandler(async (req, res) => {
+    res.clearCookie("token");
+    res.json({ message: "success" });
   })
 );
 

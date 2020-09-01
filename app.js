@@ -21,8 +21,13 @@ app.use(cookieParser())
 
 
 // Security Middleware
-app.use(cors({ origin: true }));
-app.use(helmet({ hsts: false }));
+if(process.env.NODE_ENV === 'production') {
+	app.use(cors({ origin: false }));
+	app.use(helmet({ hsts: true }));
+} else {//the following is NOT included in S-M's slack note - these were included in original file not in any conditional statement. May need to delete this else statement.
+	app.use(cors({ origin: true }));
+	app.use(helmet({ hsts: false }));
+}
 app.use(
   csurf({
     cookie: {
