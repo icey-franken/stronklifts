@@ -28,7 +28,7 @@ router.get(
       attributes: ["workoutDate"],
       limit: 10,
       order: [
-        ["workoutDate", "asc"],
+        ["workoutDate", "desc"],//out of order in postman but correct order in chrome dev tools?
         [Exercise, "exerciseOrder", "asc"],
         [Exercise, Set, "setOrder", "asc"],
       ],

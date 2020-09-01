@@ -16,7 +16,7 @@ const store = configureStore();
 
 //add store to window if in development
 if (process.env.NODE_ENV !== "production") window.store = store;
-debugger;
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

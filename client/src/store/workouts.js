@@ -1,30 +1,30 @@
 //action types
-const SET_WORKOUTS = '/workout/SET_WORKOUTS'
+const GET_WORKOUTS = '/workout/GET_WORKOUTS'
 
 
 //action pojo creator function
-export const setWorkouts = (workouts) => ({type: SET_WORKOUTS, workouts});
+export const getWorkouts = (workouts) => ({type: GET_WORKOUTS, workouts});
 
 
 
 
 //thunk action creator
-export const getWorkouts = (userId) => {
+export const getWorkoutsThunk = (userId) => {
 	return async dispatch => {
 		const res = await fetch(`/api/workouts/${userId}`);
 		res.data = await res.json();
-		if(res.ok) dispatch(setWorkouts(res.data.workouts));
+		if(res.ok) dispatch(getWorkouts(res.data.workouts));
 		return res;
 	}
 }
 
-window.getWorkouts = getWorkouts;
+window.getWorkoutsThunk = getWorkoutsThunk;
 
 //workout reducer
 export default function workoutReducer(state={}, action) {
 	Object.freeze(state);
 	switch(action.type) {
-		case SET_WORKOUTS:
+		case GET_WORKOUTS:
 			return action.workouts;
 		default:
 			return state;
