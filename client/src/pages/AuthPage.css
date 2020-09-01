@@ -7,10 +7,16 @@ h1 {
   text-align: center;
 }
 
-form {
+form,
+TextField:-webkit-autofill
+ {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+div.MuiInputBase-root {
+	margin: 0 0 8px;
 }
 
 .errorsList {

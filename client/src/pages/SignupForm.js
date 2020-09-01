@@ -30,7 +30,7 @@ export default function SignupForm() {
 			{errors ? <Errors errors={errors}/> : null}
       <form onSubmit={handleSubmit}>
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Username"
           type="text"
           name="username"
@@ -39,7 +39,7 @@ export default function SignupForm() {
           required
         />
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Email Address"
           type="email"
           name="email"
@@ -48,7 +48,7 @@ export default function SignupForm() {
           required
         />
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Password"
           type="password"
           name="password"
@@ -57,7 +57,7 @@ export default function SignupForm() {
           required
         />
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Confirm Password"
           type="password"
           name="confirmPassword"

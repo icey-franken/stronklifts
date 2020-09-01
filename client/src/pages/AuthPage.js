@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-		alignItems: "center",
+    alignItems: "center",
   },
 });
 
@@ -24,7 +24,7 @@ export default function AuthPage() {
   //changed to isLoggedIn for semantic reasons
   if (isLoggedIn) return <Redirect to="/" />;
   // not sure why we have root in classes - is it because container has a class of root put on it by MUI?
-	const signingUp = match.path === "/signup";
+  const signingUp = match.path === "/signup";
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
       <SLLogo />

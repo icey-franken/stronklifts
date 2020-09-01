@@ -28,11 +28,11 @@ export function AuthNavBar() {
 export function RandoNavBar() {
   return (
     <nav>
-      <NavLink className="nav" activeClassName="navActive" to="/login">
-        Log In
-      </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/signup">
         Sign Up
+      </NavLink>
+      <NavLink className="nav" activeClassName="navActive" to="/login">
+        Log In
       </NavLink>
     </nav>
   );

@@ -5,11 +5,30 @@ import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "../components/auth/AuthSubmitButton";
 import Errors from '../components/auth/Errors';
 
+//changing textfield formatting
+import { makeStyles } from "@material-ui/core/styles";
+const useStyles = makeStyles({
+  textfield: {
+    display: "flex",
+    flexDirection: "column",
+		alignItems: "center",
+	},
+});
+
+//need to remove autofill formatting from textfield boxes for login and signup
+// TextField: {
+// 	color: "orange",
+// 	"-webkit-autofill": "none",
+// 	"-webkit-autofill:hover": "none",
+// 	// input:-webkit-autofill:focus,
+// 	// input:-webkit-autofill:active
+
+
 export default function LoginForm() {
   const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState('');
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,22 +45,22 @@ export default function LoginForm() {
 			{errors ? <Errors errors={errors}/> : null}
       <form onSubmit={handleSubmit}>
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Username"
           type="text"
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
+					required
         />
         <TextField
-          variant="filled"
+          variant="outlined"
           label="Password"
           type="password"
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+					required
         />
         <AuthSubmitButton>Get Yoked</AuthSubmitButton>
       </form>
