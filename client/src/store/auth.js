@@ -3,9 +3,11 @@ import Cookies from 'js-cookie';//this module allows us to grab cookies
 
 //action type
 const SET_USER = 'auth/SET_USER';
+const REMOVE_USER = 'auth/REMOVE_USER';
 
 // action pojo creator function
 export const setUser = (user) => ({type:SET_USER,user});
+export const removeUser = () => ({type: REMOVE_USER});
 
 //thunk action creator
 export const login = (username, password) => {
@@ -29,6 +31,15 @@ export const login = (username, password) => {
 	};
 };
 
+export const logout = () => async (dispatch) => {
+	const res = await fetch(`/api/session`, {method: 'delete', headers: {'XSRF-TOKEN': Cookies.get('XSRF-TOKEN')}});
+	res.data = await res.json();
+	if(res.ok) {
+		dispatch(removeUser());
+	}
+	return res;
+}
+
 //test out actions on store
 // window.login = login;
 
@@ -37,6 +48,8 @@ export default function authReducer(state={}, action) {
 	switch(action.type) {
 		case SET_USER:
 			return action.user;
+		case REMOVE_USER:
+			return {};
 		default:
 			return state;
 	}
