@@ -11,7 +11,7 @@ export default function LogoutButton () {
 
 	const handleClick = () => {dispatch(AuthActions.logout())};
 
-	// if(loggedOut) return <Redirect to='/login' />;
+	if(loggedOut) return <Redirect to='/login' />;
 
 	return (
 		<Button onClick={handleClick}>Logout</Button>

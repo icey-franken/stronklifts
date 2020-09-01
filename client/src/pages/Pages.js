@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Switch, NavLink } from "react-router-dom";
-import LoginPage from "./LoginPage";
+import AuthPage from "./AuthPage";
 import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
 import Homepage from './Homepage';
-import NavBar from '../components/NavBar';
-
+import {AuthNavBar, RandoNavBar} from '../components/NavBar';
+import SignupForm from './SignupForm';
 //create protected routes!!
 export default function Pages() {
 	const needLogin = useSelector((state) => !state.auth.id);
@@ -13,9 +13,9 @@ export default function Pages() {
   return (
     <>
 		{/* hacky way to only show navbar if logged in */}
-			{needLogin ? null : <NavBar/>}
+			{needLogin ? <RandoNavBar/> : <AuthNavBar/>}
       <Switch>
-        <Route path="/login" component={LoginPage} />
+        <Route path={['/login', '/signup']} component={AuthPage} />
         <ProtectedRoute
           path="/"
           exact={true}
