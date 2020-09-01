@@ -25,7 +25,6 @@ export default function AuthPage() {
   if (isLoggedIn) return <Redirect to="/" />;
   // not sure why we have root in classes - is it because container has a class of root put on it by MUI?
 	const signingUp = match.path === "/signup";
-	console.log(signingUp);
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
       <SLLogo />

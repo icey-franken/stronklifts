@@ -18,17 +18,16 @@ export function AuthNavBar() {
 export function RandoNavBar() {
   return (
     <nav>
-      <h1>navbar for losers</h1>
       <NavLink
-        className="randoNavLink"
-        activeClassName="randoAuthNavLink"
+        className="rando"
+        activeClassName="activeRando"
         to="/login"
       >
         Log In
       </NavLink>
       <NavLink
-        className="randoNavLink"
-        activeClassName="randoAuthNavLink"
+        className="rando"
+        activeClassName="activeRando"
         to="/signup"
       >
         Sign Up
