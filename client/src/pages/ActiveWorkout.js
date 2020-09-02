@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {getWorkoutsThunk} from '../store/workouts';
 import {useEffect} from 'react';
 
-export default function Homepage() {
+export default function ActiveWorkout() {
 	const workouts = useSelector((state) => state.workouts);
 	const dispatch = useDispatch();
 	const userId = useSelector((state) => state.auth.id);

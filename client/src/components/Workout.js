@@ -35,7 +35,7 @@ export default function Workout({ workout }) {
     <div className="workout-container">
       {/* fix workout date formatting in database */}
       <div className="workout__info-container">
-        <div className="workout__title">5x5 A Day</div>
+        <div className="workout__title">5x5 - A Day</div>
         <div className="workout__date">{dummyDate}</div>
       </div>
       <div className="workout__exercises">

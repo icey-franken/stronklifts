@@ -3,7 +3,8 @@ import { Route, Switch } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
-import Homepage from "./Homepage";
+import ActiveWorkout from "./ActiveWorkout";
+import WorkoutHistoryPage from './WorkoutHistoryPage';
 
 //create protected routes!!
 export default function Pages() {
@@ -20,7 +21,13 @@ export default function Pages() {
           path="/"
           exact={true}
           needLogin={needLogin}
-          component={Homepage}
+          component={WorkoutHistoryPage}
+        />
+				<ProtectedRoute
+          path="/workout"
+          exact={true}
+          needLogin={needLogin}
+          component={ActiveWorkout}
         />
       </Switch>
     </>

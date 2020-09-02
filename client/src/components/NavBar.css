@@ -1,11 +1,18 @@
 /* backgroundover: "rgb(240,46,46)",
 backgroundDisabled: "rgba(210,46,46,0.5)", */
 .navbar {
+	position: fixed;
+	top: 0;
+	z-index: 1;
 	width: 100%;
 	height: 5vw;
 	display: flex;
 	background-color: rgb(210,46,46);
 	padding: 0 6px;
+	/* border-bottom: black 3px solid; */
+	/* rbg(210,46,46); */
+	box-shadow: 0px 0.01vw 0.5vw black;
+	/* border: 5px solid black; */
 }
 
 .randoNav {
@@ -36,7 +43,7 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 }
 
 .nav:hover {
-	border-bottom: 0.6vw white solid;
+	border-bottom: 0.5vw white solid;
 /* wanted to make text "pop out" on hover BUT since width changes, then all the nav elements wiggle and I don't like that */
 	/* font-size: 3vw; */
 }
