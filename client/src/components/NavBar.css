@@ -1,7 +1,7 @@
 /* backgroundover: "rgb(240,46,46)",
 backgroundDisabled: "rgba(210,46,46,0.5)", */
 .navbar {
-	position: fixed;
+	position: sticky;
 	top: 0;
 	z-index: 1;
 	width: 100%;

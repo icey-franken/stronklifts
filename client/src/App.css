@@ -1,10 +1,10 @@
 .pageContainer {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-	margin-top: 5vw;
-	padding-top: 0.01vw;
+  /* padding-left: 0px !important; */
+  /* padding-right: 0px !important; */
+	/* padding-top: 0.01vw; */
   position: relative;
-  /* unnecessary to have min-height I think */
+	/* unnecessary to have min-height I think */
+	/* NO - this keeps footer at exactly the bottom of the page. */
   min-height: 100vh;
 }
 
