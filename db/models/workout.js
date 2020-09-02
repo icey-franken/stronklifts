@@ -11,10 +11,20 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       workoutDate: {
-				type: DataTypes.DATE,
-				allowNull: false,
-				defaultValue: sequelize.fn("NOW"),
+				type: DataTypes.DATEONLY,
+				allowNull: true,
+				defaultValue: null,
 			},
+			workoutComplete: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false
+			},
+			workoutSplit: {
+				type: DataTypes.STRING,
+				allowNull: true,
+				defaultValue: null,
+			}
     },
     {}
   );

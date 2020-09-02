@@ -15,10 +15,10 @@ export default function ActiveWorkout() {
 	}, [dispatch, userId]);
 
 	if(!workouts.keys) return null;//chnage this to some "looks like you haven't done a damn thing" page
-
+	console.log(workouts);
   return (
     <>
-      <h1>Welcome to the home page</h1>
+      <h1>Welcome to the active workout page</h1>
       {workouts.map((workout, index) => {
 				return <Workout key={index} workout={workout} />;
       })}

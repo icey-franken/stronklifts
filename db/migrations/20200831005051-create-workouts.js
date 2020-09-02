@@ -13,8 +13,20 @@ module.exports = {
 				references: { model: 'Users'}
       },
       workoutDate: {
-        type: Sequelize.DATE
-      },
+				type: Sequelize.DATEONLY,
+				allowNull: true,
+				defaultValue: null,
+			},
+			workoutComplete: {
+				type: Sequelize.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
+			workoutSplit:{
+				type: Sequelize.STRING,
+				allowNull: true,
+				defaultValue: null,
+			},
       createdAt: {
         allowNull: false,
 				type: Sequelize.DATE,

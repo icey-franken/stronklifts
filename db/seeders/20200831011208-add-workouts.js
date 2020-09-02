@@ -1,23 +1,36 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-		return queryInterface.bulkInsert('Workouts', [{
-			userId: 1,
-			workoutDate: "2020-08-31T17:37:01.548Z",
-		},
-		{
-			userId: 1,
-			workoutDate: "2020-08-29T17:37:01.548Z",
-		},
-		{
-			userId: 1,
-			workoutDate: "2020-08-27T17:37:01.548Z",
-		}
-	], {});
+    return queryInterface.bulkInsert(
+      "Workouts",
+      [
+        {
+          userId: 1,
+          workoutDate: '2020-08-27',
+          workoutComplete: true,
+          workoutSplit: "A",
+        },
+        {
+					userId: 1,
+					workoutDate: '2020-08-29',
+          workoutComplete: true,
+          workoutSplit: "B",
+
+        },
+        {
+					userId: 1,
+          workoutDate: '2020-08-31',
+          workoutComplete: false,
+          workoutSplit: "A",
+
+				},
+      ],
+      {}
+    );
   },
 
   down: (queryInterface, Sequelize) => {
-		return queryInterface.bulkDelete('Workouts', null, {});
-  }
+    return queryInterface.bulkDelete("Workouts", null, {});
+  },
 };
