@@ -20,7 +20,6 @@ export default function Exercise({ exercise }) {
 		else repsArr.push('emptySet');
 	}
 	console.log(repsArr, name);
-	debugger;
   return (
     <div className="exercise-container">
       <div className="exercise__info-container">

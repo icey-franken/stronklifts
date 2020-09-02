@@ -21,6 +21,8 @@
 	width: 20%;
 	font-weight: bold;
 	margin-right: 0.8vw;
+	font-size: 3vw;
+	line-height: 2.8vw;
 }
 
 
@@ -30,8 +32,6 @@
 	align-items: center;
 	/* height: 50%; */
 	width: 100%;
-	font-size: 3vw;
-	line-height: 2.8vw;
 	text-align: center;
 }
 

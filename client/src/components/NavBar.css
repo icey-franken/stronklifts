@@ -17,6 +17,7 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 }
 
 .nav{
+	box-sizing: border-box;
 	color: white;
 	background-color: rgb(210,46,46);
 	display: flex;
@@ -25,6 +26,7 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 	text-decoration: none;
 	font-size: 2.8vw;
 	height: 100%;
+	/* width: fit-content; */
 	/* line-height: 100%; */
 	/* text-align: center; */
 	padding: 0 2vw;
@@ -35,6 +37,8 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 
 .nav:hover {
 	border-bottom: 0.6vw white solid;
+/* wanted to make text "pop out" on hover BUT since width changes, then all the nav elements wiggle and I don't like that */
+	/* font-size: 3vw; */
 }
 
 .navActive {

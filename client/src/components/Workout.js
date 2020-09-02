@@ -28,19 +28,22 @@ export default function Workout({ workout }) {
     }
   }
   // console.log(exerciseArr);
-	//render an exercise component for each exercise in a workout
-	//change dummyDate to date after fixing formatting
-	const dummyDate = 'Wed, August 2nd 2020';
-	return (
+  //render an exercise component for each exercise in a workout
+  //change dummyDate to date after fixing formatting
+  const dummyDate = "Wed, August 2nd 2020";
+  return (
     <div className="workout-container">
-			{/* fix workout date formatting in database */}
-      <div className="workout__date">{dummyDate}</div>
+      {/* fix workout date formatting in database */}
+      <div className="workout__info-container">
+        <div className="workout__title">5x5 A Day</div>
+        <div className="workout__date">{dummyDate}</div>
+      </div>
       <div className="workout__exercises">
         {exerciseArr.map((exercise, index) => {
           return <Exercise key={index} exercise={exercise} />;
         })}
       </div>
-      <div className='workout__note'>Notes: {note}</div>
+      <div className="workout__note">Notes: {note}</div>
     </div>
   );
 }

@@ -14,12 +14,30 @@
  padding: 0.8vw 0;
 }
 
-.workout__date {
-	width: 100%;
+.workout__info-container{
 	height: 100%;
 	display: flex;
-	justify-content: center;
+	align-items: center;
+
+}
+
+.workout__title{
+	text-align: center;
+	font-size: 3vw;
+	line-height: 2.8vw;
+	width: 20%;
+	word-wrap: break-word;
+	padding: 0 0.8vw;
+}
+
+.workout__date {
+	width: 80%;
 	font-size: 5vw;
+	justify-content: center;
+	display: flex;
+
+	padding: 0 0.8vw;
+
 
 }
 
