@@ -28,7 +28,17 @@ module.exports = {
       workingWeightId: {
 				type: Sequelize.INTEGER,
 				references: {model: 'WorkingWeights'}
-      },
+			},
+			numFails: {
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 0,
+			},
+			wasSuccessful: {
+				type: Sequelize.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

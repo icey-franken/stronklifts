@@ -1,7 +1,7 @@
 import React from "react";
 import Workout from "../components/Workout";
 import { useDispatch, useSelector } from "react-redux";
-import {getWorkoutsThunk} from '../store/workouts';
+import {createWorkoutThunk} from '../store/workouts';
 import {useEffect} from 'react';
 
 export default function ActiveWorkout({workoutId=null}) {
@@ -20,7 +20,13 @@ export default function ActiveWorkout({workoutId=null}) {
 
 	//this should actually create a new workout
 	useEffect(()=>{
-		dispatch(getWorkoutsThunk(userId));
+		//need to get previous working weights for exercises that pertain to the split.
+		//we could define a workingWeight slice of state that has the working weight for each exercise, along with number of failures.
+		//pass in an exerciseInfo array of objects with:
+		//exercise name, working weight, number of failures
+		//we can save this in a slice of state called progress?
+		//in the thunk we can figure out the workoutDate to submit. Based on workoutSplit, a post request will be made to db. Have default values in db take care of as much as possible.
+		dispatch(createWorkoutThunk(userId, workoutSplit, progress));
 	}, [dispatch, userId]);
 console.log(Object.keys(workouts));
 	if(!Object.keys(workouts)) return null;//chnage this to some "looks like you haven't done a damn thing" page

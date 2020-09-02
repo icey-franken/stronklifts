@@ -35,7 +35,17 @@ module.exports = (sequelize, DataTypes) => {
 				references: {
 					model: 'WorkingWeights'
 				}
-      },
+			},
+			numFails: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+				defaultValue: 0,
+			},
+			wasSuccessful: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
     },
     {}
   );

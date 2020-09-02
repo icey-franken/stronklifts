@@ -17,11 +17,12 @@ export const getWorkoutsThunk = (userId) => {
     return res;
   };
 };
+window.getWorkoutsThunk = getWorkoutsThunk;
 
 //needs work - need to figure out what to send to backend route.
-export const createWorkoutThunk = (userId, workoutSplit) => {
+export const createWorkoutThunk = (userId, workoutSplit, progress) => {
   return async (dispatch) => {
-    const body = JSON.stringify({ workoutSplit });
+    const body = JSON.stringify({ workoutSplit, progress });
     const res = await fetch(`api/workouts/${userId}`, {
       method: "post",
       "Content-Type": "application/json",
@@ -33,8 +34,7 @@ export const createWorkoutThunk = (userId, workoutSplit) => {
     return res;
   };
 };
-
-window.getWorkoutsThunk = getWorkoutsThunk;
+window.createWorkoutThunk = createWorkoutThunk;
 
 //workout reducer
 export default function workoutReducer(state = {}, action) {
