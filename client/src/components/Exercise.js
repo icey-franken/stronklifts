@@ -11,14 +11,16 @@ export default function Exercise({ exercise }) {
 	// setArr.forEach((set) => {
   //   repsArr.push(set.numRepsActual);
 	// });
-	console.log(setArr);
+	// console.log(setArr);
 	for(let i = 0; i < setArr.length; i++) {
-		console.log(setArr[i])
 		repsArr.push(setArr[i].numRepsActual);
 	}
 	for(let i = setArr.length; i < 5; i++) {
-		repsArr.push('noSet');
+		if(name==='DEADLIFT')	repsArr.push('noSet');
+		else repsArr.push('emptySet');
 	}
+	console.log(repsArr, name);
+	debugger;
   return (
     <div className="exercise-container">
       <div className="exercise__info-container">
