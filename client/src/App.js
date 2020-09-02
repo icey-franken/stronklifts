@@ -6,7 +6,6 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { setUser } from "./store/auth";
 import { useDispatch } from "react-redux";
-import { Container } from "@material-ui/core";
 import { AuthNavBar, RandoNavBar } from "./components/NavBar";
 import Footer from "./components/Footer";
 import "./App.css";

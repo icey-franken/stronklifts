@@ -16,6 +16,7 @@ const useStyles = makeStyles({
   },
 });
 
+//remove material ui AS A BONUS - I like it how it is now so if it doesn't mess other things up, LEAVE IT
 export default function AuthPage() {
   const isLoggedIn = useSelector((state) => !!state.auth.id);
   const classes = useStyles();

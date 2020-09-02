@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import "./Workout.css";
 
 export default function Workout({ workout }) {
-  console.log(workout);
+  // console.log(workout);
   const { workoutDate: date, Exercises } = workout;
   let note;
   if (workout.WorkoutNote) {
@@ -21,33 +21,26 @@ export default function Workout({ workout }) {
       const {
         ExerciseName: { exerciseName },
         WorkingWeight: { weight },
-        numRepsGoal,
+        // numRepsGoal,
         numSets,
         Sets,
       } = Exercises[i];
-      exerciseArr.push([exerciseName, weight, numRepsGoal, numSets, Sets]);
+      exerciseArr.push([exerciseName, weight, Sets, numSets]);//can also push numRepsGoal, BUT THIS IS A 5X5 APP. We only push numSets for the case of deadlift, where there is only 1 set
     }
   }
-  console.log(exerciseArr);
+  // console.log(exerciseArr);
   //render an exercise component for each exercise in a workout
   return (
     <>
       <h1>I am a single workout component</h1>
-      <Grid container>
-        <Grid item xs={2}>
           <div>Workout Date: {date}</div>
-        </Grid>
-        <Grid container spacing={10}>
+					{/* <div className='exercise-view-container'> add class here (around exercise component) or in exercise component*/}
           {exerciseArr.map((exercise, index) => {
             return (
-              <Grid container item className="exerciseView">
-                <Exercise key={index} exercise={exercise} />
-              </Grid>
+							<Exercise key={index} exercise={exercise} />
             );
           })}
-        </Grid>
         <div>Workout Note: {note}</div>
-      </Grid>
     </>
   );
 }

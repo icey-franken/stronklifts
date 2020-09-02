@@ -1,27 +1,26 @@
 import React from "react";
-import { Grid, Container } from "@material-ui/core";
+import "./Exercise.css";
+import Set from './Set';
 
 export default function Exercise({ exercise }) {
   console.log(exercise);
-  const [name, weight, repGoal, numSets, setArr] = exercise;
-  const repsArr = [];
+  const [name, weight, setArr, numSets] = exercise; //can also grab these: repGoal, numSets, but we don't care because this is a 5X5 APP
+	const repsArr = [];
+	//consider changing how data comes from backend so we don't have to do this forEach
   setArr.forEach((set) => {
     repsArr.push(set.numRepsActual);
-  });
-  debugger;
+	});
   return (
-    <>
-      {/* <Container maxWidth={false}> */}
-      <Grid item xs={5}>
+    <div className="exercise-container">
+      <div className="exercise__info-container">
         <div>Exercise name: {name}</div>
-      </Grid>
-      <Grid container item xs={5}>
-        <div>Completed reps: {repsArr}</div>
         <div>Working weight: {weight} lbs</div>
-      </Grid>
-      {/* <div>Rep goal: {repGoal}</div>
-      <div>Number of sets: {numSets}</div> */}
-      {/* </Container> */}
-    </>
+      </div>
+      <div className="exercise__sets-container">
+        {repsArr.map((reps,index)=>{
+					return(<Set key={index} numRepsActual={reps}/>)
+				})}
+      </div>
+    </div>
   );
 }

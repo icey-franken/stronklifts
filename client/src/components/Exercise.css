@@ -1,0 +1,20 @@
+.exercise-container{
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	border: 1px solid red;
+	padding: 6px;
+	margin: 6px;
+}
+
+.exercise__info-container{
+	display: flex;
+	flex-direction: column;
+	border: 1px solid orange;
+
+}
+
+.exercise__sets-container{
+	border: 1px solid yellow;
+
+}
