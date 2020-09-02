@@ -23,23 +23,24 @@ export default function Workout({ workout }) {
         // numRepsGoal,
         numSets,
         Sets,
-			} = Exercises[i];
-      exerciseArr.push([exerciseName.toUpperCase(), weight, Sets, numSets]);//can also push numRepsGoal, BUT THIS IS A 5X5 APP. We only push numSets for the case of deadlift, where there is only 1 set
+      } = Exercises[i];
+      exerciseArr.push([exerciseName.toUpperCase(), weight, Sets, numSets]); //can also push numRepsGoal, BUT THIS IS A 5X5 APP. We only push numSets for the case of deadlift, where there is only 1 set
     }
   }
   // console.log(exerciseArr);
-  //render an exercise component for each exercise in a workout
-  return (
-    <>
-      <h1>I am a single workout component</h1>
-          <div>Workout Date: {date}</div>
-					{/* <div className='exercise-view-container'> add class here (around exercise component) or in exercise component*/}
-          {exerciseArr.map((exercise, index) => {
-            return (
-							<Exercise key={index} exercise={exercise} />
-            );
-          })}
-        <div>Workout Note: {note}</div>
-    </>
+	//render an exercise component for each exercise in a workout
+	//change dummyDate to date after fixing formatting
+	const dummyDate = 'Wed, August 2nd 2020';
+	return (
+    <div className="workout-container">
+			{/* fix workout date formatting in database */}
+      <div className="workout__date">{dummyDate}</div>
+      <div className="workout__exercises">
+        {exerciseArr.map((exercise, index) => {
+          return <Exercise key={index} exercise={exercise} />;
+        })}
+      </div>
+      <div className='workout__note'>Notes: {note}</div>
+    </div>
   );
 }

@@ -16,7 +16,7 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       "@global": {
         body: {
-          backgroundColor: "pink",
+          backgroundColor: "#efefef",
         },
       },
     },
