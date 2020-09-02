@@ -23,8 +23,8 @@ export default function Workout({ workout }) {
         // numRepsGoal,
         numSets,
         Sets,
-      } = Exercises[i];
-      exerciseArr.push([exerciseName, weight, Sets, numSets]);//can also push numRepsGoal, BUT THIS IS A 5X5 APP. We only push numSets for the case of deadlift, where there is only 1 set
+			} = Exercises[i];
+      exerciseArr.push([exerciseName.toUpperCase(), weight, Sets, numSets]);//can also push numRepsGoal, BUT THIS IS A 5X5 APP. We only push numSets for the case of deadlift, where there is only 1 set
     }
   }
   // console.log(exerciseArr);

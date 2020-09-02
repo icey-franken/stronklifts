@@ -16,6 +16,7 @@
 	width: 20%;
 }
 
+
 .exercise__name, .exercise__weight{
 	display: flex;
 	justify-content: center;
@@ -23,6 +24,9 @@
 	height: 50%;
 	width: 100%;
 	border: black 1px solid;
+	font-size: 3vw;
+	line-height: 2.8vw;
+	text-align: center;
 }
 
 
