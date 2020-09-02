@@ -54,7 +54,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          <Container className="pageContainer" fluid="true" maxWidth={false}>
+          <div className="pageContainer">
             {needLogin ? <RandoNavBar /> : <AuthNavBar />}
             <div className="content">
               <Pages />
@@ -62,7 +62,7 @@ function App() {
             <div className="footer">
               <Footer />
             </div>
-          </Container>
+          </div>
         </BrowserRouter>
       </ThemeProvider>
     </>
