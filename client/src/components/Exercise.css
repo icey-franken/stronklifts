@@ -3,17 +3,22 @@
 	display: flex;
 	justify-content: space-between;
 	border: 1px solid red;
-	padding: 6px;
-	margin: 6px;
+	padding: 0.8vw;
+	margin: 0.8vw 0;
 }
 
 .exercise__info-container{
 	display: flex;
 	flex-direction: column;
-	border: 1px solid orange;
+	/* border: 0.3vw solid black; */
+	border-radius: 2vw;
+	padding-top: 1vw;
+	padding-bottom: 1vw;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-around;
 	width: 20%;
+	font-weight: bold;
+	margin-right: 0.8vw;
 }
 
 
@@ -21,9 +26,8 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 50%;
+	/* height: 50%; */
 	width: 100%;
-	border: black 1px solid;
 	font-size: 3vw;
 	line-height: 2.8vw;
 	text-align: center;
@@ -31,7 +35,6 @@
 
 
 .exercise__sets-container{
-	border: 1px solid yellow;
 	display: flex;
 	flex-direction: row;
 	align-items: center;

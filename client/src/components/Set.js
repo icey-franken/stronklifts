@@ -4,11 +4,15 @@ import "./Set.css";
 export default function Set({ numRepsActual }) {
   //we should pass set id from prev element, then grab info from that set from the store. Then we can update value in store
   const handleClick = (e) => {
-    console.log(e.target.innerHTML);
-    console.log(e.target.innerHTML === 0);
     if (e.target.innerHTML > 0) e.target.innerHTML--;
-    else if (e.target.innerHTML === "0") e.target.innerHTML = "";
-    else if (e.target.innerHTML === "") e.target.classList.add();
+    else if (e.target.innerHTML === "0") {
+			e.target.innerHTML = "";
+			e.target.classList.add('exercise__set--emptySet');
+		} else {
+			e.target.innerHTML = '5';
+			e.target.classList.remove('exercise__set--emptySet')
+		}
+			// else if (e.target.innerHTML === "")
   };
   console.log(numRepsActual !== ("noSet" || "emptySet"));
 
