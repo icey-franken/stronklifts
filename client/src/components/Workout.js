@@ -1,5 +1,7 @@
 import React from "react";
-import Exercise from './Exercise';
+import Exercise from "./Exercise";
+import { Grid } from "@material-ui/core";
+import "./Workout.css";
 
 export default function Workout({ workout }) {
   console.log(workout);
@@ -31,11 +33,21 @@ export default function Workout({ workout }) {
   return (
     <>
       <h1>I am a single workout component</h1>
-      <div>Workout Date: {date}</div>
-      <div>Workout Note: {note}</div>
-      {exerciseArr.map((exercise,index)=>{
-				return (<Exercise key={index} exercise={exercise}/>)
-			})}
+      <Grid container>
+        <Grid item xs={2}>
+          <div>Workout Date: {date}</div>
+        </Grid>
+        <Grid container spacing={10}>
+          {exerciseArr.map((exercise, index) => {
+            return (
+              <Grid container item className="exerciseView">
+                <Exercise key={index} exercise={exercise} />
+              </Grid>
+            );
+          })}
+        </Grid>
+        <div>Workout Note: {note}</div>
+      </Grid>
     </>
   );
 }
