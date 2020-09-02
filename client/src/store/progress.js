@@ -10,7 +10,7 @@ export const getProgressThunk = (userId) => {
 	return async (dispatch) => {
 		const res = await fetch(`api/workouts/progress/${userId}`);
 		res.data = await res.json()
-		if(res.ok) dispathc(getProgress(res.data.progress));
+		if(res.ok) dispatch(getProgress(res.data.progress));
 		return res;
 	};
 };
