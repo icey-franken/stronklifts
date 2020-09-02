@@ -43,7 +43,7 @@ export default function Workout({ workout }) {
   const dateArr = dateFormat.formatToParts(new Date(date));
   let dateStr = "";
   dateArr.forEach((el) => (dateStr += el.value));
-
+//date string day number is behind by 1 - what the fuck?
   return (
     <div className="workout-container">
       {/* fix workout date formatting in database */}
