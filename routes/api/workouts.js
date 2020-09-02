@@ -25,7 +25,7 @@ router.get(
     const workouts = await Workout.findAll({
 			//ordering works! It should return sets in an array of objects in order. Sets are a key in an exercise object, which themselves are in order. I may be able to remove some of the info queried here in the future - will leave for now for debugging.
       where: { userId },
-      attributes: ["workoutDate"],
+      attributes: ["workoutDate", 'workoutComplete', 'workoutSplit'],
       limit: 10,
       order: [
         ["workoutDate", "desc"],//out of order in postman but correct order in chrome dev tools?
