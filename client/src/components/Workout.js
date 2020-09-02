@@ -1,6 +1,5 @@
 import React from "react";
 import Exercise from "./Exercise";
-import { Grid } from "@material-ui/core";
 import "./Workout.css";
 
 export default function Workout({ workout }) {
