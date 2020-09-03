@@ -1,6 +1,6 @@
 "use strict";
-const db = require('./index')
-const Exercise = require('./exercise');
+// const db = require('./index')
+// const Exercise = require('./exercise');
 
 module.exports = (sequelize, DataTypes) => {
   const Workout = sequelize.define(
@@ -45,8 +45,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
 	Workout.getSquatProgress = async function(userId) {
-		console.log('db',db);
-		console.log('exercise',Exercise)
+		// console.log('db',db);
+		// console.log('exercise',Exercise)
 		return await Workout.findAll({
       where: {
         userId,
@@ -54,10 +54,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       limit: 1,
       order: [["workoutDate", "DESC"]],
-      include: [{all:true}
-				// {
-				// 	model: Exercise,
-				// 	required: false,
+			include: [{model: Exercise}]
+
+			//I think I need to load things separately. Find the most recent workout for A and B. Then use that and the associated workout id to get the exercises with a separate call in the backend route. Until tomorrow.
+
+				// {all:true, //},
+				// // {
+				// // 	model: Exercise,
+				// // 	as: 'exercises',
+				// // 	required: true,
         //   // attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
         //   where: { exerciseNameId: 1 },
         //   attributes: [
@@ -66,8 +71,8 @@ module.exports = (sequelize, DataTypes) => {
         //     "wasSuccessful",
         //     "didDeload",
         //   ], //might not care about didDeload
-        // },
-      ],
+      //   },
+      // ],
     })
 	}
 
