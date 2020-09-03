@@ -61,8 +61,8 @@ router.post(
 
 			//prevWorkout[0] = {workoutDate, workoutSplit, id}
 			//need id's from both; date from prev; split from prevPrev
-			const {id: prevId, workoutDate: prevWorkoutDate} = prevWorkout[0];
-			const {id: prevPrevId, workoutSplit: newWorkoutSplit,} = prevPrevWorkout[0];
+			const {id: prevId, workoutDate: prevWorkoutDate} = prevWorkout;
+			const {id: prevPrevId, workoutSplit: newWorkoutSplit,} = prevPrevWorkout;
 
 			//add workoutDate in the future - need to figure out formatting. For now default is null.
 			const newWorkout = await Workout.create({
