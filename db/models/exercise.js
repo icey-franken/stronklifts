@@ -76,16 +76,50 @@ module.exports = (sequelize, DataTypes) => {
 	//takes in the relevant workoutId and exerciseNameId. WorkoutId should come from method call on workout model that finds most recent completed workout having that exercise.
 	//this method will grab numFails, wasSuccessful, and workingWeightId.
 	//based on logic in the method it will determine what the workingWeightId should be for the upcoming exercise, and will update properties as necessary.
-	Exercise.getNext = async function(workoutId, exerciseNameId, workoutDate) {
+	Exercise.createNext = async function(newWorkoutId, prevWorkoutId, exerciseNameId, workoutDate) {
 		//implement a check that workoutDate is less than 14 days behind. If it is, then we deload. If not, do regular logic
-		console.log('workoutId',workoutId);
 		const prevExercise = await Exercise.findOne({
       where: {
-        [Op.and]: [{ workoutId: 1 }, { exerciseNameId }],
+        [Op.and]: [{ workoutId: prevWorkoutId }, { exerciseNameId }],
 			},
 			attributes: ['numFails', 'wasSuccessful', 'workingWeightId']
 		});
-		return prevExercise;
+		let numSets = 5;
+		const {numFails, wasSuccessful, workingWeightId} = prevExercise;
+		if(exerciseNameId === 3) numSets = 1;
+		//could condense these conditionals by changing new values and having a single create call.
+		if(wasSuccessful === true) {
+			await Exercise.create({
+				workoutId: newWorkoutId,
+				exerciseNameId,
+				exerciseOrder: exerciseNameId,
+				numSets,
+				workingWeightId: workingWeightId + 1,
+			});
+		}else if (numFails < 2) {
+			await Exercise.create({
+				workoutId: newWorkoutId,
+				exerciseNameId,
+				exerciseOrder: exerciseNameId,
+				numSets,
+				workingWeightId,
+				numFails: numFails + 1,
+			});
+		} else if (numFails >= 2) {
+			const deloadedWorkingWeightId = Math.floor(workingWeightId * 0.8);
+			await Exercise.create({
+				workoutId: newWorkoutId,
+				exerciseNameId,
+				exerciseOrder: exerciseNameId,
+				numSets,
+				workingWeightId: deloadedWorkingWeightId,
+				numFails: numFails + 1,
+				didDeload: true
+			});
+		}
+
+
+		return;
 	}
 
 

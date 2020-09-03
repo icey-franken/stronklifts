@@ -73,28 +73,49 @@ router.post(
 			const newWorkoutSplit = prevPrevWorkoutInfo.workoutSplit;
 			//to create a new workout we need to send workoutSplit, userId, and (maybe) workout date - for now the default value is null - fix later.
 			//that means at this point we can create the new workout with newWorkoutSplit and userId - after creating, we need to grab workoutId and use that in our exercise model methods to create those exercises.
+			const newWorkout = await Workout.create({
+				workoutSplit: newWorkoutSplit,
+				userId,
+			});
+			workoutId = newWorkout.id;
 
 			//we need to call this method to get the next exercise.
 			//If newWorkoutSplit is 'A' then our exercise name id's are 1 2 3; if 'B' then its 1 4 5. The workoutDate we send over is for 2 week deloading purposes - for now I think we can ignore.
 			const prevId = prevWorkoutInfo.id;
 			const prevPrevId = prevPrevWorkoutInfo.id;
 
-			const newSquat = await Exercise.getNext(prevId, 1, null);
+			//pull values off of this, then create a squat model and link to workoutId
+			const newSquat = await Exercise.createNext(workoutId, prevId, 1, null);
+
+
 			const newWorkoutArr = [newSquat];
 			if(newWorkoutSplit === 'A') {
-				const newOverhead = await Exercise.getNext(prevPrevId, 2, null);
-				const newDeadlift = await Exercise.getNext(prevPrevId, 3, null);
-				newWorkoutArr.push(newOverhead, newDeadlift);
+			//pull values off of this, then create a squat model and link to workoutId
+				const nextOverhead = await Exercise.createNext(workoutId, prevPrevId, 2, null);
+
+
+			//pull values off of this, then create a squat model and link to workoutId
+			const nextDeadlift = await Exercise.createNext(workoutId, prevPrevId, 3, null);
+
+
+
 			} else if (newWorkoutSplit === 'B') {
-				const newBench = await Exercise.getNext(prevPrevId, 4, null);
-				const newRow = await Exercise.getNext(prevPrevId, 5, null);
-				newWorkoutArr.push(newBench, newRow);
+
+
+			//pull values off of this, then create a squat model and link to workoutId
+				const nextBench = await Exercise.createNext(workoutId, prevPrevId, 4, null);
+
+
+				//pull values off of this, then create a squat model and link to workoutId
+				//have logic on exercise model - this should return a new row model that is attached to our workout.
+				const nextRow = await Exercise.createNext(workoutId, prevPrevId, 5, null);
+
+				//unnecessary?
 			}
 
-			//push relevant exercises into an array, then iterate over that array creating a new exercise instance for each based on return from getNext.
 
-			// return res.json(newWorkoutArr);
-			return res.json({prevWorkouts })
+			//I think what we want to return is our new workout model with the next exercises on it.
+			return res.json(newWorkout)
     } catch (err) {
       console.log(err);
     }
