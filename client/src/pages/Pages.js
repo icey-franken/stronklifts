@@ -9,13 +9,10 @@ import {getWorkoutsThunk} from '../store/workouts';
 
 //create protected routes!!
 export default function Pages() {
-	const userId = useSelector((state) => state.auth.id);
+	// const userId = useSelector((state) => state.auth.id);
   const needLogin = useSelector((state) => !state.auth.id);
 	// const needLogin = true;
-	const dispatch = useDispatch();
-	useEffect(()=>{
-		dispatch(getWorkoutsThunk(userId));
-	});//dispatch, userId
+
 
   return (
     <>
