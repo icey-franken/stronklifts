@@ -65,7 +65,7 @@ router.post(
 			const {id: prevPrevId, workoutSplit: newWorkoutSplit,} = prevPrevWorkout;
 
 			//add workoutDate in the future - need to figure out formatting. For now default is null.
-			const newWorkout = await Workout.create({
+			let newWorkout = await Workout.create({
 				workoutSplit: newWorkoutSplit,
 				userId,
 			});
@@ -82,7 +82,35 @@ router.post(
 				await Exercise.createNext(workoutId, prevPrevId, exerciseId, null);
 			})
 
-			return res.json(newWorkout)
+			//now we grab the new workout the same way we do for a get request to api/workouts/:userId. There is probably a better way to do this but as of now I can't get methods on the models to work if I use an include property, so we'll do it caveman style here for now.
+			//It is critical that this grabs the SAME stuff as the above, so that our store state stays the same
+			newWorkout = await Workout.findOne({
+				where: { id: workoutId },//we know the exact id of this workout because we made it above
+				attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
+				order: [
+					[Exercise, "exerciseOrder", "asc"],//can probably remove these because of new defaults, but we'll leave it in for now
+					[Exercise, Set, "setOrder", "asc"],
+				],
+				include: [
+					{
+						model: Exercise,
+						attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
+						include: [
+							{ model: ExerciseName, attributes: ["exerciseName"] },
+							{ model: WorkingWeight, attributes: ["weight"] },
+							{
+								model: Set,
+								attributes: ["setOrder", "numRepsActual"],
+							},
+						],
+					},
+					{ model: WorkoutNote, attributes: ["description"] },
+					// {
+					//   model: Set,
+					// },
+				],
+			});
+			return res.json({newWorkout})
     } catch (err) {
       console.log(err);
     }

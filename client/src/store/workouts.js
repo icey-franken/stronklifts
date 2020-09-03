@@ -20,17 +20,24 @@ export const getWorkoutsThunk = (userId) => {
 window.getWorkoutsThunk = getWorkoutsThunk;
 
 //needs work - need to figure out what to send to backend route.
-export const createWorkoutThunk = (userId, workoutSplit, progress) => {
+export const createWorkoutThunk = (userId) => {
+  //, workoutSplit, progress
   return async (dispatch) => {
-    const body = JSON.stringify({ workoutSplit, progress });
+    // const body = JSON.stringify({ workoutSplit, progress });
     const res = await fetch(`api/workouts/${userId}`, {
       method: "post",
-      "Content-Type": "application/json",
-      // "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"), //necessary?
-      body,
+      headers: {
+        "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+        // "Content-Type": "application/json",
+      },
     });
     res.data = await res.json();
-    if (res.ok) dispatch(createWorkout(res.data.workout));
+    if (res.ok) {
+      const workout = res.data.newWorkout;
+      dispatch(createWorkout(workout));
+      return workout.id;
+    }
+
     return res;
   };
 };
@@ -39,7 +46,7 @@ window.createWorkoutThunk = createWorkoutThunk;
 //workout reducer
 export default function workoutReducer(state = {}, action) {
   Object.freeze(state);
-	let newState = Object.assign({}, state);
+  let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_WORKOUTS:
       action.workouts.forEach((workout) => {

@@ -4,7 +4,10 @@ import "./Workout.css";
 
 export default function Workout({ workout }) {
   // console.log(workout);
-  const { workoutDate: date, Exercises, workoutSplit: split } = workout;
+  if (!workout) return null;
+  let date;
+  const { Exercises, workoutSplit: split } = workout;
+  workout.workoutDate ? (date = workout.workoutDate) : (date = null);
   let note;
   if (workout.WorkoutNote) {
     const {
@@ -40,10 +43,15 @@ export default function Workout({ workout }) {
     month: "long",
     year: "numeric",
   });
-  const dateArr = dateFormat.formatToParts(new Date(date));
+  let dateArr;
+  if (date === null) {
+    dateArr = dateFormat.formatToParts(Date.now());
+  } else {
+    dateArr = dateFormat.formatToParts(new Date(date));
+  }
   let dateStr = "";
   dateArr.forEach((el) => (dateStr += el.value));
-//date string day number is behind by 1 - what the fuck?
+  //date string day number is behind by 1 - what the fuck?
   return (
     <div className="workout-container">
       {/* fix workout date formatting in database */}
