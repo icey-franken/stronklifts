@@ -33,11 +33,11 @@ const grabWorkoutSpecs = {
         { model: WorkingWeight, attributes: ["weight"] },
         {
           model: Set,
-          attributes: ["setOrder", "numRepsActual"],
+          attributes: ['id',"setOrder", "numRepsActual"],
         },
       ],
     },
-    { model: WorkoutNote, attributes: ["description"] },
+    { model: WorkoutNote, attributes: ['id',"description"] },
   ],
 };
 

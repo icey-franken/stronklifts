@@ -50,19 +50,43 @@ export default function workoutReducer(state = {}, action) {
   switch (action.type) {
     case GET_WORKOUTS:
       action.workouts.forEach((workout) => {
-				//pull exercises object off of workout
-				const exercises = workout.Exercises
-				const exerciseIds = [];
-				//get exercise ids from exercises object
-				exercises.forEach(({id})=> exerciseIds.push(id));
+        const workoutId = workout.id;
 
-				console.log(exercises);
-				//replace exercises object on workout object with an array containing exercise ids
-				workout.exerciseIds = exerciseIds;
-				delete workout.Exercises;
-				//send exercises object to the exercises reducer along with workout id
-				//follow similar process for sets, but in exercises reducer
-				newState[workout.id] = workout;
+        //pull exercises object off of workout
+        const exercises = workout.Exercises;
+        const exerciseIds = [];
+        const setIds = [];
+        //get exercise ids from exercises object
+        exercises.forEach((exercise) => {
+          exerciseIds.push(exercise.id);
+          // exercise.forEach(({Sets})=>{
+          // setIds.push(Sets.id);
+          // })
+          // console.log(exercise);
+        });
+        // workout.setIds = setIds;
+        //I don't think workout needs to know about sets - we can let exercises worry about that. If sets change, exercises will change, therefore so will workouts? Ignore for now.
+
+        //replace exercises object on workout object with an array containing exercise ids
+        workout.exerciseIds = exerciseIds;
+        delete workout.Exercises;
+        //send exercises object to the exercises reducer along with workout id
+				//!!!function call sending workout.id and exercises
+
+
+        const { WorkoutNote } = workout;
+        if (WorkoutNote) {
+          workout.workoutNoteId = WorkoutNote.id;
+          const workoutNote = WorkoutNote.description;
+          //!!!send workoutNote to workoutNote reducer along with workout id
+        } else {
+          workout.workoutNoteId = null;
+        }
+        delete workout.WorkoutNote;
+
+        // const note = workout.WorkoutNote.
+        //follow similar process for sets and workout note, but in exercises reducer
+        newState[workoutId] = workout;
       });
       return newState;
     case CREATE_WORKOUT:
@@ -71,7 +95,7 @@ export default function workoutReducer(state = {}, action) {
       else {
         newState[action.workout.id] = action.workout;
         return newState;
-      };
+      }
     default:
       return state;
   }
