@@ -83,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
         workoutId: prevWorkoutId,
         exerciseNameId,
       },
-      attributes: ["numFails", "wasSuccessful", "workingWeightId"],
+      attributes: ["id", "numFails", "wasSuccessful", "workingWeightId"],
     });
     let numSets = 5;
     if (exerciseNameId === 3) numSets = 1;

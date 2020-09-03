@@ -18,13 +18,6 @@ module.exports = {
           workoutSplit: "B",
 
         },
-        {
-					userId: 1,
-          workoutDate: '2020-08-31',
-          workoutComplete: false,
-          workoutSplit: "A",
-
-				},
       ],
       {}
     );

@@ -12,41 +12,79 @@ const {
 
 const router = express.Router();
 
-// const findOneWorkoutSpecs = {} //to simplify db calls - do later
+const grabWorkoutSpecs = {
+  //we know the exact id of this workout because we made it above
+  attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
+  order: [
+    [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
+    [Exercise, Set, "setOrder", "asc"],
+  ],
+  include: [
+    {
+      model: Exercise,
+      attributes: [
+        "exerciseOrder",
+        "numSets",
+        "numRepsGoal",
+        ["id", "exerciseId"],
+      ],
+      include: [
+        { model: ExerciseName, attributes: ["exerciseName"] },
+        { model: WorkingWeight, attributes: ["weight"] },
+        {
+          model: Set,
+          attributes: ["setOrder", "numRepsActual"],
+        },
+      ],
+    },
+    { model: WorkoutNote, attributes: ["description"] },
+    // {
+    //   model: Set,
+    // },
+  ],
+}; //to simplify db calls - do later
+
+// const findAllSpecs = find
 
 router.get(
   "/:userId",
   asyncHandler(async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
-    const workouts = await Workout.findAll({
-      //ordering works! It should return sets in an array of objects in order. Sets are a key in an exercise object, which themselves are in order. I may be able to remove some of the info queried here in the future - will leave for now for debugging.
-      where: { userId },
-      attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
-      limit: 10,
-      order: [
-        ["workoutDate", "desc"], //out of order in postman but correct order in chrome dev tools?
-        [Exercise, "exerciseOrder", "asc"],
-        [Exercise, Set, "setOrder", "asc"],
-      ],
-      include: [
-        {
-          model: Exercise,
-          attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
-          include: [
-            { model: ExerciseName, attributes: ["exerciseName"] },
-            { model: WorkingWeight, attributes: ["weight"] },
-            {
-              model: Set,
-              attributes: ["setOrder", "numRepsActual"],
-            },
-          ],
-        },
-        { model: WorkoutNote, attributes: ["description"] },
-        // {
-        //   model: Set,
-        // },
-      ],
-    });
+    grabWorkoutSpecs.where = { userId };
+    grabWorkoutSpecs.limit = 10;
+    grabWorkoutSpecs.order.unshift(["workoutDate", "desc"]);
+    const workouts = await Workout.findAll(
+      grabWorkoutSpecs
+      // 	{
+      //   //ordering works! It should return sets in an array of objects in order. Sets are a key in an exercise object, which themselves are in order. I may be able to remove some of the info queried here in the future - will leave for now for debugging.
+      //   where: { userId },
+      //   attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
+      //   limit: 10,
+      //   order: [
+      //     ["workoutDate", "desc"], //out of order in postman but correct order in chrome dev tools?
+      //     [Exercise, "exerciseOrder", "asc"],
+      //     [Exercise, Set, "setOrder", "asc"],
+      //   ],
+      //   include: [
+      //     {
+      //       model: Exercise,
+      //       attributes: ["exerciseOrder", "numSets", "numRepsGoal", ['id','exerciseId']],
+      //       include: [
+      //         { model: ExerciseName, attributes: ["exerciseName"] },
+      //         { model: WorkingWeight, attributes: ["weight"] },
+      //         {
+      //           model: Set,
+      //           attributes: ["setOrder", "numRepsActual"],
+      //         },
+      //       ],
+      //     },
+      //     { model: WorkoutNote, attributes: ["description"] },
+      //     // {
+      //     //   model: Set,
+      //     // },
+      //   ],
+      // }
+    );
     return res.json({ workouts });
   })
 );
@@ -82,45 +120,90 @@ router.post(
         workoutId = newWorkout.id;
 
         //create squat
-        await Exercise.createNext(workoutId, prevId, 1, null);
-        //for overhead and deadlift (newWorkoutSplit === 'A')
-        let exerciseNameIdArr = [2, 3];
-        //for bench and row
-        if (newWorkoutSplit === "B") exerciseNameIdArr = [4, 5];
-        //create A or B split exercises
-        exerciseNameIdArr.forEach(async (exerciseId) => {
-          await Exercise.createNext(workoutId, prevPrevId, exerciseId, null);
-        });
+        const { id: squatId } = await Exercise.createNext(
+          workoutId,
+          prevId,
+          1,
+          null
+        );
+        await Set.createBasicSets(squatId, 5);
+        console.log("squat id", squatId);
 
+        //I don't know why but this for each was fucking things up
+        // //for overhead and deadlift (newWorkoutSplit === 'A')
+        // let exerciseNameIdArr = [2, 3];
+        // //for bench and row
+        // if (newWorkoutSplit === "B") exerciseNameIdArr = [4, 5];
+        // //create A or B split exercises
+        // exerciseNameIdArr.forEach(async (exerciseId) => {
+        //   await Exercise.createNext(workoutId, prevPrevId, exerciseId, null);
+        // });
+        if (newWorkoutSplit === "A") {
+          const { id: overheadId } = await Exercise.createNext(
+            workoutId,
+            prevPrevId,
+            2,
+            null
+          );
+          await Set.createBasicSets(overheadId, 5);
+          const { id: deadliftId } = await Exercise.createNext(
+            workoutId,
+            prevPrevId,
+            3,
+            null
+          );
+          await Set.createBasicSets(deadliftId, 1);
+          console.log("ohp and dl id", overheadId, deadliftId);
+        } else if (newWorkoutSplit === "B") {
+          const { id: benchId } = await Exercise.createNext(
+            workoutId,
+            prevPrevId,
+            4,
+            null
+          );
+          await Set.createBasicSets(benchId, 5);
+          const { id: rowId } = await Exercise.createNext(
+            workoutId,
+            prevPrevId,
+            5,
+            null
+          );
+          await Set.createBasicSets(rowId, 5);
+          console.log("bench and row id", benchId, rowId);
+        }
         //now we grab the new workout the same way we do for a get request to api/workouts/:userId. There is probably a better way to do this but as of now I can't get methods on the models to work if I use an include property, so we'll do it caveman style here for now.
         //It is critical that this grabs the SAME stuff as the above, so that our store state stays the same
       }
-      newWorkout = await Workout.findOne({
-        where: { id: workoutId }, //we know the exact id of this workout because we made it above
-        attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
-        order: [
-          [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
-          [Exercise, Set, "setOrder", "asc"],
-        ],
-        include: [
-          {
-            model: Exercise,
-            attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
-            include: [
-              { model: ExerciseName, attributes: ["exerciseName"] },
-              { model: WorkingWeight, attributes: ["weight"] },
-              {
-                model: Set,
-                attributes: ["setOrder", "numRepsActual"],
-              },
-            ],
-          },
-          { model: WorkoutNote, attributes: ["description"] },
-          // {
-          //   model: Set,
-          // },
-        ],
-      });
+      grabWorkoutSpecs.where = { id: workoutId };
+      newWorkout = await Workout.findOne(
+        grabWorkoutSpecs
+        // 	{
+        //   where: { id: workoutId }, //we know the exact id of this workout because we made it above
+        //   attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
+        //   order: [
+        //     [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
+        //     [Exercise, Set, "setOrder", "asc"],
+        //   ],
+        //   include: [
+        //     {
+        //       model: Exercise,
+        //       attributes: ["exerciseOrder", "numSets", "numRepsGoal", ['id','exerciseId']],
+        //       include: [
+        //         { model: ExerciseName, attributes: ["exerciseName"] },
+        //         { model: WorkingWeight, attributes: ["weight"] },
+        //         {
+        //           model: Set,
+        //           attributes: ["setOrder", "numRepsActual"],
+        //         },
+        //       ],
+        //     },
+        //     { model: WorkoutNote, attributes: ["description"] },
+        //     // {
+        //     //   model: Set,
+        //     // },
+        //   ],
+        // }
+      );
       return res.json({ newWorkout });
     } catch (err) {
       console.log(err);
