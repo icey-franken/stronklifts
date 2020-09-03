@@ -40,6 +40,21 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  Workout.getIncompleteId = async function (userId) {
+    try {
+      const incompleteWorkout = await Workout.findOne({
+        where: {
+          userId,
+          workoutComplete: false,
+        },
+      });
+      return incompleteWorkout.id;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  };
+
   Workout.prevWorkouts = async function (userId) {
     const prevWorkout = await Workout.findOne({
       where: {

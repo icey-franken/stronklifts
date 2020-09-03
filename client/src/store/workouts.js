@@ -54,8 +54,12 @@ export default function workoutReducer(state = {}, action) {
       });
       return newState;
     case CREATE_WORKOUT:
-      newState[action.workout.id] = action.workout;
-      return newState;
+      //if workout already exists, just return state as is
+      if (newState[action.workout.id]) return newState;
+      else {
+        newState[action.workout.id] = action.workout;
+        return newState;
+      };
     default:
       return state;
   }
