@@ -17,7 +17,7 @@ export default function Exercise({ exercise }) {
 	}
 	for(let i = setArr.length; i < 5; i++) {
 		if(name==='DEADLIFT')	repsArr.push('noSet');
-		else repsArr.push('emptySet');
+		else repsArr.push(null);
 	}
 	console.log(repsArr, name);
   return (

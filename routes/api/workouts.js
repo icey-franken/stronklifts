@@ -38,9 +38,6 @@ const grabWorkoutSpecs = {
       ],
     },
     { model: WorkoutNote, attributes: ["description"] },
-    // {
-    //   model: Set,
-    // },
   ],
 }; //to simplify db calls - do later
 
