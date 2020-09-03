@@ -15,7 +15,7 @@ export default function Pages() {
 	const dispatch = useDispatch();
 	useEffect(()=>{
 		dispatch(getWorkoutsThunk(userId));
-	}, [dispatch, userId]);
+	});//dispatch, userId
 
   return (
     <>

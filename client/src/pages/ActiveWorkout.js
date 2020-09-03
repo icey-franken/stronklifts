@@ -43,7 +43,7 @@ export default function ActiveWorkout() {//default? { workoutId = null }
   // if (workoutId === null) return null;//dispatch(createWorkoutThunk(userId)); //chnage this to some "looks like you haven't done a damn thing" page
   // console.log(workouts);
 	const workout = workouts[workoutId];
-	// console.log(workoutId, workout);
+	console.log(workoutId, workout);
 	if(workoutId === null) return null;
   return (
     <>
