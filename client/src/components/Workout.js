@@ -15,7 +15,9 @@ export default function Workout({ workout }) {
     } = workout;
     note = description;
   }
-  //do something with workout date and note
+	//do something with workout date and note
+
+	//making big changes to store - in a bit we'll be able to pull exercises from store based on workoutId - all we have to pass to exercise component will be the workout id
   let exerciseArr = [];
   if (Exercises.length > 0) {
     //create an exercise component for each exercise in a workout

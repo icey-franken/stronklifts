@@ -19,7 +19,7 @@ export default function Exercise({ exercise }) {
 		if(name==='DEADLIFT')	repsArr.push('noSet');
 		else repsArr.push(null);
 	}
-	console.log(repsArr, name);
+	// console.log(repsArr, name);
   return (
     <div className="exercise-container">
       <div className="exercise__info-container">

@@ -13,7 +13,7 @@ const {
 const router = express.Router();
 
 const grabWorkoutSpecs = {
-  attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
+  attributes: ["id", "workoutDate", "workoutComplete", "workoutSplit"],
   order: [
     [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
     [Exercise, Set, "setOrder", "asc"],
@@ -22,10 +22,11 @@ const grabWorkoutSpecs = {
     {
       model: Exercise,
       attributes: [
+        "id",
+				'workoutId',
         "exerciseOrder",
         "numSets",
         "numRepsGoal",
-        ["id", "exerciseId"],
       ],
       include: [
         { model: ExerciseName, attributes: ["exerciseName"] },
@@ -48,7 +49,20 @@ router.get(
     grabWorkoutSpecs.where = { userId };
     grabWorkoutSpecs.limit = 10;
     grabWorkoutSpecs.order.unshift(["workoutDate", "desc"]);
-    const workouts = await Workout.findAll(grabWorkoutSpecs);
+		let workouts = await Workout.findAll(grabWorkoutSpecs);
+		// console.log(workouts[1].WorkoutNote.description);
+		// for(let i = 0; i < workouts.length; i ++) {
+		// 	console.log('hits');
+		// 	// workouts[i].WorkoutNote = null;
+		// 	console.log(workouts[i].WorkoutNote);
+		// 	// delete workouts[i].WorkoutNote.description;
+		// 	//workouts[i].WorkoutNote.description);
+		// };
+		// // workouts.map((workout)=>{
+		// // // 	const {workoutNote} = workout.WorkoutNote;
+		// // workout.WorkoutNote = workout.WorkoutNote.description;
+		// // return workout;
+		// // })
     return res.json({ workouts });
   })
 );
@@ -57,9 +71,9 @@ router.post(
   "/:userId",
   asyncHandler(async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
-    //first check that no incomplete workouts exist
     let workoutId;
     try {
+			//first check that no incomplete workouts exist
       const incompleteId = await Workout.getIncompleteId(userId);
       if (incompleteId !== null) {
         workoutId = incompleteId;
@@ -83,7 +97,6 @@ router.post(
         });
         workoutId = newWorkout.id;
 
-        //create squat
         const { id: squatId } = await Exercise.createNext(
           workoutId,
           prevId,
@@ -91,17 +104,6 @@ router.post(
           null
         );
         await Set.createBasicSets(squatId, 5);
-        console.log("squat id", squatId);
-
-        //I don't know why but this for each was fucking things up
-        // //for overhead and deadlift (newWorkoutSplit === 'A')
-        // let exerciseNameIdArr = [2, 3];
-        // //for bench and row
-        // if (newWorkoutSplit === "B") exerciseNameIdArr = [4, 5];
-        // //create A or B split exercises
-        // exerciseNameIdArr.forEach(async (exerciseId) => {
-        //   await Exercise.createNext(workoutId, prevPrevId, exerciseId, null);
-        // });
         if (newWorkoutSplit === "A") {
           const { id: overheadId } = await Exercise.createNext(
             workoutId,
@@ -117,7 +119,6 @@ router.post(
             null
           );
           await Set.createBasicSets(deadliftId, 1);
-          console.log("ohp and dl id", overheadId, deadliftId);
         } else if (newWorkoutSplit === "B") {
           const { id: benchId } = await Exercise.createNext(
             workoutId,
@@ -133,10 +134,7 @@ router.post(
             null
           );
           await Set.createBasicSets(rowId, 5);
-          console.log("bench and row id", benchId, rowId);
         }
-        //now we grab the new workout the same way we do for a get request to api/workouts/:userId. There is probably a better way to do this but as of now I can't get methods on the models to work if I use an include property, so we'll do it caveman style here for now.
-        //It is critical that this grabs the SAME stuff as the above, so that our store state stays the same
       }
       grabWorkoutSpecs.where = { id: workoutId };
       newWorkout = await Workout.findOne(grabWorkoutSpecs);

@@ -15,7 +15,7 @@ export default function Set({ numRepsActual }) {
 			// else if (e.target.innerHTML === "")
   };
   // console.log(numRepsActual !== ("noSet" || "emptySet"));
-	console.log(numRepsActual===null);
+	// console.log(numRepsActual===null);
   return (
     <div className="exercise__set-container">
       {(numRepsActual === null)? (

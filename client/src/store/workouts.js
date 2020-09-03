@@ -50,7 +50,19 @@ export default function workoutReducer(state = {}, action) {
   switch (action.type) {
     case GET_WORKOUTS:
       action.workouts.forEach((workout) => {
-        newState[workout.id] = workout;
+				//pull exercises object off of workout
+				const exercises = workout.Exercises
+				const exerciseIds = [];
+				//get exercise ids from exercises object
+				exercises.forEach(({id})=> exerciseIds.push(id));
+
+				console.log(exercises);
+				//replace exercises object on workout object with an array containing exercise ids
+				workout.exerciseIds = exerciseIds;
+				delete workout.Exercises;
+				//send exercises object to the exercises reducer along with workout id
+				//follow similar process for sets, but in exercises reducer
+				newState[workout.id] = workout;
       });
       return newState;
     case CREATE_WORKOUT:
