@@ -1,4 +1,6 @@
 "use strict";
+const {Op} = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   const Exercise = sequelize.define(
     "Exercise",
@@ -23,11 +25,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       numSets: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+				allowNull: false,
+				defaultValue: 5,
       },
       numRepsGoal: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+				allowNull: false,
+				defaultValue: 5,
       },
       workingWeightId: {
         type: DataTypes.INTEGER,
@@ -68,6 +72,21 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'exerciseNameId'
 		})
 	};
+
+	//takes in the relevant workoutId and exerciseNameId. WorkoutId should come from method call on workout model that finds most recent completed workout having that exercise.
+	//this method will grab numFails, wasSuccessful, and workingWeightId.
+	//based on logic in the method it will determine what the workingWeightId should be for the upcoming exercise, and will update properties as necessary.
+	Exercise.getNext = async function(workoutId, exerciseNameId, workoutDate) {
+		//implement a check that workoutDate is less than 14 days behind. If it is, then we deload. If not, do regular logic
+		console.log('workoutId',workoutId);
+		const prevExercise = await Exercise.findOne({
+      where: {
+        [Op.and]: [{ workoutId: 1 }, { exerciseNameId }],
+			},
+			attributes: ['numFails', 'wasSuccessful', 'workingWeightId']
+		});
+		return prevExercise;
+	}
 
 
 

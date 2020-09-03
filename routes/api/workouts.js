@@ -61,9 +61,40 @@ router.post(
     // const { workoutSplit, progress } = JSON.parse(req.body);
     //based on workout split we create a new workout - A or B. In progress object we will find a number of failures and a working weight for each exercise. Based on A or B, grab value of wasSuccessful from relevant exercise from progress object. If true, then increase workingWeight by 5 lbs (increase id by 1). If false, check if numFails is <= 2 - if it is, then working weight stays the same and numFails on that exercise increases by 1. If numFails >2, then it deload (decrease WW by 20%, rounding down to nearest whole number if going by workingWeightId).
     try {
-      const lastSquatWorkout = await Workout.getSquatProgress(userId);
-      console.log(lastSquatWorkout);
-      return res.json({ lastSquatWorkout });
+      const prevWorkouts = await Workout.prevWorkouts(userId);
+			const {prevWorkout, prevPrevWorkout} = prevWorkouts;
+
+			//on these info variables we can key in to workoutDate, workoutSplit, and id (workout id)
+			const prevWorkoutInfo = prevWorkout[0];
+			const prevPrevWorkoutInfo = prevPrevWorkout[0];
+
+
+			//we have next workout split.
+			const newWorkoutSplit = prevPrevWorkoutInfo.workoutSplit;
+			//to create a new workout we need to send workoutSplit, userId, and (maybe) workout date - for now the default value is null - fix later.
+			//that means at this point we can create the new workout with newWorkoutSplit and userId - after creating, we need to grab workoutId and use that in our exercise model methods to create those exercises.
+
+			//we need to call this method to get the next exercise.
+			//If newWorkoutSplit is 'A' then our exercise name id's are 1 2 3; if 'B' then its 1 4 5. The workoutDate we send over is for 2 week deloading purposes - for now I think we can ignore.
+			const prevId = prevWorkoutInfo.id;
+			const prevPrevId = prevPrevWorkoutInfo.id;
+
+			const newSquat = await Exercise.getNext(prevId, 1, null);
+			const newWorkoutArr = [newSquat];
+			if(newWorkoutSplit === 'A') {
+				const newOverhead = await Exercise.getNext(prevPrevId, 2, null);
+				const newDeadlift = await Exercise.getNext(prevPrevId, 3, null);
+				newWorkoutArr.push(newOverhead, newDeadlift);
+			} else if (newWorkoutSplit === 'B') {
+				const newBench = await Exercise.getNext(prevPrevId, 4, null);
+				const newRow = await Exercise.getNext(prevPrevId, 5, null);
+				newWorkoutArr.push(newBench, newRow);
+			}
+
+			//push relevant exercises into an array, then iterate over that array creating a new exercise instance for each based on return from getNext.
+
+			// return res.json(newWorkoutArr);
+			return res.json({prevWorkouts })
     } catch (err) {
       console.log(err);
     }

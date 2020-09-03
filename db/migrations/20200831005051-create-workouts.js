@@ -24,8 +24,7 @@ module.exports = {
 			},
 			workoutSplit:{
 				type: Sequelize.STRING,
-				allowNull: true,
-				defaultValue: null,
+				allowNull: false,
 			},
       createdAt: {
         allowNull: false,

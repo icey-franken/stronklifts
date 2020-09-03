@@ -10,24 +10,32 @@ module.exports = {
       },
       workoutId: {
 				type: Sequelize.INTEGER,
-				references: {model:'Workouts'}
+				references: {model:'Workouts'},
+				allowNull: false,
       },
       exerciseNameId: {
 				type: Sequelize.INTEGER,
-				references: {model: 'ExerciseNames'}
+				references: {model: 'ExerciseNames'},
+				allowNull: false,
       },
       exerciseOrder: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: false,
       },
       numSets: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 5,
       },
       numRepsGoal: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: false,
+				defaultValue: 5,
       },
       workingWeightId: {
 				type: Sequelize.INTEGER,
-				references: {model: 'WorkingWeights'}
+				references: {model: 'WorkingWeights'},
+				allowNull: false,
 			},
 			numFails: {
 				type: Sequelize.INTEGER,
