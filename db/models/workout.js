@@ -54,18 +54,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       limit: 1,
       order: [["workoutDate", "DESC"]],
-      include: [
-        {
-          model: 'Exercise',
-          // attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
-          where: { exerciseNameId: 1 },
-          attributes: [
-            "workingWeightId",
-            "numFails",
-            "wasSuccessful",
-            "didDeload",
-          ], //might not care about didDeload
-        },
+      include: [{all:true}
+				// {
+				// 	model: Exercise,
+				// 	required: false,
+        //   // attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
+        //   where: { exerciseNameId: 1 },
+        //   attributes: [
+        //     "workingWeightId",
+        //     "numFails",
+        //     "wasSuccessful",
+        //     "didDeload",
+        //   ], //might not care about didDeload
+        // },
       ],
     })
 	}
