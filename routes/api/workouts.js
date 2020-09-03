@@ -8,7 +8,6 @@ const {
   ExerciseName,
   WorkingWeight,
   WorkoutNote,
-  User,
 } = require("../../db/models");
 
 const router = express.Router();
@@ -50,103 +49,45 @@ router.get(
   })
 );
 
-//NEEDS WORK - NEED TO FINISH PROGRESS ROUTE FIRST SO THAT THAT SLICE OF STATE CAN BE SENT TO THIS ROUTE.
-//Would it be better to have this route get progress on it's own? So that we don't have to make a request from front end, wait for response, and then send that response back with our create request? I think so. for the future.
 
 router.post(
   "/:userId",
   asyncHandler(async (req, res) => {
-    const userId = parseInt(req.params.userId, 10);
+		const userId = parseInt(req.params.userId, 10);
 
-    // const { workoutSplit, progress } = JSON.parse(req.body);
-    //based on workout split we create a new workout - A or B. In progress object we will find a number of failures and a working weight for each exercise. Based on A or B, grab value of wasSuccessful from relevant exercise from progress object. If true, then increase workingWeight by 5 lbs (increase id by 1). If false, check if numFails is <= 2 - if it is, then working weight stays the same and numFails on that exercise increases by 1. If numFails >2, then it deload (decrease WW by 20%, rounding down to nearest whole number if going by workingWeightId).
     try {
       const prevWorkouts = await Workout.prevWorkouts(userId);
 			const {prevWorkout, prevPrevWorkout} = prevWorkouts;
 
-			//on these info variables we can key in to workoutDate, workoutSplit, and id (workout id)
-			const prevWorkoutInfo = prevWorkout[0];
-			const prevPrevWorkoutInfo = prevPrevWorkout[0];
+			//prevWorkout[0] = {workoutDate, workoutSplit, id}
+			//need id's from both; date from prev; split from prevPrev
+			const {id: prevId, workoutDate: prevWorkoutDate} = prevWorkout[0];
+			const {id: prevPrevId, workoutSplit: newWorkoutSplit,} = prevPrevWorkout[0];
 
-
-			//we have next workout split.
-			const newWorkoutSplit = prevPrevWorkoutInfo.workoutSplit;
-			//to create a new workout we need to send workoutSplit, userId, and (maybe) workout date - for now the default value is null - fix later.
-			//that means at this point we can create the new workout with newWorkoutSplit and userId - after creating, we need to grab workoutId and use that in our exercise model methods to create those exercises.
+			//add workoutDate in the future - need to figure out formatting. For now default is null.
 			const newWorkout = await Workout.create({
 				workoutSplit: newWorkoutSplit,
 				userId,
 			});
-			workoutId = newWorkout.id;
+			const workoutId = newWorkout.id;
 
-			//we need to call this method to get the next exercise.
-			//If newWorkoutSplit is 'A' then our exercise name id's are 1 2 3; if 'B' then its 1 4 5. The workoutDate we send over is for 2 week deloading purposes - for now I think we can ignore.
-			const prevId = prevWorkoutInfo.id;
-			const prevPrevId = prevPrevWorkoutInfo.id;
+			//create squat
+			await Exercise.createNext(workoutId, prevId, 1, null);
+			//for overhead and deadlift (newWorkoutSplit === 'A')
+			let exerciseNameIdArr = [2,3];
+			//for bench and row
+			if(newWorkoutSplit === 'B') exerciseNameIdArr = [4,5];
+			//create A or B split exercises
+			exerciseNameIdArr.forEach(async (exerciseId)=>{
+				await Exercise.createNext(workoutId, prevPrevId, exerciseId, null);
+			})
 
-			//pull values off of this, then create a squat model and link to workoutId
-			const newSquat = await Exercise.createNext(workoutId, prevId, 1, null);
-
-
-			const newWorkoutArr = [newSquat];
-			if(newWorkoutSplit === 'A') {
-			//pull values off of this, then create a squat model and link to workoutId
-				const nextOverhead = await Exercise.createNext(workoutId, prevPrevId, 2, null);
-
-
-			//pull values off of this, then create a squat model and link to workoutId
-			const nextDeadlift = await Exercise.createNext(workoutId, prevPrevId, 3, null);
-
-
-
-			} else if (newWorkoutSplit === 'B') {
-
-
-			//pull values off of this, then create a squat model and link to workoutId
-				const nextBench = await Exercise.createNext(workoutId, prevPrevId, 4, null);
-
-
-				//pull values off of this, then create a squat model and link to workoutId
-				//have logic on exercise model - this should return a new row model that is attached to our workout.
-				const nextRow = await Exercise.createNext(workoutId, prevPrevId, 5, null);
-
-				//unnecessary?
-			}
-
-
-			//I think what we want to return is our new workout model with the next exercises on it.
 			return res.json(newWorkout)
     } catch (err) {
       console.log(err);
     }
-    // const lastAWorkout = Workout.findAll({
-    //   where: {
-    //     workoutSplit: "A",
-    //     userId,
-    //   },
-    //   limit: 1,
-    //   order: [["workoutDate", "DESC"]],
-    // });
   })
 );
 
-//second thought - why does front end need to know about progress object? We can create it on the back end, use it to make a new workout, and send the new workout over to the user! Keep going.
-router.get(
-  "/progress/:userId",
-  asyncHandler(async (req, res) => {
-    const userId = parseInt(req.params.userId, 10);
-    //bunch of database queries coming up. I would like to format the progress object as follows:
-
-    //should I be creating methods on my models to do some of this work? That way these back end calls can just be calling a few methods on the models and getting what they need.
-    // progress = {
-    // 	1: {
-    // 		exerciseNameId: 1,//squat is 1, then overhead, dead, bench, row
-    // 		workingWeightId: 0,//0lbs is id 1; multiply id by 5 and subtract 5 for ww
-    // 		wasSuccessful: true,//bool - if true, ww for next goes up, if false, we have other checks relating to numFails
-    // 		numFails: 2,// if wasSuccessful is false and numFails is 2, then the new exercise will have numFails 0 and didDeload prop set to true - we will also decrease working weight by 20% - multiply wwid by 0.8 and find the floor for the new wwid.
-    // 	}
-    // }
-  })
-);
 
 module.exports = router;
