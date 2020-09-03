@@ -26,7 +26,7 @@ export const createWorkoutThunk = (userId, workoutSplit, progress) => {
     const res = await fetch(`api/workouts/${userId}`, {
       method: "post",
       "Content-Type": "application/json",
-      "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"), //necessary?
+      // "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"), //necessary?
       body,
     });
     res.data = await res.json();

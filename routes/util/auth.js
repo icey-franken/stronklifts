@@ -53,6 +53,20 @@ function restoreUser(req, _res, next) {
   });
 }
 
+function getCurrentUser(req, _res, next) {
+  const { token } = req.cookies;
+  if (!token) {
+    return next();
+  }
+  return jwt.verify(token, secret, null, async (err, payload) => {
+    if (!err) {
+      const userId = payload.data.id;
+      req.user = await User.getCurrentUserById(userId);
+    }
+    return next();
+  });
+}
+
 const requireUser = [restoreUser];
 
-module.exports = { generateToken, requireUser, AuthenticationError };
+module.exports = { generateToken, requireUser, getCurrentUser, AuthenticationError };

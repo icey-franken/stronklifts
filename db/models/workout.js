@@ -39,5 +39,32 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: 'workoutId'
 		})
   };
-  return Workout;
+
+
+	Workout.getSquatProgress = async function(userId) {
+		return await Workout.findAll({
+      where: {
+        userId,
+        workoutComplete: true,
+      },
+      limit: 1,
+      order: [["workoutDate", "DESC"]],
+      include: [
+        {
+          model: Exercise,
+          // attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
+          where: { exerciseNameId: 1 },
+          attributes: [
+            "workingWeightId",
+            "numFails",
+            "wasSuccessful",
+            "didDeload",
+          ], //might not care about didDeload
+        },
+      ],
+    })
+	}
+
+
+	return Workout;
 };

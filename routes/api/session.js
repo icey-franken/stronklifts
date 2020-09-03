@@ -8,7 +8,10 @@ const {
   requireUser,
   generateToken,
   AuthenticationError,
-} = require("../util/auth");
+} = require("../util/auth");//delete?
+
+const { getCurrentUser, generateToken } = require("../util/auth");
+
 const {
   jwtConfig: { expiresIn },
 } = require("../../config");
@@ -19,14 +22,11 @@ const validateLogin = [check("username").exists(), check("password").exists()];
 
 router.get(
   "/",
-  requireUser,
+  getCurrentUser,
   asyncHandler(async function (req, res, next) {
-    if (req.user) {
-      return res.json({
-        user: req.user,
-      });
-    }
-    next(new AuthenticationError());
+    return res.json({
+      user: req.user || {}
+    });
   })
 );
 

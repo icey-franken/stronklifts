@@ -67,6 +67,9 @@ module.exports = (sequelize, DataTypes) => {
 		Exercise.belongsTo(models.ExerciseName, {
 			foreignKey: 'exerciseNameId'
 		})
-  };
+	};
+
+
+
   return Exercise;
 };
