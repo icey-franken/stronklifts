@@ -13,7 +13,6 @@ const {
 const router = express.Router();
 
 const grabWorkoutSpecs = {
-  //we know the exact id of this workout because we made it above
   attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
   order: [
     [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
@@ -39,9 +38,8 @@ const grabWorkoutSpecs = {
     },
     { model: WorkoutNote, attributes: ["description"] },
   ],
-}; //to simplify db calls - do later
+};
 
-// const findAllSpecs = find
 
 router.get(
   "/:userId",
@@ -50,38 +48,7 @@ router.get(
     grabWorkoutSpecs.where = { userId };
     grabWorkoutSpecs.limit = 10;
     grabWorkoutSpecs.order.unshift(["workoutDate", "desc"]);
-    const workouts = await Workout.findAll(
-      grabWorkoutSpecs
-      // 	{
-      //   //ordering works! It should return sets in an array of objects in order. Sets are a key in an exercise object, which themselves are in order. I may be able to remove some of the info queried here in the future - will leave for now for debugging.
-      //   where: { userId },
-      //   attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
-      //   limit: 10,
-      //   order: [
-      //     ["workoutDate", "desc"], //out of order in postman but correct order in chrome dev tools?
-      //     [Exercise, "exerciseOrder", "asc"],
-      //     [Exercise, Set, "setOrder", "asc"],
-      //   ],
-      //   include: [
-      //     {
-      //       model: Exercise,
-      //       attributes: ["exerciseOrder", "numSets", "numRepsGoal", ['id','exerciseId']],
-      //       include: [
-      //         { model: ExerciseName, attributes: ["exerciseName"] },
-      //         { model: WorkingWeight, attributes: ["weight"] },
-      //         {
-      //           model: Set,
-      //           attributes: ["setOrder", "numRepsActual"],
-      //         },
-      //       ],
-      //     },
-      //     { model: WorkoutNote, attributes: ["description"] },
-      //     // {
-      //     //   model: Set,
-      //     // },
-      //   ],
-      // }
-    );
+    const workouts = await Workout.findAll(grabWorkoutSpecs);
     return res.json({ workouts });
   })
 );
@@ -172,35 +139,7 @@ router.post(
         //It is critical that this grabs the SAME stuff as the above, so that our store state stays the same
       }
       grabWorkoutSpecs.where = { id: workoutId };
-      newWorkout = await Workout.findOne(
-        grabWorkoutSpecs
-        // 	{
-        //   where: { id: workoutId }, //we know the exact id of this workout because we made it above
-        //   attributes: ["workoutDate", "workoutComplete", "workoutSplit", "id"],
-        //   order: [
-        //     [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
-        //     [Exercise, Set, "setOrder", "asc"],
-        //   ],
-        //   include: [
-        //     {
-        //       model: Exercise,
-        //       attributes: ["exerciseOrder", "numSets", "numRepsGoal", ['id','exerciseId']],
-        //       include: [
-        //         { model: ExerciseName, attributes: ["exerciseName"] },
-        //         { model: WorkingWeight, attributes: ["weight"] },
-        //         {
-        //           model: Set,
-        //           attributes: ["setOrder", "numRepsActual"],
-        //         },
-        //       ],
-        //     },
-        //     { model: WorkoutNote, attributes: ["description"] },
-        //     // {
-        //     //   model: Set,
-        //     // },
-        //   ],
-        // }
-      );
+      newWorkout = await Workout.findOne(grabWorkoutSpecs);
       return res.json({ newWorkout });
     } catch (err) {
       console.log(err);
