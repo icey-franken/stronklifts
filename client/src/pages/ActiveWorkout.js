@@ -18,17 +18,19 @@ export default function ActiveWorkout({workoutId=null}) {
 // 		//dispatch a thunk to create a new workout,
 // 	// }
 
-	//this should actually create a new workout
-	useEffect(()=>{
-		//need to get previous working weights for exercises that pertain to the split.
-		//we could define a workingWeight slice of state that has the working weight for each exercise, along with number of failures.
-		//pass in an exerciseInfo array of objects with:
-		//exerciseName (from exerciseNameId), workingWeight (from workingWeightId), wasSuccessful, numFails,
-		//we can save this in a slice of state called progress?
-		//in the thunk we can figure out the workoutDate to submit. Based on workoutSplit, a post request will be made to db. Have default values in db take care of as much as possible.
-		dispatch(createWorkoutThunk(userId, workoutSplit, progress));
-	}, [dispatch, userId]);
-console.log(Object.keys(workouts));
+	// //this should actually create a new workout
+	// useEffect(()=>{
+	// 	//need to get previous working weights for exercises that pertain to the split.
+	// 	//we could define a workingWeight slice of state that has the working weight for each exercise, along with number of failures.
+	// 	//pass in an exerciseInfo array of objects with:
+	// 	//exerciseName (from exerciseNameId), workingWeight (from workingWeightId), wasSuccessful, numFails,
+	// 	//we can save this in a slice of state called progress?
+	// 	//in the thunk we can figure out the workoutDate to submit. Based on workoutSplit, a post request will be made to db. Have default values in db take care of as much as possible.
+
+	// 	dispatch(createWorkoutThunk(userId, workoutSplit, progress));
+	// }, [dispatch, userId]);
+
+	console.log(Object.keys(workouts));
 	if(!Object.keys(workouts)) return null;//chnage this to some "looks like you haven't done a damn thing" page
 	console.log(workouts);
   return (

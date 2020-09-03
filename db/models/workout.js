@@ -1,4 +1,7 @@
 "use strict";
+const db = require('./index')
+const Exercise = require('./exercise');
+
 module.exports = (sequelize, DataTypes) => {
   const Workout = sequelize.define(
     "Workout",
@@ -42,6 +45,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
 	Workout.getSquatProgress = async function(userId) {
+		console.log('db',db);
+		console.log('exercise',Exercise)
 		return await Workout.findAll({
       where: {
         userId,
@@ -51,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
       order: [["workoutDate", "DESC"]],
       include: [
         {
-          model: Exercise,
+          model: 'Exercise',
           // attributes: ["exerciseOrder", "numSets", "numRepsGoal"],
           where: { exerciseNameId: 1 },
           attributes: [
