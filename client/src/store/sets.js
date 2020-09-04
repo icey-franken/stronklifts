@@ -11,7 +11,6 @@ export default function setReducer(state = {}, action) {
   switch (action.type) {
     case SET_USER:
       const userId = action.user.id;
-      console.log(userId);
       setIds.forEach((setId) => {
         newState[setId].userId = userId;
       });
@@ -36,25 +35,6 @@ export default function setReducer(state = {}, action) {
 				newState[id] = action.sets[id];
 			});
       return newState;
-			// console.log('line 31 set',action)
-      // let copy2 = Object.assign({}, action.workout);
-      // console.log(copy2);
-      // copy2.Exercises.forEach((exercise) => {
-      //   // exercise.exerciseName = exercise.ExerciseName.exerciseName;
-      //   // delete exercise.ExerciseName;
-      //   // exercise.weight = exercise.WorkingWeight.weight;
-      //   // delete exercise.WorkingWeight;
-      //   // let setIds = [];
-      //   exercise.Sets.forEach((set) => {
-      //     // setIds.push(set.id);
-      //     newState[set.id] = set;
-      //     newState[set.id].exerciseId = exercise.id;
-      //   });
-      //   // delete exercise.Sets;
-      //   // exercise.setIds = setIds;
-      //   // newState[exercise.id] = exercise;
-      // });
-      // return newState;
     default:
       return state;
   }
