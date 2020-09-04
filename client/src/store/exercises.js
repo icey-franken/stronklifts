@@ -52,24 +52,6 @@ export default function exerciseReducer(state = {}, action) {
 					action.sets[set.id] = setCopy;
 				})
       });
-
-      // console.
-      // console.log(newState);
-      // console.log(action.exercises);
-      // workout.Exercises.forEach((exercise) => {
-      //   const exerciseCopy = Object.assign({}, exercise);
-      //   console.log("line 135 loop", exercise);
-      //   action.exercises[exercise.id] = exerciseCopy;
-			// });
-
-      // action.exercises
-      // action.exercises[exerciseState.]
-      // delete action.workout;
-      // action.exercise = exercisesState;
-      // console.log("line 126 workouts", action.exercise);
-
-      // delete action.exercises;
-			console.log("line 148 action", action);
 			delete action.exercises;
       return newState;
     case CREATE_WORKOUT:

@@ -22,28 +22,10 @@ export default function setReducer(state = {}, action) {
       });
       return newState;
     case GET_WORKOUTS:
-      // let copy = [...action.workouts];
-      // console.log(copy);
-      // copy.forEach((workout) => {
-      //   workout.Exercises.forEach((exercise) => {
-      //     // exercise.exerciseName = exercise.ExerciseName.exerciseName;
-      //     // delete exercise.ExerciseName;
-      //     // exercise.weight = exercise.WorkingWeight.weight;
-      //     // delete exercise.WorkingWeight;
-			// 		// let setIds = [];
-			// 		// console.log(exercise);
-      //     if (exercise.Sets) {
-      //       exercise.Sets.forEach((set) => {
-      //         // setIds.push(set.id);
-      //         newState[set.id] = set;
-      //         newState[set.id].exerciseId = exercise.id;
-      //       });
-      //       // delete exercise.Sets;
-      //       // exercise.setIds = setIds;
-      //       // newState[exercise.id] = exercise;
-      //     }
-      //   });
-      // });
+			const actionSetIds = Object.keys(action.sets);
+			actionSetIds.forEach(id=>{
+				newState[id] = action.sets[id];
+			});
       return newState;
     case CREATE_WORKOUT:
       // let copy2 = Object.assign({}, action.workout);
