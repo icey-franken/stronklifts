@@ -3,8 +3,9 @@ import Exercise from "./Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
 
-export default function Workout({ workout }) {
-  // console.log(workout);
+export default function Workout({ workoutId }) {
+	// console.log(workout);
+	const workout = useSelector(state=> state.workouts[workoutId])
 	const exercises = useSelector((state)=>state.exercises);
 	const exercisesArr = Object.values(exercises);
 	if (!workout) return null;
@@ -73,8 +74,8 @@ export default function Workout({ workout }) {
         <div className="workout__date">{dateStr}</div>
       </div>
       <div className="workout__exercises">
-        {workoutExercisesArr.map((exercise, index) => {
-          return <Exercise key={index} exercise={exercise} />;
+        {workout.exerciseIds.map((exerciseId, index) => {
+          return <Exercise key={index} exerciseId={exerciseId} />;
         })}
       </div>
       <div className="workout__note">Notes: {note}</div>

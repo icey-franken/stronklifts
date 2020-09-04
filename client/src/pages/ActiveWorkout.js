@@ -29,7 +29,7 @@ export default function ActiveWorkout() {
       {/* {workouts.map((workout, index) => {
 				return <Workout key={index} workout={workout} />;
       })} */}
-			<Workout workout={workout}/>
+			<Workout workoutId={workoutId}/>
 			<button type='submit' onClick={handleClick}>SAVE</button>
     </>
   );

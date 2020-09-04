@@ -20,8 +20,6 @@ export default function Set({ setId }) {
 		dispatch(updateReps(setId, e.target.innerHTML));
 			// else if (e.target.innerHTML === "")
   };
-  // console.log(numRepsActual !== ("noSet" || "emptySet"));
-	// console.log(numRepsActual===null);
   return (
     <div className="exercise__set-container">
       {(set.numRepsActual === null)? (
