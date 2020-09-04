@@ -68,10 +68,6 @@ export default function workoutReducer(state = {}, action) {
         // workout.setIds = setIds;
         //I don't think workout needs to know about sets - we can let exercises worry about that. If sets change, exercises will change, therefore so will workouts? Ignore for now.
 
-        //replace exercises object on workout object with an array containing exercise ids
-        workout.exerciseIds = exerciseIds;
-        //send exercises object to the exercises reducer along with workout id
-				//!!!function call sending workout.id and exercises
 
 
         const { WorkoutNote } = workout;
@@ -84,9 +80,23 @@ export default function workoutReducer(state = {}, action) {
         }
         delete workout.WorkoutNote;
 
+
+
+        //replace exercises object on workout object with an array containing exercise ids
+				workout.exerciseIds = exerciseIds;
+				// exercise.setIds = setIds;
+        // delete exercise.Sets;
+        newState[workout.id] = workout;
+        let newNestedState = Object.assign({}, newState[workout.id]);
+        delete newNestedState.Exercises;
+        newState[newNestedState.id] = newNestedState;
+        //send exercises object to the exercises reducer along with workout id
+				//!!!function call sending workout.id and exercises
+
+
         // const note = workout.WorkoutNote.
         //follow similar process for sets and workout note, but in exercises reducer
-        newState[workoutId] = workout;
+        // newState[workoutId] = workout;
       });
       return newState;
     case CREATE_WORKOUT:
