@@ -28,6 +28,15 @@ export default function setReducer(state = {}, action) {
 			});
       return newState;
     case CREATE_WORKOUT:
+			if (action.workout === "duplicate") {
+        return newState;
+      }
+			const actionSetIds2 = Object.keys(action.sets);
+			actionSetIds2.forEach(id=>{
+				newState[id] = action.sets[id];
+			});
+      return newState;
+			// console.log('line 31 set',action)
       // let copy2 = Object.assign({}, action.workout);
       // console.log(copy2);
       // copy2.Exercises.forEach((exercise) => {
@@ -45,7 +54,7 @@ export default function setReducer(state = {}, action) {
       //   // exercise.setIds = setIds;
       //   // newState[exercise.id] = exercise;
       // });
-      return newState;
+      // return newState;
     default:
       return state;
   }
