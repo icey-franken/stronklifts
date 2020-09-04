@@ -1,6 +1,8 @@
 import React from "react";
 import "./Exercise.css";
 import Set from './Set';
+import SetEmpty from './SetEmpty';
+
 
 export default function Exercise({ exercise }) {
 
@@ -24,6 +26,9 @@ export default function Exercise({ exercise }) {
 	// 	else repsArr.push(null);
 	// }
 	// // console.log(repsArr, name);
+	if(exercise.setIds.length === 1) {
+		exercise.setIds.push('emptySet','emptySet','emptySet','emptySet');
+	}
 
 	return (
     <div className="exercise-container">
@@ -33,6 +38,9 @@ export default function Exercise({ exercise }) {
       </div>
       <div className="exercise__sets-container">
         {exercise.setIds.map((setId,index)=>{
+					if(setId === 'emptySet') {
+						return <SetEmpty key={index}/>
+					} else
 					return(<Set key={index} setId={setId}/>)
 				})}
       </div>
