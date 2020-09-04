@@ -49,62 +49,108 @@ export default function workoutReducer(state = {}, action) {
   let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_WORKOUTS:
-			console.log('action.workouts',action.workouts);
+			action.exercises = {};
       action.workouts.forEach((workout) => {
         const workoutId = workout.id;
+        newState[workoutId] = {
+          id: workoutId,
+          workoutDate: workout.workoutDate,
+          workoutComplete: workout.workoutComplete,
+          workoutSplit: workout.workoutSplit,
+        };
+        // newState[]
+
+        const { WorkoutNote } = workout;
+        if (WorkoutNote) {
+          newState[workoutId].workoutNoteId = WorkoutNote.id;
+
+          //grab this before workout reducer. Don't care right now.
+          const workoutNote = WorkoutNote.description;
+          //!!!send workoutNote to workoutNote reducer along with workout id
+        } else {
+          newState[workoutId].workoutNoteId = null;
+        }
 
         //pull exercises object off of workout
+        let stateToPassToExerciseRed = Object.assign({}, workout.Exercises);
         const exercises = workout.Exercises;
         const exerciseIds = [];
-        const setIds = [];
-        //get exercise ids from exercises object
+				//get exercise ids from exercises object
+				const workoutSetIds = [];
         exercises.forEach((exercise) => {
+          exercise.workoutId = workoutId;
           exerciseIds.push(exercise.id);
+          const exerciseSetIds = [];
+          console.log("line 64", exercise);
+          exercise.Sets.forEach((set) => {
+            exerciseSetIds.push(set.id);
+          });
+          // console.log(setIds);
+					exercise.setIds = exerciseSetIds;
+					workoutSetIds.push(...exerciseSetIds);
+          // workout.setIds = setIds;
+          // exercise.workoutNoteId = workout.workoutNoteId;
           // exercise.forEach(({Sets})=>{
           // setIds.push(Sets.id);
           // })
           // console.log(exercise);
-        });
+				});
+				newState[workoutId].setIds = workoutSetIds;
+				newState[workoutId].exerciseIds = exerciseIds;
+        // exerciseArr.push([...exercises]);
+
+        // workout.exerciseIds = exerciseIds;
+        console.log("workout line 75", workout);
         // workout.setIds = setIds;
         //I don't think workout needs to know about sets - we can let exercises worry about that. If sets change, exercises will change, therefore so will workouts? Ignore for now.
 
+        // stateToPassToExerciseRed.exerciseIds = exerciseIds;
 
-
-        const { WorkoutNote } = workout;
-        if (WorkoutNote) {
-          workout.workoutNoteId = WorkoutNote.id;
-          const workoutNote = WorkoutNote.description;
-          //!!!send workoutNote to workoutNote reducer along with workout id
-        } else {
-          workout.workoutNoteId = null;
-        }
-        delete workout.WorkoutNote;
-
-
+        // delete workout.WorkoutNote;
 
         //replace exercises object on workout object with an array containing exercise ids
-				workout.exerciseIds = exerciseIds;
-				// exercise.setIds = setIds;
+        // workout.exerciseIds = exerciseIds;
+        // exercise.setIds = setIds;
         // delete exercise.Sets;
-        newState[workout.id] = workout;
-        let newNestedState = Object.assign({}, newState[workout.id]);
-        delete newNestedState.Exercises;
-        newState[newNestedState.id] = newNestedState;
-        //send exercises object to the exercises reducer along with workout id
-				//!!!function call sending workout.id and exercises
 
+        // delete workout.Exercises;
+        // newState[workout.id] = workout;
+        // let newNestedState = Object.assign({}, newState[workout.id]);
+        // delete newNestedState.Exercises;
+        // newState[newNestedState.id] = newNestedState;
+        //send exercises object to the exercises reducer along with workout id
+        //!!!function call sending workout.id and exercises
 
         // const note = workout.WorkoutNote.
         //follow similar process for sets and workout note, but in exercises reducer
         // newState[workoutId] = workout;
-      });
+        // exerciseArr.forEach((exercise) => {
+        //   exercisesState[exercise.id] = exercise;
+				// });
+				// const exerciseState = Object.assign({},action.workout.Exercises)
+				console.log('line 133 workuot.',workout.Exercises);
+
+				// const newAction = {exercises: {}};
+				workout.Exercises.forEach(exercise=>{
+					const exerciseCopy = Object.assign({}, exercise);
+					console.log('line 135 loop',exercise)
+					action.exercises[exercise.id] = exerciseCopy;
+				})
+				// action.exercises
+				// action.exercises[exerciseState.]
+        // delete action.workout;
+        // action.exercise = exercisesState;
+        // console.log("line 126 workouts", action.exercise);
+			});
+			delete action.workouts;
+			console.log('line 148 action', action);
       return newState;
     case CREATE_WORKOUT:
       //if workout already exists, just return state as is
       if (newState[action.workout.id]) return newState;
       else {
-				const copy = Object.assign({},action.workout);
-				const workoutId = copy.id;
+        const copy = Object.assign({}, action.workout);
+        const workoutId = copy.id;
 
         //pull exercises object off of workout
         const exerciseIds = [];
@@ -112,20 +158,19 @@ export default function workoutReducer(state = {}, action) {
         //get exercise ids from exercises object
         copy.Exercises.forEach((exercise) => {
           exerciseIds.push(exercise.id);
-          exercise.Sets.forEach((set)=>{
-          setIds.push(set.id);
-          })
+          exercise.Sets.forEach((set) => {
+            setIds.push(set.id);
+          });
           // console.log(exercise);
         });
         copy.setIds = setIds;
         //I don't think workout needs to know about sets - we can let exercises worry about that. If sets change, exercises will change, therefore so will workouts? Ignore for now.
 
         //replace exercises object on workout object with an array containing exercise ids
-				copy.exerciseIds = exerciseIds;
-				delete copy.Exercises;
+        copy.exerciseIds = exerciseIds;
+        delete copy.Exercises;
         //send exercises object to the exercises reducer along with workout id
-				//!!!function call sending workout.id and exercises
-
+        //!!!function call sending workout.id and exercises
 
         const { WorkoutNote } = copy;
         if (WorkoutNote) {

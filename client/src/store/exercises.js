@@ -22,29 +22,30 @@ export default function exerciseReducer(state = {}, action) {
       });
       return newState;
     case GET_WORKOUTS:
-      let copy = [...action.workouts];
-      console.log(copy);
-      copy.forEach((workout) => {
-        workout.Exercises.forEach((exercise) => {
-          exercise.exerciseName = exercise.ExerciseName.exerciseName;
-          delete exercise.ExerciseName;
-          exercise.weight = exercise.WorkingWeight.weight;
-          delete exercise.WorkingWeight;
-          let setIds = [];
-          exercise.Sets.forEach((set) => {
-            setIds.push(set.id);
-          });
-					exercise.setIds = setIds;
-					// delete exercise.Sets;
-          newState[exercise.id] = exercise;
-          let newNestedState = Object.assign({}, newState[exercise.id]);
-          delete newNestedState.Sets;
-          newState[newNestedState.id] = newNestedState;
-          // let newNewState =
-          // delete newState[exercise.id].Sets;
-          delete newState[exercise.id].Sets;
-        });
-      });
+			console.log(action.exercises);
+      // let copy = [...action.workouts];
+      // console.log(copy);
+      // copy.forEach((workout) => {
+      //   workout.Exercises.forEach((exercise) => {
+      //     exercise.exerciseName = exercise.ExerciseName.exerciseName;
+      //     delete exercise.ExerciseName;
+      //     exercise.weight = exercise.WorkingWeight.weight;
+      //     delete exercise.WorkingWeight;
+      //     let setIds = [];
+      //     exercise.Sets.forEach((set) => {
+      //       setIds.push(set.id);
+      //     });
+			// 		exercise.setIds = setIds;
+			// 		// delete exercise.Sets;
+      //     newState[exercise.id] = exercise;
+      //     let newNestedState = Object.assign({}, newState[exercise.id]);
+      //     delete newNestedState.Sets;
+      //     newState[newNestedState.id] = newNestedState;
+      //     // let newNewState =
+      //     // delete newState[exercise.id].Sets;
+      //     delete newState[exercise.id].Sets;
+      //   });
+      // });
       return newState;
     case CREATE_WORKOUT:
       let copy2 = Object.assign({}, action.workout);
