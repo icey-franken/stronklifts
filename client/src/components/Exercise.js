@@ -34,7 +34,7 @@ export default function Exercise({ exercise }) {
     <div className="exercise-container">
       <div className="exercise__info-container">
         <div className='exercise__name'>{exercise.exerciseName}</div>
-        <div className='exercise__weight'>{exercise.weight} lbs</div>
+        <div className='exercise__weight'>{exercise.workingWeight} lbs</div>
       </div>
       <div className="exercise__sets-container">
         {exercise.setIds.map((setId,index)=>{

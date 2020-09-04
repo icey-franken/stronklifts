@@ -1,22 +1,23 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {updateReps} from '../store/sets';
 import "./Set.css";
 
 export default function Set({ setId }) {
 
-	//add set slice of state!
 	const set = useSelector((state)=>state.sets[setId]);
-	// if(set.)
-  //we should pass set id from prev element, then grab info from that set from the store. Then we can update value in store
+	const dispatch = useDispatch();
   const handleClick = (e) => {
     if (e.target.innerHTML > 0) e.target.innerHTML--;
     else if (e.target.innerHTML === "0") {
-			e.target.innerHTML = "";
+			e.target.innerHTML = null;
 			e.target.classList.add('exercise__set--emptySet');
 		} else {
 			e.target.innerHTML = '5';
 			e.target.classList.remove('exercise__set--emptySet')
 		}
+		//this updates store - we should set something up that updates the value in the database after a certain amount of dead time. (debouncing?)
+		dispatch(updateReps(setId, e.target.innerHTML));
 			// else if (e.target.innerHTML === "")
   };
   // console.log(numRepsActual !== ("noSet" || "emptySet"));

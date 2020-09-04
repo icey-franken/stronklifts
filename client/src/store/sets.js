@@ -4,6 +4,10 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
 import { SET_USER, REMOVE_USER } from "./auth";
 
+const UPDATE_REPS = 'sets/UPDATE_REPS';
+
+export const updateReps = (setId, numRepsActual) => ({type:UPDATE_REPS, id: setId, numRepsActual});
+
 export default function setReducer(state = {}, action) {
   Object.freeze(state);
   let newState = Object.assign({}, state);
@@ -34,7 +38,9 @@ export default function setReducer(state = {}, action) {
 			actionSetIds2.forEach(id=>{
 				newState[id] = action.sets[id];
 			});
-      return newState;
+			return newState;
+			case UPDATE_REPS:
+				newState[action.id].numRepsActual = parseInt(action.numRepsActual, 10);
     default:
       return state;
   }
