@@ -1,9 +1,11 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./Set.css";
 
-export default function Set({ numRepsActual }) {
+export default function Set({ setId }) {
 
 	//add set slice of state!
+	// const set = useSelector((state)=>state.sets[setId]);
 
   //we should pass set id from prev element, then grab info from that set from the store. Then we can update value in store
   const handleClick = (e) => {
@@ -20,19 +22,20 @@ export default function Set({ numRepsActual }) {
   // console.log(numRepsActual !== ("noSet" || "emptySet"));
 	// console.log(numRepsActual===null);
   return (
-    <div className="exercise__set-container">
-      {(numRepsActual === null)? (
-        <div
-          className="exercise__set exercise__set--emptySet"
-          onClick={handleClick}
-        ></div>
-      ) : numRepsActual !== "noSet" ? (
-        <div className="exercise__set" onClick={handleClick}>
-          {numRepsActual}
-        </div>
-      ) : (
-        <div className="exercise__set exercise__set--noSet">&#10006;</div>
-      )}
-    </div>
+		<div>connecting state</div>
+    // <div className="exercise__set-container">
+    //   {(numRepsActual === null)? (
+    //     <div
+    //       className="exercise__set exercise__set--emptySet"
+    //       onClick={handleClick}
+    //     ></div>
+    //   ) : numRepsActual !== "noSet" ? (
+    //     <div className="exercise__set" onClick={handleClick}>
+    //       {numRepsActual}
+    //     </div>
+    //   ) : (
+    //     <div className="exercise__set exercise__set--noSet">&#10006;</div>
+    //   )}
+    // </div>
   );
 }

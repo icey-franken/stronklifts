@@ -10,8 +10,8 @@ export default function exerciseReducer(state = {}, action) {
   let exerciseIds = Object.keys(newState);
   switch (action.type) {
     case SET_USER:
-			const userId = action.user.id;
-			console.log(userId);
+      const userId = action.user.id;
+      console.log(userId);
       exerciseIds.forEach((exerciseId) => {
         newState[exerciseId].userId = userId;
       });
@@ -34,15 +34,22 @@ export default function exerciseReducer(state = {}, action) {
           exercise.Sets.forEach((set) => {
             setIds.push(set.id);
           });
-          delete exercise.Sets;
-          exercise.setIds = setIds;
+					exercise.setIds = setIds;
+					// delete exercise.Sets;
           newState[exercise.id] = exercise;
+          let newNestedState = Object.assign({}, newState[exercise.id]);
+          delete newNestedState.Sets;
+          newState[newNestedState.id] = newNestedState;
+          // let newNewState =
+          // delete newState[exercise.id].Sets;
+          delete newState[exercise.id].Sets;
         });
       });
       return newState;
     case CREATE_WORKOUT:
       let copy2 = Object.assign({}, action.workout);
       console.log(copy2);
+      // let newNewState = Object.assign({},state);
       copy2.Exercises.forEach((exercise) => {
         exercise.exerciseName = exercise.ExerciseName.exerciseName;
         delete exercise.ExerciseName;
@@ -52,9 +59,14 @@ export default function exerciseReducer(state = {}, action) {
         exercise.Sets.forEach((set) => {
           setIds.push(set.id);
         });
-        delete exercise.Sets;
-        exercise.setIds = setIds;
+				exercise.setIds = setIds;
+        // delete exercise.Sets;
         newState[exercise.id] = exercise;
+        let newNestedState = Object.assign({}, newState[exercise.id]);
+        delete newNestedState.Sets;
+        newState[newNestedState.id] = newNestedState;
+        // let newNewState =
+        // delete newState[exercise.id].Sets;
       });
       return newState;
     default:
