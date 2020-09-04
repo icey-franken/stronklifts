@@ -2,8 +2,8 @@ import Cookies from 'js-cookie';//this module allows us to grab cookies
 // create all actions and reducer related to auth in this file
 
 //action type
-const SET_USER = 'auth/SET_USER';
-const REMOVE_USER = 'auth/REMOVE_USER';
+export const SET_USER = 'auth/SET_USER';
+export const REMOVE_USER = 'auth/REMOVE_USER';
 // const CREATE_USER = 'auth/CREATE_USER';//uses set user action creator - difference is thunk action creator called
 
 // action pojo creator function

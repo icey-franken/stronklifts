@@ -3,11 +3,14 @@ import thunk from 'redux-thunk';
 import auth from './auth';
 import workouts from './workouts'
 import progress from './progress';
+import exercises from './exercises';
+
 
 const rootReducer = combineReducers({
 	auth,
 	workouts,
 	progress,
+	exercises
 });
 
 let storeEnhancer;

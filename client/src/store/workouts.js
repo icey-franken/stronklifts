@@ -1,8 +1,8 @@
 import Cookies from "js-cookie"; //this module allows us to grab cookies
 
 //action types
-const GET_WORKOUTS = "/workout/GET_WORKOUTS";
-const CREATE_WORKOUT = "/workout/CREATE_WORKOUT";
+export const GET_WORKOUTS = "workout/GET_WORKOUTS";
+export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
 
 //action pojo creator function
 export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
@@ -49,6 +49,7 @@ export default function workoutReducer(state = {}, action) {
   let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_WORKOUTS:
+			console.log('action.workouts',action.workouts);
       action.workouts.forEach((workout) => {
         const workoutId = workout.id;
 
@@ -69,7 +70,6 @@ export default function workoutReducer(state = {}, action) {
 
         //replace exercises object on workout object with an array containing exercise ids
         workout.exerciseIds = exerciseIds;
-        delete workout.Exercises;
         //send exercises object to the exercises reducer along with workout id
 				//!!!function call sending workout.id and exercises
 
@@ -93,7 +93,42 @@ export default function workoutReducer(state = {}, action) {
       //if workout already exists, just return state as is
       if (newState[action.workout.id]) return newState;
       else {
-        newState[action.workout.id] = action.workout;
+				const copy = Object.assign({},action.workout);
+				const workoutId = copy.id;
+
+        //pull exercises object off of workout
+        const exerciseIds = [];
+        const setIds = [];
+        //get exercise ids from exercises object
+        copy.Exercises.forEach((exercise) => {
+          exerciseIds.push(exercise.id);
+          exercise.Sets.forEach((set)=>{
+          setIds.push(set.id);
+          })
+          // console.log(exercise);
+        });
+        copy.setIds = setIds;
+        //I don't think workout needs to know about sets - we can let exercises worry about that. If sets change, exercises will change, therefore so will workouts? Ignore for now.
+
+        //replace exercises object on workout object with an array containing exercise ids
+				copy.exerciseIds = exerciseIds;
+				delete copy.Exercises;
+        //send exercises object to the exercises reducer along with workout id
+				//!!!function call sending workout.id and exercises
+
+
+        const { WorkoutNote } = copy;
+        if (WorkoutNote) {
+          copy.workoutNoteId = WorkoutNote.id;
+          // const workoutNote = WorkoutNote.description;
+          //!!!send workoutNote to workoutNote reducer along with workout id
+        } else {
+          copy.workoutNoteId = null;
+        }
+        delete copy.WorkoutNote;
+
+        // const note = workout.WorkoutNote.
+        newState[workoutId] = copy;
         return newState;
       }
     default:
