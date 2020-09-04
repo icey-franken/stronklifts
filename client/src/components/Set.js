@@ -2,6 +2,9 @@ import React from "react";
 import "./Set.css";
 
 export default function Set({ numRepsActual }) {
+
+	//add set slice of state!
+
   //we should pass set id from prev element, then grab info from that set from the store. Then we can update value in store
   const handleClick = (e) => {
     if (e.target.innerHTML > 0) e.target.innerHTML--;
