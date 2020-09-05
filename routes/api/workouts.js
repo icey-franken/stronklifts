@@ -26,7 +26,8 @@ const grabWorkoutSpecs = {
 				'workoutId',
         "exerciseOrder",
         "numSets",
-        "numRepsGoal",
+				"numRepsGoal",
+				"wasSuccessful"
       ],
       include: [
         { model: ExerciseName, attributes: ["exerciseName"] },
@@ -45,7 +46,6 @@ const grabWorkoutSpecs = {
 router.get(
   "/:userId",
   asyncHandler(async (req, res) => {
-		console.log(req.body);
     const userId = parseInt(req.params.userId, 10);
     grabWorkoutSpecs.where = { userId };
     grabWorkoutSpecs.limit = 10;

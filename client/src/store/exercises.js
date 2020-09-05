@@ -3,6 +3,32 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 //action types
 import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
 import { SET_USER, REMOVE_USER } from "./auth";
+export const UPDATE_SUCCESS = 'exercise/UPDATE_SUCCESS';
+
+export const updateExerciseSuccess= (exerciseId, wasSuccessful) =>({
+	type: UPDATE_SUCCESS,
+	exerciseId,
+	wasSuccessful
+})
+
+export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
+	return async (dispatch) => {
+		try{
+			const body = JSON.stringify({wasSuccessful});
+			const res = await fetch(`api/exercises/${exerciseId}`, {
+				method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+        },
+        body,
+			});
+			if(!res.ok) throw res;
+			dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
+			return res;
+		} catch(err) {console.log(err)}
+	}
+}
 
 export default function exerciseReducer(state = {}, action) {
   Object.freeze(state);
@@ -37,7 +63,8 @@ export default function exerciseReducer(state = {}, action) {
           "numRepsGoal",
           "numSets",
           "setIds",
-          "workoutId",
+					"workoutId",
+					'wasSuccessful'
         ];
         relevantExerciseKeys.forEach((relevantExerciseKey) => {
           newState[id][relevantExerciseKey] = exercise[relevantExerciseKey];
@@ -83,7 +110,10 @@ export default function exerciseReducer(state = {}, action) {
         });
       });
       delete action.exercises;
-      return newState;
+			return newState;
+		case UPDATE_SUCCESS:
+			newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
+			return newState;
     default:
       return state;
   }
