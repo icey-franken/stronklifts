@@ -17,7 +17,8 @@ export default function Set({ setId }) {
 			e.target.classList.remove('exercise__set--emptySet')
 		}
 		//this updates store - we should set something up that updates the value in the database after a certain amount of dead time. (debouncing?)
-		dispatch(updateRepsThunk(setId, e.target.innerHTML));
+		dispatch(updateRepsThunk(setId, parseInt(e.target.innerHTML,10)));
+		console.log(setId, parseInt(e.target.innerHTML,10));
 			// else if (e.target.innerHTML === "")
   };
   return (

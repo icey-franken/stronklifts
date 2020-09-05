@@ -8,28 +8,30 @@ const UPDATE_REPS = "sets/UPDATE_REPS";
 
 export const updateReps = (setId, numRepsActual) => ({
   type: UPDATE_REPS,
-  id: setId,
+  setId,
   numRepsActual,
 });
 
 export const updateRepsThunk = (setId, numRepsActual) => {
   return async (dispatch) => {
-		try{
-			console.log(numRepsActual);
-			const body = JSON.stringify( {numRepsActual})
-			console.log(body);
-    const res = await fetch(`/api/sets/${setId}`, {
-      method: "patch",
-      headers: {
-        "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
-        "Content-Type": "application/json",
-      },
-      body,
-		});
-		if(!res.ok) throw res;
-		dispatch(updateReps(setId, numRepsActual));
-		return res;
-	} catch(err) {console.log(err)}
+    try {
+      const body = JSON.stringify({ numRepsActual });
+			const res = await fetch(`/api/sets/${setId}`,
+			{
+        method: "put",
+        headers: {
+          "Content-Type": "application/json",
+          "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+        },
+        body,
+			}
+			);
+      if (!res.ok) throw res;
+      dispatch(updateReps(setId, numRepsActual));
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
@@ -65,7 +67,7 @@ export default function setReducer(state = {}, action) {
       });
       return newState;
     case UPDATE_REPS:
-      newState[action.id].numRepsActual = parseInt(action.numRepsActual, 10);
+      newState[action.setId].numRepsActual = parseInt(action.numRepsActual, 10);
     default:
       return state;
   }

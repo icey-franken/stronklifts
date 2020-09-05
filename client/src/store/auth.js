@@ -49,13 +49,15 @@ export const logout = () => async (dispatch) => {
 //NEED TO ALTER THIS THUNK FOR SIGNUP!!!
 export const signup = (username, email, password, confirmPassword) => {
 	return async dispatch => {
+		const body = JSON.stringify({username,email,password, confirmPassword});
+		console.log(body);
 		const res = await fetch('/api/users', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
 				'XSRF-TOKEN': Cookies.get('XSRF-TOKEN'),
 			},
-			body: JSON.stringify({username,email,password, confirmPassword}),
+			body,
 		});
 		res.data = await res.json()//this should be everything EXCEPT hashed password (see user model)
 		//now we put user data in our redux store.
