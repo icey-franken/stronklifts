@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {updateReps} from '../store/sets';
+import {updateRepsThunk} from '../store/sets';
 import "./Set.css";
 
 export default function Set({ setId }) {
@@ -17,7 +17,7 @@ export default function Set({ setId }) {
 			e.target.classList.remove('exercise__set--emptySet')
 		}
 		//this updates store - we should set something up that updates the value in the database after a certain amount of dead time. (debouncing?)
-		dispatch(updateReps(setId, e.target.innerHTML));
+		dispatch(updateRepsThunk(setId, e.target.innerHTML));
 			// else if (e.target.innerHTML === "")
   };
   return (
