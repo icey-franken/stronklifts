@@ -36,7 +36,7 @@ export default function Workout({ workoutId }) {
   dateArr.forEach((el) => (dateStr += el.value));
   //date string day number is behind by 1 - what the fuck?
 
-  let note = "need to make note slice of state";
+	//need to add note input
   if (!workout.exerciseIds) return null;
   return (
     <div className="workout-container">
@@ -50,7 +50,7 @@ export default function Workout({ workoutId }) {
           return <Exercise key={index} exerciseId={exerciseId} />;
         })}
       </div>
-      <div className="workout__note">Notes: {note}</div>
+      <div className="workout__note">Notes: {workout.note}</div>
       <button id={workout.id} onClick={handleDelete}>
         Delete Workout
       </button>
