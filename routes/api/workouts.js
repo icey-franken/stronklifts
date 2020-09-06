@@ -104,13 +104,13 @@ router.post(
   "/:userId",
   asyncHandler(async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
-		let wwValues = [null, null, null, null, null];
-		console.log('line108',req.body===true);
-		console.log(req.body.wwValues === true)
+    let wwValues = [null, null, null, null, null];
+    console.log("line108", req.body === true);
+    console.log(req.body.wwValues === true);
     if (req.body.wwValues) {
       wwValues = req.body.wwValues;
 
-			let newWorkout = await Workout.create({
+      let newWorkout = await Workout.create({
         workoutSplit: "A",
         userId,
       });
@@ -146,7 +146,6 @@ router.post(
       await Set.createBasicSets(rowId, 5);
       console.log("hits", rowId);
 
-
       workoutId = newWorkout.id;
       const { id: squatId } = await Exercise.createNext(
         workoutId,
@@ -178,11 +177,10 @@ router.post(
       // newWorkout = await Workout.findOne(grabWorkoutSpecs);
       return res.json({ newWorkout });
     } else {
-			let workoutId;
-			console.log('hits line 179');
-			console.log(wwValues);
+      let workoutId;
+      console.log("hits line 179");
+      console.log(wwValues);
       try {
-
         //first check that no incomplete workouts exist
         const incompleteId = await Workout.getIncompleteId(userId);
         if (incompleteId !== null) {
@@ -286,6 +284,41 @@ router.put(
       return res.json({ workout });
     } catch (err) {
       console.log(err);
+    }
+  })
+);
+
+//this gives error: "update or delete on table \"Workouts\" violates foreign key constraint \"Exercises_workoutId_fkey\" on table \"Exercises\"",
+//BUT only on the first time - the second time I call there is no problem.
+//Seems like the Workout.destroy method is called too quickly and it thinks the associated exercises still exist, even though I delete them BEFORE.
+//Not sure why - did a lot of trouble shooting and writing this code different ways. For now.... we will make two requests to this route in order to delete a workout.
+router.delete(
+  "/:workoutId",
+  asyncHandler(async (req, res) => {
+		const id = parseInt(req.params.workoutId, 10);
+    try {
+      await WorkoutNote.destroy({ where: { workoutId: id } });
+      const assocExercises = await Exercise.findAll({
+        where: { workoutId: id },
+      });
+      if (assocExercises.length > 0) {
+        assocExercises.forEach(async (exercise) => {
+          const assocSets = await Set.findAll({
+            where: { exerciseId: exercise.id },
+          });
+          if (assocSets.length > 0) {
+            assocSets.forEach(async (set) => {
+              await set.destroy();
+            });
+          }
+          await exercise.destroy();
+        });
+      }
+      await Workout.destroy({ where: { id } });
+      return res.json({ deleted: true });
+    } catch (err) {
+      console.log(err);
+			return res.json({ deleted: false });
     }
   })
 );
