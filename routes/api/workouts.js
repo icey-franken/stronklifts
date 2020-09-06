@@ -330,8 +330,6 @@ router.delete(
     try {
       //get workout id off params
       const id = parseInt(req.params.workoutId, 10);
-      //destroy workout note
-      await WorkoutNote.destroy({ where: { workoutId: id } });
       //get exercise and set ids associated with that workout
       const exercises = await Exercise.findAll({
         where: { workoutId: id },
@@ -353,6 +351,7 @@ router.delete(
         });
       });
       //DESTROY
+			await WorkoutNote.destroy({ where: { workoutId: id } });
       await Set.destroy({ where: { id: setIdArr } });
       await Exercise.destroy({ where: { id: exerciseIdArr } });
       await Workout.destroy({ where: { id } });
