@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  Workout.prevWorkouts = async function (userId) {
+  Workout.prevWorkout = async function (userId) {
     const prevWorkout = await Workout.findOne({
       where: {
         userId,
@@ -63,22 +63,22 @@ module.exports = (sequelize, DataTypes) => {
       },
       order: [["workoutDate", "desc"]],
       attributes: ["workoutDate", "workoutSplit", "id"],
-    });
-    const prevSplit = prevWorkout.workoutSplit;
+		});
+		return prevWorkout;
+	}
 
-    let prevPrevSplit = "A";
-    if (prevSplit === "A") prevPrevSplit = "B";
+	Workout.prevPrevWorkout = async function (userId, workoutSplit) {
     //same logic as above prevWorkout but with split
     const prevPrevWorkout = await Workout.findOne({
       where: {
         userId,
         workoutComplete: true,
-        workoutSplit: prevPrevSplit,
+        workoutSplit,
       },
       order: [["workoutDate", "desc"]],
       attributes: ["workoutDate", "workoutSplit", "id"],
     });
-    return { prevWorkout, prevPrevWorkout };
+    return prevPrevWorkout;
   };
 
   return Workout;

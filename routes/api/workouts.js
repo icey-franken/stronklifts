@@ -28,8 +28,8 @@ const grabWorkoutSpecs = {
         "numSets",
         "numRepsGoal",
         "wasSuccessful",
-				'numFails',
-				'didDeload'
+        "numFails",
+        "didDeload",
       ],
       include: [
         { model: ExerciseName, attributes: ["exerciseName"] },
@@ -81,37 +81,34 @@ router.post(
         workoutId = incompleteId;
       } else {
         //add another check here - if no prevWorkouts then set starting values
-				const prevWorkouts = await Workout.prevWorkouts(userId);
-				console.log(prevWorkouts);
-        const { prevWorkout, prevPrevWorkout } = prevWorkouts;
+        const prevWorkout = await Workout.prevWorkout(userId);
 
-        //prevWorkout[0] = {workoutDate, workoutSplit, id}
-        //need id's from both; date from prev; split from prevPrev
-        const { id: prevId, workoutDate: prevWorkoutDate } = prevWorkout;
-        const {
-          id: prevPrevId,
-        } = prevPrevWorkout;
+        let prevId = null;
+        let prevSplit = "B";
+        if (prevWorkout !== null) {
+          prevId = prevWorkout.id;
+          prevSplit = prevWorkout.workoutSplit;
+          prevWorkoutDate = prevWorkout.workoutDate;
+        }
 
-				console.log('-------------------ids', prevId, prevPrevId);
-				let newWorkoutSplit = 'A'
-				console.log('--------------------------------------------',prevWorkout.workoutSplit)
-				console.log(prevWorkout);
-				if(prevWorkout.workoutSplit === 'A') {
-					newWorkoutSplit='B';
-				}
-				console.log('newWorkoutSplit', newWorkoutSplit);
-				//add workoutDate in the future - need to figure out formatting. For now default is null.
-				// const dateObj = new Date();
-				// const yr = dateObj.getFullYear();
-				// const day = dateObj.getDate();
-				// const month = dateObj.getMonth();
+        let newWorkoutSplit = "A";
+        if (prevSplit === "A") {
+          newWorkoutSplit = "B";
+        }
 
-				// const date = `${yr}-${month+1}-${day}`;
-				// // dateObj.now();
+        const prevPrevWorkout = await Workout.prevPrevWorkout(
+          userId,
+          newWorkoutSplit
+        );
+        let prevPrevId = null;
+        if (prevPrevWorkout !== null) {
+          prevPrevId = prevPrevWorkout.id;
+        }
+
         let newWorkout = await Workout.create({
           workoutSplit: newWorkoutSplit,
-					userId,
-					// workoutDate: date,
+          userId,
+          // workoutDate: date,
         });
         workoutId = newWorkout.id;
 
@@ -155,7 +152,7 @@ router.post(
         }
       }
       grabWorkoutSpecs.where = { id: workoutId };
-			newWorkout = await Workout.findOne(grabWorkoutSpecs);
+      newWorkout = await Workout.findOne(grabWorkoutSpecs);
       return res.json({ newWorkout });
     } catch (err) {
       console.log(err);

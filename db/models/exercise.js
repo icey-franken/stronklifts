@@ -78,22 +78,21 @@ module.exports = (sequelize, DataTypes) => {
     workoutDate
   ) {
     //implement a check that workoutDate is less than 14 days behind. If it is, then we deload. If not, do regular logic
-    const prevExercise = await Exercise.findOne({
-      where: {
-        workoutId: prevWorkoutId,
-        exerciseNameId,
-      },
-      attributes: ["id", "numFails", "wasSuccessful", "workingWeightId"],
-    });
     let numSets = 5;
     let workingWeightId = 10;
     if (exerciseNameId === 3) {
       workingWeightId = 20;
       numSets = 1;
-		}
-		console.log( "---------------------------prevExercise from exercise model",prevExercise, prevWorkoutId, exerciseNameId);
+    }
 
-    if (prevExercise) {
+    if (prevWorkoutId !== null) {
+      const prevExercise = await Exercise.findOne({
+        where: {
+          workoutId: prevWorkoutId,
+          exerciseNameId,
+        },
+        attributes: ["id", "numFails", "wasSuccessful", "workingWeightId"],
+      });
       const { numFails, wasSuccessful, workingWeightId } = prevExercise;
       let newWorkingWeightId = workingWeightId;
       let newNumFails = 0;
@@ -114,9 +113,6 @@ module.exports = (sequelize, DataTypes) => {
         didDeload: newDidDeload,
       });
     } else {
-			console.log( "---------------------------null prevExercise from exercise model", exerciseNameId)
-
-
       return await Exercise.create({
         workoutId: newWorkoutId,
         exerciseNameId,
