@@ -104,17 +104,30 @@ router.post(
   "/:userId",
   asyncHandler(async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
-    let wwValues = [null, null, null, null, null];
-    if (req.body) {
+		let wwValues = [null, null, null, null, null];
+		console.log('line108',req.body===true);
+		console.log(req.body.wwValues === true)
+    if (req.body.wwValues) {
       wwValues = req.body.wwValues;
-      console.log(wwValues);
+
+			let newWorkout = await Workout.create({
+        workoutSplit: "A",
+        userId,
+      });
 
       let newNewWorkout = await Workout.create({
         workoutSplit: "B",
         userId,
       });
-      const workoutId = newNewWorkout.id;
-
+      let workoutId = newNewWorkout.id;
+      const { id: squatId2 } = await Exercise.createNext(
+        workoutId,
+        null,
+        1,
+        null,
+        wwValues[0] + 1
+      );
+      await Set.createBasicSets(squatId2, 5);
       const { id: benchId } = await Exercise.createNext(
         workoutId,
         null,
@@ -132,94 +145,130 @@ router.post(
       );
       await Set.createBasicSets(rowId, 5);
       console.log("hits", rowId);
-    }
-    let workoutId;
-    try {
-      //first check that no incomplete workouts exist
-      const incompleteId = await Workout.getIncompleteId(userId);
-      if (incompleteId !== null) {
-        workoutId = incompleteId;
-      } else {
-        const prevWorkout = await Workout.prevWorkout(userId);
 
-        let prevId = null;
-        let prevSplit = "B";
-        if (prevWorkout !== null) {
-          prevId = prevWorkout.id;
-          prevSplit = prevWorkout.workoutSplit;
-          prevWorkoutDate = prevWorkout.workoutDate;
-        }
 
-        let newWorkoutSplit = "A";
-        if (prevSplit === "A") {
-          newWorkoutSplit = "B";
-        }
+      workoutId = newWorkout.id;
+      const { id: squatId } = await Exercise.createNext(
+        workoutId,
+        null,
+        1,
+        null,
+        wwValues[0]
+      );
+      await Set.createBasicSets(squatId, 5);
 
-        const prevPrevWorkout = await Workout.prevPrevWorkout(
-          userId,
-          newWorkoutSplit
-        );
-        let prevPrevId = null;
-        if (prevPrevWorkout !== null) {
-          prevPrevId = prevPrevWorkout.id;
-        }
+      const { id: overheadId } = await Exercise.createNext(
+        workoutId,
+        null,
+        2,
+        null,
+        wwValues[1]
+      );
+      await Set.createBasicSets(overheadId, 5);
+      const { id: deadliftId } = await Exercise.createNext(
+        workoutId,
+        null,
+        3,
+        null,
+        wwValues[2]
+      );
+      await Set.createBasicSets(deadliftId, 1);
 
-        let newWorkout = await Workout.create({
-          workoutSplit: newWorkoutSplit,
-          userId,
-        });
-        workoutId = newWorkout.id;
-        const workoutDate = newWorkout.workoutDate;
-
-        const { id: squatId } = await Exercise.createNext(
-          workoutId,
-          prevId,
-          1,
-          workoutDate,
-          wwValues[0]
-        );
-        await Set.createBasicSets(squatId, 5);
-        if (newWorkoutSplit === "A") {
-          const { id: overheadId } = await Exercise.createNext(
-            workoutId,
-            prevPrevId,
-            2,
-            workoutDate,
-            wwValues[1]
-          );
-          await Set.createBasicSets(overheadId, 5);
-          const { id: deadliftId } = await Exercise.createNext(
-            workoutId,
-            prevPrevId,
-            3,
-            workoutDate,
-            wwValues[2]
-          );
-          await Set.createBasicSets(deadliftId, 1);
-        } else if (newWorkoutSplit === "B") {
-          const { id: benchId } = await Exercise.createNext(
-            workoutId,
-            prevPrevId,
-            4,
-            workoutDate,
-            wwValues[3]
-          );
-          await Set.createBasicSets(benchId, 5);
-          const { id: rowId } = await Exercise.createNext(
-            workoutId,
-            prevPrevId,
-            5,
-            workoutDate,
-            wwValues[4]
-          );
-          await Set.createBasicSets(rowId, 5);
-        }
-      }
-      grabWorkoutSpecs.where = { id: workoutId };
-      newWorkout = await Workout.findOne(grabWorkoutSpecs);
+      // grabWorkoutSpecs.where = { id: workoutId };
+      // newWorkout = await Workout.findOne(grabWorkoutSpecs);
       return res.json({ newWorkout });
-    } catch (err) {
-      console.log(err);
+    } else {
+			let workoutId;
+			console.log('hits line 179');
+			console.log(wwValues);
+      try {
+
+        //first check that no incomplete workouts exist
+        const incompleteId = await Workout.getIncompleteId(userId);
+        if (incompleteId !== null) {
+          workoutId = incompleteId;
+        } else {
+          const prevWorkout = await Workout.prevWorkout(userId);
+
+          let prevId = null;
+          let prevSplit = "B";
+          if (prevWorkout !== null) {
+            prevId = prevWorkout.id;
+            prevSplit = prevWorkout.workoutSplit;
+            prevWorkoutDate = prevWorkout.workoutDate;
+          }
+
+          let newWorkoutSplit = "A";
+          if (prevSplit === "A") {
+            newWorkoutSplit = "B";
+          }
+
+          const prevPrevWorkout = await Workout.prevPrevWorkout(
+            userId,
+            newWorkoutSplit
+          );
+          let prevPrevId = null;
+          if (prevPrevWorkout !== null) {
+            prevPrevId = prevPrevWorkout.id;
+          }
+
+          let newWorkout = await Workout.create({
+            workoutSplit: newWorkoutSplit,
+            userId,
+          });
+          workoutId = newWorkout.id;
+          const workoutDate = newWorkout.workoutDate;
+
+          const { id: squatId } = await Exercise.createNext(
+            workoutId,
+            prevId,
+            1,
+            workoutDate,
+            wwValues[0]
+          );
+          await Set.createBasicSets(squatId, 5);
+          if (newWorkoutSplit === "A") {
+            const { id: overheadId } = await Exercise.createNext(
+              workoutId,
+              prevPrevId,
+              2,
+              workoutDate,
+              wwValues[1]
+            );
+            await Set.createBasicSets(overheadId, 5);
+            const { id: deadliftId } = await Exercise.createNext(
+              workoutId,
+              prevPrevId,
+              3,
+              workoutDate,
+              wwValues[2]
+            );
+            await Set.createBasicSets(deadliftId, 1);
+          } else if (newWorkoutSplit === "B") {
+            const { id: benchId } = await Exercise.createNext(
+              workoutId,
+              prevPrevId,
+              4,
+              workoutDate,
+              wwValues[3]
+            );
+            await Set.createBasicSets(benchId, 5);
+            const { id: rowId } = await Exercise.createNext(
+              workoutId,
+              prevPrevId,
+              5,
+              workoutDate,
+              wwValues[4]
+            );
+            await Set.createBasicSets(rowId, 5);
+          }
+        }
+        grabWorkoutSpecs.where = { id: workoutId };
+        newWorkout = await Workout.findOne(grabWorkoutSpecs);
+        return res.json({ newWorkout });
+      } catch (err) {
+        console.log(err);
+      }
     }
   })
 );

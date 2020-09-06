@@ -38,7 +38,7 @@ export const createWorkoutThunk = (userId, wwValues) => {
         headers: {
           "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
         },
-      };
+			};
       if (wwValues) {
         let body = JSON.stringify({ wwValues });
 				console.log("wwValues truthy");
