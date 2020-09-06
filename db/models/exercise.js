@@ -75,15 +75,15 @@ module.exports = (sequelize, DataTypes) => {
     newWorkoutId,
     prevWorkoutId,
     exerciseNameId,
-		workoutDate,
-		workingWeightId
+    workoutDate,
+    workingWeightId
   ) {
     //implement a check that workoutDate is less than 14 days behind. If it is, then we deload. If not, do regular logic
-		let numSets = 5;
+    let numSets = 5;
     let newWorkingWeightId = 10;
-		if(workingWeightId !== null) {
-			newWorkingWeightId = workingWeightId;
-		}
+    if (workingWeightId !== null) {
+      newWorkingWeightId = workingWeightId;
+    }
     let newNumFails = 0;
     let newDidDeload = false;
     if (exerciseNameId === 3) {
@@ -104,7 +104,7 @@ module.exports = (sequelize, DataTypes) => {
       if (wasSuccessful === true) newWorkingWeightId++;
       else if (numFails < 2) newNumFails = numFails + 1;
       else if (numFails >= 2) {
-				newWorkingWeightId = Math.floor(workingWeightId * 0.8);
+        newWorkingWeightId = Math.floor(workingWeightId * 0.8);
         newDidDeload = true;
       }
     }
@@ -118,5 +118,10 @@ module.exports = (sequelize, DataTypes) => {
       didDeload: newDidDeload,
     });
   };
+
+  Exercise.destroyExercises = async function (exerciseIds) {
+    exerciseIds.forEach(async (id) => await Exercise.destroy({ where: {id} }));
+  };
+
   return Exercise;
 };

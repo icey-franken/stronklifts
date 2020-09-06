@@ -292,35 +292,79 @@ router.put(
 //BUT only on the first time - the second time I call there is no problem.
 //Seems like the Workout.destroy method is called too quickly and it thinks the associated exercises still exist, even though I delete them BEFORE.
 //Not sure why - did a lot of trouble shooting and writing this code different ways. For now.... we will make two requests to this route in order to delete a workout.
+// router.delete(
+//   "/:workoutId",
+//   asyncHandler(async (req, res) => {
+//     const id = parseInt(req.params.workoutId, 10);
+//     try {
+//       await WorkoutNote.destroy({ where: { workoutId: id } });
+//       const assocExercises = await Exercise.findAll({
+//         where: { workoutId: id },
+//       });
+//       if (assocExercises.length > 0) {
+//         assocExercises.forEach(async (exercise) => {
+//           const assocSets = await Set.findAll({
+//             where: { exerciseId: exercise.id },
+//           });
+//           if (assocSets.length > 0) {
+//             assocSets.forEach(async (set) => {
+//               await set.destroy();
+//             });
+//           }
+//           await exercise.destroy();
+//         });
+//       }
+//       await Workout.destroy({ where: { id } });
+//       return res.json({ deleted: true });
+//     } catch (err) {
+//       console.log(err);
+//       return res.json({ deleted: false });
+//     }
+//   })
+// );
+
+//second attempt at delete method. This time I will make methods on the model that do the work. This route will simply call those methods. This route needs to get the work
 router.delete(
   "/:workoutId",
   asyncHandler(async (req, res) => {
-		const id = parseInt(req.params.workoutId, 10);
     try {
+      //get workout id off params
+      const id = parseInt(req.params.workoutId, 10);
+      //destroy workout note
       await WorkoutNote.destroy({ where: { workoutId: id } });
-      const assocExercises = await Exercise.findAll({
+      //get exercise and set ids associated with that workout
+      const exercises = await Exercise.findAll({
         where: { workoutId: id },
+        attributes: ["id"],
+        include: [
+          {
+            model: Set,
+            attributes: ["id"],
+          },
+        ],
       });
-      if (assocExercises.length > 0) {
-        assocExercises.forEach(async (exercise) => {
-          const assocSets = await Set.findAll({
-            where: { exerciseId: exercise.id },
-          });
-          if (assocSets.length > 0) {
-            assocSets.forEach(async (set) => {
-              await set.destroy();
+      let setIdArr = [];
+      let exerciseIdArr = [];
+      //extract ids off of exercises
+      if (exercises.length > 0) {
+        exercises.forEach(async (exercise) => {
+          exerciseIdArr.push(exercise.id);
+          if (exercise.Sets.length > 0) {
+            exercise.Sets.forEach(async (set) => {
+              setIdArr.push(set.id);
             });
           }
-          await exercise.destroy();
         });
       }
+      //DESTROY
+      await Set.destroySets(setIdArr);
+      await Exercise.destroyExercises(exerciseIdArr);
       await Workout.destroy({ where: { id } });
       return res.json({ deleted: true });
     } catch (err) {
       console.log(err);
-			return res.json({ deleted: false });
+      return res.json({ deleted: false });
     }
   })
 );
-
 module.exports = router;

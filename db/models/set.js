@@ -16,9 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       numRepsActual: {
         type: DataTypes.INTEGER,
-				allowNull: true,
-				defaultValue: null,
-
+        allowNull: true,
+        defaultValue: null,
       },
     },
     {}
@@ -29,11 +28,15 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-	Set.createBasicSets = async function (exerciseId, numSets) {
-		for(let i = 1; i <= numSets; i ++) {
-			await Set.create({exerciseId, setOrder: i,});
-		}
-	}
+  Set.createBasicSets = async function (exerciseId, numSets) {
+    for (let i = 1; i <= numSets; i++) {
+      await Set.create({ exerciseId, setOrder: i });
+    }
+  };
 
-	return Set;
+  Set.destroySets = async function (setIds) {
+    setIds.forEach(async (id) => await Set.destroy({ where: {id} }));
+  };
+
+  return Set;
 };
