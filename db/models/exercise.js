@@ -90,12 +90,10 @@ module.exports = (sequelize, DataTypes) => {
     if (exerciseNameId === 3) {
       workingWeightId = 20;
       numSets = 1;
-    }
+		}
+		console.log( "---------------------------prevExercise from exercise model",prevExercise, prevWorkoutId, exerciseNameId);
+
     if (prevExercise) {
-      console.log(
-        "---------------------------prevExercise from exercise model",
-        prevExercise
-      );
       const { numFails, wasSuccessful, workingWeightId } = prevExercise;
       let newWorkingWeightId = workingWeightId;
       let newNumFails = 0;
@@ -116,6 +114,9 @@ module.exports = (sequelize, DataTypes) => {
         didDeload: newDidDeload,
       });
     } else {
+			console.log( "---------------------------null prevExercise from exercise model", exerciseNameId)
+
+
       return await Exercise.create({
         workoutId: newWorkoutId,
         exerciseNameId,

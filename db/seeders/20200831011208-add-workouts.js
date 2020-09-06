@@ -16,7 +16,6 @@ module.exports = {
 					workoutDate: '2020-08-29',
           workoutComplete: true,
           workoutSplit: "B",
-
         },
       ],
       {}

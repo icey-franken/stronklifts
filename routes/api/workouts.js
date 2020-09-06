@@ -92,12 +92,13 @@ router.post(
           id: prevPrevId,
         } = prevPrevWorkout;
 
+				console.log('-------------------ids', prevId, prevPrevId);
 				let newWorkoutSplit = 'A'
 				console.log('--------------------------------------------',prevWorkout.workoutSplit)
 				console.log(prevWorkout);
-				// if(prevWorkout.workoutSplit === 'A') {
-				// 	newWorkoutSplit='B';
-				// }
+				if(prevWorkout.workoutSplit === 'A') {
+					newWorkoutSplit='B';
+				}
 				console.log('newWorkoutSplit', newWorkoutSplit);
 				//add workoutDate in the future - need to figure out formatting. For now default is null.
 				// const dateObj = new Date();

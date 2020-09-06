@@ -9,6 +9,7 @@ module.exports = {
 			 numSets: 5,
 			 numRepsGoal: 5,
 			 workingWeightId: 46,
+			 wasSuccessful: true,
 			},
 			{
 				workoutId: 1,
@@ -17,6 +18,7 @@ module.exports = {
 				numSets: 5,
 				numRepsGoal: 5,
 				workingWeightId: 22,
+				wasSuccessful: true,
 			 },
 			 {
 				workoutId: 1,
@@ -25,6 +27,7 @@ module.exports = {
 				numSets: 1,
 				numRepsGoal: 5,
 				workingWeightId: 56,
+				wasSuccessful: true,
 			 },
 			 {
 				workoutId: 2,
@@ -33,6 +36,7 @@ module.exports = {
 				numSets: 5,
 				numRepsGoal: 5,
 				workingWeightId: 47,
+				wasSuccessful: true,
 			 },
 			 {
 				 workoutId: 2,
@@ -41,6 +45,7 @@ module.exports = {
 				 numSets: 5,
 				 numRepsGoal: 5,
 				 workingWeightId: 35,
+				 wasSuccessful: true,
 				},
 				{
 				 workoutId: 2,
@@ -49,6 +54,7 @@ module.exports = {
 				 numSets: 5,
 				 numRepsGoal: 5,
 				 workingWeightId: 37,
+				 wasSuccessful: true,
 				}
 		], {});
   },
