@@ -4,7 +4,7 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 export const GET_WORKOUTS = "workout/GET_WORKOUTS";
 export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
 export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
-export const 	DELETE_WORKOUT = 'workout/DELETE_WORKOUT';
+export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
 
 //action pojo creator function
 export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
@@ -14,7 +14,12 @@ export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
   workoutId,
   workoutComplete,
 });
-export const deleteWorkout = (workoutId, exerciseIds, setIds) => ({type:DELETE_WORKOUT, workoutId, exerciseIds, setIds,});
+export const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
+  type: DELETE_WORKOUT,
+  workoutId,
+  exerciseIds,
+  setIds,
+});
 
 //thunk action creator
 export const getWorkoutsThunk = (userId) => {
@@ -40,19 +45,19 @@ export const createWorkoutThunk = (userId, wwValues) => {
         headers: {
           "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
         },
-			};
+      };
       if (wwValues) {
         let body = JSON.stringify({ wwValues });
-				console.log("wwValues truthy");
-				options = {
-					method: "post",
-					headers: {
-						"XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
-						"Content-Type": "application/json",
-					},
-					body
-				};
-      };
+        console.log("wwValues truthy");
+        options = {
+          method: "post",
+          headers: {
+            "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+            "Content-Type": "application/json",
+          },
+          body,
+        };
+      }
       const res = await fetch(`api/workouts/${userId}`, options);
       if (!res.ok) {
         throw res;
@@ -100,24 +105,24 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   };
 };
 
-export const deleteWorkoutThunk = (workoutId)=>{
-	return async(dispatch) =>{
-		try{
-			const res = await fetch(`/api/workouts/${workoutId}`,{
-				method:'delete',
-				headers: {'XSRF-TOKEN': Cookies.get('XSRF-TOKEN')}
-			})
-			if(!res.ok) throw res;
-			const data = await res.json();
-			const {exerciseIds, setIds} = data;
+export const deleteWorkoutThunk = (workoutId) => {
+  return async (dispatch) => {
+    try {
+      const res = await fetch(`/api/workouts/${workoutId}`, {
+        method: "delete",
+        headers: { "XSRF-TOKEN": Cookies.get("XSRF-TOKEN") },
+      });
+      if (!res.ok) throw res;
+      const data = await res.json();
+      const { exerciseIds, setIds } = data;
 
-			dispatch(deleteWorkout(workoutId, exerciseIds, setIds));
-			return res;
-		} catch(err) {
-			console.log(err);
-		}
-	}
-}
+      dispatch(deleteWorkout(workoutId, exerciseIds, setIds));
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 //workout reducer
 export default function workoutReducer(state = {}, action) {
@@ -135,15 +140,10 @@ export default function workoutReducer(state = {}, action) {
           workoutSplit: workout.workoutSplit,
         };
 
+        newState[workoutId].workoutNote = null;
         const { WorkoutNote } = workout;
         if (WorkoutNote) {
-          newState[workoutId].workoutNoteId = WorkoutNote.id;
-
-          //grab this before workout reducer. Don't care right now.
-          const workoutNote = WorkoutNote.description;
-          //!!!send workoutNote to workoutNote reducer along with workout id
-        } else {
-          newState[workoutId].workoutNoteId = null;
+          newState[workoutId].workoutNote = WorkoutNote.description;
         }
         //pull exercises object off of workout
         let stateToPassToExerciseRed = Object.assign({}, workout.Exercises);
@@ -186,15 +186,10 @@ export default function workoutReducer(state = {}, action) {
           workoutSplit: workout.workoutSplit,
         };
 
+        newState[workoutId].workoutNote = null;
         const { WorkoutNote } = workout;
         if (WorkoutNote) {
-          newState[workoutId].workoutNoteId = WorkoutNote.id;
-
-          //grab this before workout reducer. Don't care right now.
-          const workoutNote = WorkoutNote.description;
-          //!!!send workoutNote to workoutNote reducer along with workout id
-        } else {
-          newState[workoutId].workoutNoteId = null;
+          newState[workoutId].workoutNote = WorkoutNote.description;
         }
         //pull exercises object off of workout
 
@@ -223,10 +218,10 @@ export default function workoutReducer(state = {}, action) {
       return newState;
     case COMPLETE_WORKOUT:
       newState[action.workoutId].workoutComplete = action.workoutComplete;
-			return newState;
-		case DELETE_WORKOUT:
-			delete newState[action.workoutId];
-			return newState;
+      return newState;
+    case DELETE_WORKOUT:
+      delete newState[action.workoutId];
+      return newState;
     default:
       return state;
   }
