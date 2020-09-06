@@ -75,11 +75,15 @@ module.exports = (sequelize, DataTypes) => {
     newWorkoutId,
     prevWorkoutId,
     exerciseNameId,
-    workoutDate
+		workoutDate,
+		workingWeightId
   ) {
     //implement a check that workoutDate is less than 14 days behind. If it is, then we deload. If not, do regular logic
-    let numSets = 5;
+		let numSets = 5;
     let newWorkingWeightId = 10;
+		if(workingWeightId !== null) {
+			newWorkingWeightId = workingWeightId;
+		}
     let newNumFails = 0;
     let newDidDeload = false;
     if (exerciseNameId === 3) {

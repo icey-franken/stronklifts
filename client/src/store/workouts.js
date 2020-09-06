@@ -26,25 +26,43 @@ export const getWorkoutsThunk = (userId) => {
 window.getWorkoutsThunk = getWorkoutsThunk;
 
 //needs work - need to figure out what to send to backend route.
-export const createWorkoutThunk = (userId) => {
+export const createWorkoutThunk = (userId, wwValues) => {
+  //can pass an array of wwStates for exercisenames to change default values of new workouts.
+  // setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0])
+
   //, workoutSplit, progress
   return async (dispatch) => {
-    // const body = JSON.stringify({ workoutSplit, progress });
-    const res = await fetch(`api/workouts/${userId}`, {
-      method: "post",
-      headers: {
-        "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
-        // "Content-Type": "application/json",
-      },
-    });
-    res.data = await res.json();
-    if (res.ok) {
+    try {
+      let options = {
+        method: "post",
+        headers: {
+          "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+        },
+      };
+      if (wwValues) {
+        let body = JSON.stringify({ wwValues });
+				console.log("wwValues truthy");
+				options = {
+					method: "post",
+					headers: {
+						"XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+						"Content-Type": "application/json",
+					},
+					body
+				};
+      };
+      const res = await fetch(`api/workouts/${userId}`, options);
+      if (!res.ok) {
+        throw res;
+      }
+      res.data = await res.json();
       const workout = res.data.newWorkout;
       dispatch(createWorkout(workout));
       return workout.id;
+    } catch (err) {
+      console.log(err);
+      return;
     }
-
-    return res;
   };
 };
 window.createWorkoutThunk = createWorkoutThunk;
@@ -54,8 +72,8 @@ window.createWorkoutThunk = createWorkoutThunk;
 export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
-			const body = JSON.stringify({ workoutComplete });
-			console.log(body);
+      const body = JSON.stringify({ workoutComplete });
+      console.log(body);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -71,12 +89,12 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
       //   const workout = res.data.newWorkout;
       //   dispatch(createWorkout(workout));
       //   return workout.id;
-			// }
+      // }
       return res;
     } catch (err) {
-			console.log(err);
+      console.log(err);
     }
-		dispatch(updateWorkoutComplete(workoutId, workoutComplete));
+    dispatch(updateWorkoutComplete(workoutId, workoutComplete));
   };
 };
 
@@ -181,10 +199,10 @@ export default function workoutReducer(state = {}, action) {
         });
         delete action.workout;
       }
-			return newState;
-		case COMPLETE_WORKOUT:
-			newState[action.workoutId].workoutComplete = action.workoutComplete;
-			return newState;
+      return newState;
+    case COMPLETE_WORKOUT:
+      newState[action.workoutId].workoutComplete = action.workoutComplete;
+      return newState;
     default:
       return state;
   }

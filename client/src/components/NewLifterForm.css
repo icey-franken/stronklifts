@@ -8,15 +8,10 @@ h1 {
 }
 
 form,
-TextField:-webkit-autofill
- {
+TextField:-webkit-autofill {
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-
-div.MuiInputBase-root {
-	margin: 0 0 8px;
 }
 
 .errorsList {
@@ -31,19 +26,15 @@ div.MuiInputBase-root {
 }
 
 form,
-TextField:-webkit-autofill
- {
+TextField:-webkit-autofill {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-
-div.MuiInputBase-root {
-	margin: 0 0 8px;
+.inputItem {
+  padding: 8px 0;
 }
-
-.errorsList {
-  margin-top: 0px;
-  margin-bottom: 18.76px;
-  color: red;
+div.MuiFormLabel-root,
+div.MuiSelect-root {
+  /* margin: 0 0 8px; */
 }

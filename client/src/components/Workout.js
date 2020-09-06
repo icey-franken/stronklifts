@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
 
 export default function Workout({ workoutId }) {
-	// console.log(workout);
-	const workout = useSelector(state=> state.workouts[workoutId])
-	if (!workout) return null;
-	// const exerciseIds = workout.exerciseIds;
-	// const exerciseSuccessfulArray = exerciseIds.map((exerciseId)=>{
-	// 	return useSelector(state=> state.exercises[exerciseId].wasSuccessful);
-	// })
-	// console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
+  // console.log(workout);
+  const workout = useSelector((state) => state.workouts[workoutId]);
+  if (!workout) return null;
+  // const exerciseIds = workout.exerciseIds;
+  // const exerciseSuccessfulArray = exerciseIds.map((exerciseId)=>{
+  // 	return useSelector(state=> state.exercises[exerciseId].wasSuccessful);
+  // })
+  // console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
 
   //date formatting
   const dateFormat = new Intl.DateTimeFormat("en", {
@@ -27,9 +27,10 @@ export default function Workout({ workoutId }) {
   }
   let dateStr = "";
   dateArr.forEach((el) => (dateStr += el.value));
-	//date string day number is behind by 1 - what the fuck?
+  //date string day number is behind by 1 - what the fuck?
 
-	let note = 'need to make note slice of state'
+  let note = "need to make note slice of state";
+  if (!workout.exerciseIds) return null;
   return (
     <div className="workout-container">
       {/* fix workout date formatting in database */}
