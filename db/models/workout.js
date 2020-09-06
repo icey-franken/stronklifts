@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       workoutDate: {
-        type: DataTypes.DATEONLY,
-        allowNull: true,
-        defaultValue: null,
+        type: DataTypes.DATE,
+				allowNull: false,
+				defaultValue: DataTypes.NOW,
       },
       workoutComplete: {
         type: DataTypes.BOOLEAN,
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       return incompleteWorkout.id;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return null;
     }
   };
@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
         userId,
         workoutComplete: true,
       },
-      order: [["workoutDate", "DESC"]],
+      order: [["workoutDate", "desc"]],
       attributes: ["workoutDate", "workoutSplit", "id"],
     });
     const prevSplit = prevWorkout.workoutSplit;
@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
         workoutComplete: true,
         workoutSplit: prevPrevSplit,
       },
-      order: [["workoutDate", "DESC"]],
+      order: [["workoutDate", "desc"]],
       attributes: ["workoutDate", "workoutSplit", "id"],
     });
     return { prevWorkout, prevPrevWorkout };

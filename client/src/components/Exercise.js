@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Exercise.css";
 import Set from './Set';
@@ -7,6 +8,13 @@ import SetEmpty from './SetEmpty';
 
 export default function Exercise({ exerciseId }) {
 	const exercise = useSelector((state)=>state.exercises[exerciseId]);
+
+	// const exerciseSuccess = exercise.wasSuccessful;
+
+	// useEffect(()=>{
+	// 	dispatch()
+	// })
+
 
 	//add use selector to grab exercises instead of threading?
 

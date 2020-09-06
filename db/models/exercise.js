@@ -86,27 +86,46 @@ module.exports = (sequelize, DataTypes) => {
       attributes: ["id", "numFails", "wasSuccessful", "workingWeightId"],
     });
     let numSets = 5;
-    if (exerciseNameId === 3) numSets = 1;
-    const { numFails, wasSuccessful, workingWeightId } = prevExercise;
-    let newWorkingWeightId = workingWeightId;
-    let newNumFails = 0;
-    let newDidDeload = false;
-    if (wasSuccessful === true) newWorkingWeightId++;
-    else if (numFails < 2) newNumFails = numFails + 1;
-    else if (numFails >= 2) {
-      newWorkingWeightId = Math.floor(workingWeightId * 0.8);
-      newDidDeload = true;
+    let workingWeightId = 10;
+    if (exerciseNameId === 3) {
+      workingWeightId = 20;
+      numSets = 1;
     }
-    return await Exercise.create({
-      workoutId: newWorkoutId,
-      exerciseNameId,
-      exerciseOrder: exerciseNameId,
-      numSets,
-      workingWeightId: newWorkingWeightId,
-      numFails: newNumFails,
-      didDeload: newDidDeload,
-    });
+    if (prevExercise) {
+      console.log(
+        "---------------------------prevExercise from exercise model",
+        prevExercise
+      );
+      const { numFails, wasSuccessful, workingWeightId } = prevExercise;
+      let newWorkingWeightId = workingWeightId;
+      let newNumFails = 0;
+      let newDidDeload = false;
+      if (wasSuccessful === true) newWorkingWeightId++;
+      else if (numFails < 2) newNumFails = numFails + 1;
+      else if (numFails >= 2) {
+        newWorkingWeightId = Math.floor(workingWeightId * 0.8);
+        newDidDeload = true;
+      }
+      return await Exercise.create({
+        workoutId: newWorkoutId,
+        exerciseNameId,
+        exerciseOrder: exerciseNameId,
+        numSets,
+        workingWeightId: newWorkingWeightId,
+        numFails: newNumFails,
+        didDeload: newDidDeload,
+      });
+    } else {
+      return await Exercise.create({
+        workoutId: newWorkoutId,
+        exerciseNameId,
+        exerciseOrder: exerciseNameId,
+        numSets,
+        workingWeightId,
+        numFails: 0,
+        didDeload: false,
+      });
+    }
   };
-
   return Exercise;
 };

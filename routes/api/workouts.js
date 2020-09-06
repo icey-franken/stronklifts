@@ -23,25 +23,26 @@ const grabWorkoutSpecs = {
       model: Exercise,
       attributes: [
         "id",
-				'workoutId',
+        "workoutId",
         "exerciseOrder",
         "numSets",
-				"numRepsGoal",
-				"wasSuccessful"
+        "numRepsGoal",
+        "wasSuccessful",
+				'numFails',
+				'didDeload'
       ],
       include: [
         { model: ExerciseName, attributes: ["exerciseName"] },
         { model: WorkingWeight, attributes: ["weight"] },
         {
           model: Set,
-          attributes: ['id',"setOrder", "numRepsActual"],
+          attributes: ["id", "setOrder", "numRepsActual"],
         },
       ],
     },
-    { model: WorkoutNote, attributes: ['id',"description"] },
+    { model: WorkoutNote, attributes: ["id", "description"] },
   ],
 };
-
 
 router.get(
   "/:userId",
@@ -50,20 +51,20 @@ router.get(
     grabWorkoutSpecs.where = { userId };
     grabWorkoutSpecs.limit = 10;
     grabWorkoutSpecs.order.unshift(["workoutDate", "desc"]);
-		let workouts = await Workout.findAll(grabWorkoutSpecs);
-		// console.log(workouts[1].WorkoutNote.description);
-		// for(let i = 0; i < workouts.length; i ++) {
-		// 	console.log('hits');
-		// 	// workouts[i].WorkoutNote = null;
-		// 	console.log(workouts[i].WorkoutNote);
-		// 	// delete workouts[i].WorkoutNote.description;
-		// 	//workouts[i].WorkoutNote.description);
-		// };
-		// // workouts.map((workout)=>{
-		// // // 	const {workoutNote} = workout.WorkoutNote;
-		// // workout.WorkoutNote = workout.WorkoutNote.description;
-		// // return workout;
-		// // })
+    let workouts = await Workout.findAll(grabWorkoutSpecs);
+    // console.log(workouts[1].WorkoutNote.description);
+    // for(let i = 0; i < workouts.length; i ++) {
+    // 	console.log('hits');
+    // 	// workouts[i].WorkoutNote = null;
+    // 	console.log(workouts[i].WorkoutNote);
+    // 	// delete workouts[i].WorkoutNote.description;
+    // 	//workouts[i].WorkoutNote.description);
+    // };
+    // // workouts.map((workout)=>{
+    // // // 	const {workoutNote} = workout.WorkoutNote;
+    // // workout.WorkoutNote = workout.WorkoutNote.description;
+    // // return workout;
+    // // })
     return res.json({ workouts });
   })
 );
@@ -74,13 +75,14 @@ router.post(
     const userId = parseInt(req.params.userId, 10);
     let workoutId;
     try {
-			//first check that no incomplete workouts exist
+      //first check that no incomplete workouts exist
       const incompleteId = await Workout.getIncompleteId(userId);
       if (incompleteId !== null) {
         workoutId = incompleteId;
       } else {
         //add another check here - if no prevWorkouts then set starting values
-        const prevWorkouts = await Workout.prevWorkouts(userId);
+				const prevWorkouts = await Workout.prevWorkouts(userId);
+				console.log(prevWorkouts);
         const { prevWorkout, prevPrevWorkout } = prevWorkouts;
 
         //prevWorkout[0] = {workoutDate, workoutSplit, id}
@@ -88,13 +90,27 @@ router.post(
         const { id: prevId, workoutDate: prevWorkoutDate } = prevWorkout;
         const {
           id: prevPrevId,
-          workoutSplit: newWorkoutSplit,
         } = prevPrevWorkout;
 
-        //add workoutDate in the future - need to figure out formatting. For now default is null.
+				let newWorkoutSplit = 'A'
+				console.log('--------------------------------------------',prevWorkout.workoutSplit)
+				console.log(prevWorkout);
+				// if(prevWorkout.workoutSplit === 'A') {
+				// 	newWorkoutSplit='B';
+				// }
+				console.log('newWorkoutSplit', newWorkoutSplit);
+				//add workoutDate in the future - need to figure out formatting. For now default is null.
+				// const dateObj = new Date();
+				// const yr = dateObj.getFullYear();
+				// const day = dateObj.getDate();
+				// const month = dateObj.getMonth();
+
+				// const date = `${yr}-${month+1}-${day}`;
+				// // dateObj.now();
         let newWorkout = await Workout.create({
           workoutSplit: newWorkoutSplit,
-          userId,
+					userId,
+					// workoutDate: date,
         });
         workoutId = newWorkout.id;
 
@@ -138,8 +154,25 @@ router.post(
         }
       }
       grabWorkoutSpecs.where = { id: workoutId };
-      newWorkout = await Workout.findOne(grabWorkoutSpecs);
+			newWorkout = await Workout.findOne(grabWorkoutSpecs);
       return res.json({ newWorkout });
+    } catch (err) {
+      console.log(err);
+    }
+  })
+);
+
+router.put(
+  "/:workoutId",
+  asyncHandler(async (req, res) => {
+    try {
+      const { workoutComplete } = req.body;
+      const id = parseInt(req.params.workoutId, 10);
+      const workout = await Workout.update(
+        { workoutComplete },
+        { where: { id } }
+      );
+      return res.json({ workout });
     } catch (err) {
       console.log(err);
     }

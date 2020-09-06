@@ -3,10 +3,16 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 //action types
 export const GET_WORKOUTS = "workout/GET_WORKOUTS";
 export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
+export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
 
 //action pojo creator function
 export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
 export const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
+export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
+  type: COMPLETE_WORKOUT,
+  workoutId,
+  workoutComplete,
+});
 
 //thunk action creator
 export const getWorkoutsThunk = (userId) => {
@@ -45,28 +51,35 @@ window.createWorkoutThunk = createWorkoutThunk;
 
 //I think it can dispatch a createWorkout action all the same - it does the same stuff?
 //Actually the workout should already be created, and as it is changed by user it should be updated in the store. So what we send to the database doesn't need to be seen by the store at all because it'll already be there.
-export const saveWorkoutThunk = (workoutId, workout) => {
+export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
-    // const body = JSON.stringify({ workoutSplit, progress });
-    const res = await fetch(`api/workouts/${workoutId}`, {
-      method: "put",
-      headers: {
-        "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
-        // "Content-Type": "application/json",
-			},
-			body: JSON.stringify(workout),
-    });
-    res.data = await res.json();
-		//dont need to do any of this because we're just updating it in the database
-		// if (res.ok) {
-    //   const workout = res.data.newWorkout;
-    //   dispatch(createWorkout(workout));
-    //   return workout.id;
-    // }
-
-    return res;
+    try {
+			const body = JSON.stringify({ workoutComplete });
+			console.log(body);
+      const res = await fetch(`/api/workouts/${workoutId}`, {
+        method: "put",
+        headers: {
+          "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
+          "Content-Type": "application/json",
+        },
+        body,
+      });
+      if (!res.ok) throw res;
+      // res.data = await res.json();
+      //dont need to do any of this because we're just updating it in the database
+      // if (res.ok) {
+      //   const workout = res.data.newWorkout;
+      //   dispatch(createWorkout(workout));
+      //   return workout.id;
+			// }
+      return res;
+    } catch (err) {
+			console.log(err);
+    }
+		dispatch(updateWorkoutComplete(workoutId, workoutComplete));
   };
 };
+
 //workout reducer
 export default function workoutReducer(state = {}, action) {
   Object.freeze(state);
@@ -168,7 +181,10 @@ export default function workoutReducer(state = {}, action) {
         });
         delete action.workout;
       }
-      return newState;
+			return newState;
+		case COMPLETE_WORKOUT:
+			newState[action.workoutId].workoutComplete = action.workoutComplete;
+			return newState;
     default:
       return state;
   }

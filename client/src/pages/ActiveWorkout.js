@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import Workout from "../components/Workout";
 import { useDispatch, useSelector } from "react-redux";
-import { createWorkoutThunk, saveWorkoutThunk } from "../store/workouts";
+import { createWorkoutThunk, saveWorkoutThunk, updateWorkoutCompleteThunk } from "../store/workouts";
 import { useEffect, useRef } from "react";
 
 export default function ActiveWorkout() {
@@ -17,7 +17,7 @@ export default function ActiveWorkout() {
 
 	const handleClick = (e) =>{
 		e.preventDefault();
-		dispatch(saveWorkoutThunk(workoutId, workouts[workoutId]));
+		dispatch(updateWorkoutCompleteThunk(workoutId, true));
 		//this should send everything to the database
 	}
 
@@ -30,7 +30,7 @@ export default function ActiveWorkout() {
 				return <Workout key={index} workout={workout} />;
       })} */}
 			<Workout workoutId={workoutId}/>
-			<button type='submit' onClick={handleClick}>SAVE</button>
+			<button type='submit' onClick={handleClick}>WORKOUT COMPLETE</button>
     </>
   );
 }

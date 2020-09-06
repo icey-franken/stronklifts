@@ -7,6 +7,11 @@ export default function Workout({ workoutId }) {
 	// console.log(workout);
 	const workout = useSelector(state=> state.workouts[workoutId])
 	if (!workout) return null;
+	// const exerciseIds = workout.exerciseIds;
+	// const exerciseSuccessfulArray = exerciseIds.map((exerciseId)=>{
+	// 	return useSelector(state=> state.exercises[exerciseId].wasSuccessful);
+	// })
+	// console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
 
   //date formatting
   const dateFormat = new Intl.DateTimeFormat("en", {

@@ -13,9 +13,9 @@ module.exports = {
 				references: { model: 'Users'}
       },
       workoutDate: {
-				type: Sequelize.DATEONLY,
-				allowNull: true,
-				defaultValue: null,
+				type: Sequelize.DATE,
+				allowNull: false,
+				defaultValue: Sequelize.NOW,
 			},
 			workoutComplete: {
 				type: Sequelize.BOOLEAN,
