@@ -13,34 +13,34 @@ export default function Set({ setId }) {
     (state) => state.exercises[exerciseId].numRepsGoal
   );
   const numSets = useSelector((state) => state.exercises[exerciseId].numSets);
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleClick = (e) => {
-    if (e.target.innerHTML === "5") {
-      dispatch(updateExerciseSuccessThunk(exerciseId, false));
-      e.target.innerHTML--;
-    } else if (e.target.innerHTML > 0) e.target.innerHTML--;
-    else if (e.target.innerHTML === "0") {
-      e.target.innerHTML = null;
-      e.target.classList.add("exercise__set--emptySet");
-    } else {
-      e.target.innerHTML = "5";
+    let num = e.target.innerHTML;
+    if (num === "") {
+      num = "5";
       e.target.classList.remove("exercise__set--emptySet");
-      set.numRepsActual = 5;
+			set.numRepsActual = 5;
       const successfulSets = setIds.filter((setId) => {
         if (setId === "emptySet") return false;
-        const numRepsActual = sets[setId].numRepsActual;
-        return numRepsActual === numRepsGoal;
+        return 5 === sets[setId].numRepsActual;
+        // return numRepsActual === numRepsGoal;
       });
       if (successfulSets.length === numSets) {
         dispatch(updateExerciseSuccessThunk(exerciseId, true));
       }
+    } else if (num === 5) {
+      num--;
+      dispatch(updateExerciseSuccessThunk(exerciseId, false));
+    } else if (num > 0) {
+      num--;
+    } else if (num === "0") {
+      e.target.classList.add("exercise__set--emptySet");
+      num = null;
     }
-    dispatch(updateRepsThunk(setId, parseInt(e.target.innerHTML, 10)));
-    console.log(setId, parseInt(e.target.innerHTML, 10));
+    dispatch(updateRepsThunk(setId, num));
     //this updates store - we should set something up that updates the value in the database after a certain amount of dead time. (debouncing?)
-	};
-
+  };
 
   return (
     <div className="exercise__set-container">

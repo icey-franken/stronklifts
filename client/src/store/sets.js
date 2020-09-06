@@ -66,7 +66,8 @@ export default function setReducer(state = {}, action) {
       });
       return newState;
     case UPDATE_REPS:
-      newState[action.setId].numRepsActual = parseInt(action.numRepsActual, 10);
+			newState[action.setId].numRepsActual = action.numRepsActual;
+			return newState;
     case DELETE_WORKOUT:
       const setIds2 = action.setIds;
       setIds2.forEach((id) => {
