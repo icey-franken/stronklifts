@@ -12,7 +12,8 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+		alignItems: "center",
+		paddingTop: '18px',
   },
 });
 

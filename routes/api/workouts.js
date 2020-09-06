@@ -47,10 +47,41 @@ const grabWorkoutSpecs = {
 router.get(
   "/:userId",
   asyncHandler(async (req, res) => {
-    const userId = parseInt(req.params.userId, 10);
-    grabWorkoutSpecs.where = { userId };
-    grabWorkoutSpecs.limit = 10;
-    grabWorkoutSpecs.order.unshift(["workoutDate", "desc"]);
+		const userId = parseInt(req.params.userId, 10);
+		const grabWorkoutSpecs = {
+			where: userId,
+			attributes: ["id", "workoutDate", "workoutComplete", "workoutSplit"],
+			limit: 10,
+			order: [
+				["workoutDate", "desc"],
+				[Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now
+				[Exercise, Set, "setOrder", "asc"],
+			],
+			include: [
+				{
+					model: Exercise,
+					attributes: [
+						"id",
+						"workoutId",
+						"exerciseOrder",
+						"numSets",
+						"numRepsGoal",
+						"wasSuccessful",
+						"numFails",
+						"didDeload",
+					],
+					include: [
+						{ model: ExerciseName, attributes: ["exerciseName"] },
+						{ model: WorkingWeight, attributes: ["weight"] },
+						{
+							model: Set,
+							attributes: ["id", "setOrder", "numRepsActual"],
+						},
+					],
+				},
+				{ model: WorkoutNote, attributes: ["id", "description"] },
+			],
+		};
     let workouts = await Workout.findAll(grabWorkoutSpecs);
     // console.log(workouts[1].WorkoutNote.description);
     // for(let i = 0; i < workouts.length; i ++) {
@@ -80,7 +111,6 @@ router.post(
       if (incompleteId !== null) {
         workoutId = incompleteId;
       } else {
-        //add another check here - if no prevWorkouts then set starting values
         const prevWorkout = await Workout.prevWorkout(userId);
 
         let prevId = null;
@@ -108,15 +138,15 @@ router.post(
         let newWorkout = await Workout.create({
           workoutSplit: newWorkoutSplit,
           userId,
-          // workoutDate: date,
         });
-        workoutId = newWorkout.id;
+				workoutId = newWorkout.id;
+				const workoutDate = newWorkout.workoutDate
 
         const { id: squatId } = await Exercise.createNext(
           workoutId,
           prevId,
           1,
-          null
+          workoutDate
         );
         await Set.createBasicSets(squatId, 5);
         if (newWorkoutSplit === "A") {
@@ -124,14 +154,14 @@ router.post(
             workoutId,
             prevPrevId,
             2,
-            null
+            workoutDate
           );
           await Set.createBasicSets(overheadId, 5);
           const { id: deadliftId } = await Exercise.createNext(
             workoutId,
             prevPrevId,
             3,
-            null
+            workoutDate
           );
           await Set.createBasicSets(deadliftId, 1);
         } else if (newWorkoutSplit === "B") {
@@ -139,14 +169,14 @@ router.post(
             workoutId,
             prevPrevId,
             4,
-            null
+            workoutDate
           );
           await Set.createBasicSets(benchId, 5);
           const { id: rowId } = await Exercise.createNext(
             workoutId,
             prevPrevId,
             5,
-            null
+            workoutDate
           );
           await Set.createBasicSets(rowId, 5);
         }
