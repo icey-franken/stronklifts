@@ -2,9 +2,11 @@ import React from "react";
 import Exercise from "./Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
+import { deleteWorkoutThunk } from "../store/workouts";
 
 export default function Workout({ workoutId }) {
   // console.log(workout);
+	const dispatch = useDispatch();
   const workout = useSelector((state) => state.workouts[workoutId]);
   if (!workout) return null;
   // const exerciseIds = workout.exerciseIds;
@@ -12,6 +14,10 @@ export default function Workout({ workoutId }) {
   // 	return useSelector(state=> state.exercises[exerciseId].wasSuccessful);
   // })
   // console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
+  const handleDelete = (e) => {
+    e.preventDefault();
+    dispatch(deleteWorkoutThunk(e.target.id));
+  };
 
   //date formatting
   const dateFormat = new Intl.DateTimeFormat("en", {
@@ -44,6 +50,9 @@ export default function Workout({ workoutId }) {
         })}
       </div>
       <div className="workout__note">Notes: {note}</div>
+      <button id={workout.id} onClick={handleDelete}>
+        Delete Workout
+      </button>
     </div>
   );
 }

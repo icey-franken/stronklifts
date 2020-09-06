@@ -4,6 +4,7 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 export const GET_WORKOUTS = "workout/GET_WORKOUTS";
 export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
 export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
+export const 	DELETE_WORKOUT = 'workout/DELETE_WORKOUT';
 
 //action pojo creator function
 export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
@@ -13,6 +14,7 @@ export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
   workoutId,
   workoutComplete,
 });
+export const deleteWorkout = (workoutId) => ({type:DELETE_WORKOUT, workoutId});
 
 //thunk action creator
 export const getWorkoutsThunk = (userId) => {
@@ -97,6 +99,22 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
     dispatch(updateWorkoutComplete(workoutId, workoutComplete));
   };
 };
+
+export const deleteWorkoutThunk = (workoutId)=>{
+	return async(dispatch) =>{
+		try{
+			const res = await fetch(`/api/workouts/${workoutId}`,{
+				method:'delete',
+				headers: {'XSRF-TOKEN': Cookies.get('XSRF-TOKEN')}
+			})
+			if(!res.ok) throw res;
+			return res;
+		} catch(err) {
+			console.log(err);
+		}
+		dispatch(deleteWorkout(workoutId));
+	}
+}
 
 //workout reducer
 export default function workoutReducer(state = {}, action) {
