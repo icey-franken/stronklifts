@@ -355,7 +355,7 @@ router.delete(
       await Set.destroy({ where: { id: setIdArr } });
       await Exercise.destroy({ where: { id: exerciseIdArr } });
       await Workout.destroy({ where: { id } });
-      return res.json({ deleted: true });
+      return res.json({ deleted: true, exerciseIds: exerciseIdArr, setIds: setIdArr });
     } catch (err) {
       console.log(err);
       return res.json({ deleted: false });

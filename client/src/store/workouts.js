@@ -14,7 +14,7 @@ export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
   workoutId,
   workoutComplete,
 });
-export const deleteWorkout = (workoutId) => ({type:DELETE_WORKOUT, workoutId});
+export const deleteWorkout = (workoutId, exerciseIds, setIds) => ({type:DELETE_WORKOUT, workoutId, exerciseIds, setIds,});
 
 //thunk action creator
 export const getWorkoutsThunk = (userId) => {
@@ -108,11 +108,14 @@ export const deleteWorkoutThunk = (workoutId)=>{
 				headers: {'XSRF-TOKEN': Cookies.get('XSRF-TOKEN')}
 			})
 			if(!res.ok) throw res;
+			const data = await res.json();
+			const {exerciseIds, setIds} = data;
+
+			dispatch(deleteWorkout(workoutId, exerciseIds, setIds));
 			return res;
 		} catch(err) {
 			console.log(err);
 		}
-		dispatch(deleteWorkout(workoutId));
 	}
 }
 
@@ -220,7 +223,10 @@ export default function workoutReducer(state = {}, action) {
       return newState;
     case COMPLETE_WORKOUT:
       newState[action.workoutId].workoutComplete = action.workoutComplete;
-      return newState;
+			return newState;
+		case DELETE_WORKOUT:
+			delete newState[action.workoutId];
+			return newState;
     default:
       return state;
   }

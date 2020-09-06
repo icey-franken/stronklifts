@@ -3,6 +3,8 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 //action types
 import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
 import { SET_USER, REMOVE_USER } from "./auth";
+import {DELETE_WORKOUT} from './workouts';
+
 export const UPDATE_SUCCESS = 'exercise/UPDATE_SUCCESS';
 
 export const updateExerciseSuccess= (exerciseId, wasSuccessful) =>({
@@ -118,6 +120,12 @@ export default function exerciseReducer(state = {}, action) {
 			return newState;
 		case UPDATE_SUCCESS:
 			newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
+			return newState;
+		case DELETE_WORKOUT:
+			const exerciseIds5 = action.exerciseIds;
+			exerciseIds5.forEach(id=>{
+				delete newState[id]
+			})
 			return newState;
     default:
       return state;

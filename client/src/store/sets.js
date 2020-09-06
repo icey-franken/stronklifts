@@ -3,6 +3,7 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 //action types
 import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
 import { SET_USER, REMOVE_USER } from "./auth";
+import { DELETE_WORKOUT } from "./workouts";
 
 const UPDATE_REPS = "sets/UPDATE_REPS";
 
@@ -16,16 +17,14 @@ export const updateRepsThunk = (setId, numRepsActual) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ numRepsActual });
-			const res = await fetch(`/api/sets/${setId}`,
-			{
+      const res = await fetch(`/api/sets/${setId}`, {
         method: "put",
         headers: {
           "Content-Type": "application/json",
           "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
         },
         body,
-			}
-			);
+      });
       if (!res.ok) throw res;
       dispatch(updateReps(setId, numRepsActual));
       return res;
@@ -68,6 +67,12 @@ export default function setReducer(state = {}, action) {
       return newState;
     case UPDATE_REPS:
       newState[action.setId].numRepsActual = parseInt(action.numRepsActual, 10);
+    case DELETE_WORKOUT:
+      const setIds2 = action.setIds;
+      setIds2.forEach((id) => {
+        delete newState[id];
+      });
+      return newState;
     default:
       return state;
   }

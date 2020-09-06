@@ -15,8 +15,9 @@ export default function Workout({ workoutId }) {
   // })
   // console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
   const handleDelete = (e) => {
-    e.preventDefault();
-    dispatch(deleteWorkoutThunk(e.target.id));
+		e.preventDefault();
+		console.log(e.target.id);
+    dispatch(deleteWorkoutThunk(parseInt(e.target.id,10)));
   };
 
   //date formatting
