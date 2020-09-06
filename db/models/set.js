@@ -34,9 +34,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  Set.destroySets = async function (setIds) {
-    setIds.forEach(async (id) => await Set.destroy({ where: {id} }));
-  };
-
   return Set;
 };

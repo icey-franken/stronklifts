@@ -346,19 +346,15 @@ router.delete(
       let setIdArr = [];
       let exerciseIdArr = [];
       //extract ids off of exercises
-      if (exercises.length > 0) {
-        exercises.forEach(async (exercise) => {
-          exerciseIdArr.push(exercise.id);
-          if (exercise.Sets.length > 0) {
-            exercise.Sets.forEach(async (set) => {
-              setIdArr.push(set.id);
-            });
-          }
+      exercises.forEach(async (exercise) => {
+        exerciseIdArr.push(exercise.id);
+        exercise.Sets.forEach(async (set) => {
+          setIdArr.push(set.id);
         });
-      }
+      });
       //DESTROY
-      await Set.destroySets(setIdArr);
-      await Exercise.destroyExercises(exerciseIdArr);
+      await Set.destroy({ where: { id: setIdArr } });
+      await Exercise.destroy({ where: { id: exerciseIdArr } });
       await Workout.destroy({ where: { id } });
       return res.json({ deleted: true });
     } catch (err) {

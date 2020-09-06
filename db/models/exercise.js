@@ -119,9 +119,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  Exercise.destroyExercises = async function (exerciseIds) {
-    exerciseIds.forEach(async (id) => await Exercise.destroy({ where: {id} }));
-  };
-
   return Exercise;
 };
