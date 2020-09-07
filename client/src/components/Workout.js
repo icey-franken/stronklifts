@@ -6,7 +6,7 @@ import { deleteWorkoutThunk } from "../store/workouts";
 
 export default function Workout({ workoutId }) {
   // console.log(workout);
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const workout = useSelector((state) => state.workouts[workoutId]);
   if (!workout) return null;
   // const exerciseIds = workout.exerciseIds;
@@ -15,9 +15,8 @@ export default function Workout({ workoutId }) {
   // })
   // console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
   const handleDelete = (e) => {
-		e.preventDefault();
-		console.log(e.target.id);
-    dispatch(deleteWorkoutThunk(parseInt(e.target.id,10)));
+    e.preventDefault();
+    dispatch(deleteWorkoutThunk(parseInt(e.target.id, 10)));
   };
 
   //date formatting
@@ -36,7 +35,7 @@ export default function Workout({ workoutId }) {
   dateArr.forEach((el) => (dateStr += el.value));
   //date string day number is behind by 1 - what the fuck?
 
-	//need to add note input
+  //need to add note input
   if (!workout.exerciseIds) return null;
   return (
     <div className="workout-container">
@@ -44,6 +43,9 @@ export default function Workout({ workoutId }) {
       <div className="workout__info-container">
         <div className="workout__title">{workout.workoutSplit} Day</div>
         <div className="workout__date">{dateStr}</div>
+        <div className="workout__delete-button" onClick={handleDelete}>
+          <i className="fa fa-trash" id={workout.id} />
+        </div>
       </div>
       <div className="workout__exercises">
         {workout.exerciseIds.map((exerciseId, index) => {
@@ -51,9 +53,6 @@ export default function Workout({ workoutId }) {
         })}
       </div>
       <div className="workout__note">Notes: {workout.note}</div>
-      <button id={workout.id} onClick={handleDelete}>
-        Delete Workout
-      </button>
     </div>
   );
 }

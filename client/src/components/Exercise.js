@@ -1,6 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Exercise.css";
 import Set from './Set';
 import SetEmpty from './SetEmpty';
@@ -9,33 +8,6 @@ import SetEmpty from './SetEmpty';
 export default function Exercise({ exerciseId }) {
 	const exercise = useSelector((state)=>state.exercises[exerciseId]);
 
-	// const exerciseSuccess = exercise.wasSuccessful;
-
-	// useEffect(()=>{
-	// 	dispatch()
-	// })
-
-
-	//add use selector to grab exercises instead of threading?
-
-
-  // console.log(exercise);
-  // const [name, weight, setArr ] = exercise; //can also grab these: repGoal, numSets, but we don't care because this is a 5X5 APP
-	// const repsArr = [];
-	// //consider changing how data comes from backend so we don't have to do this forEach
-	// //this works for adjustable number of sets, but this is a 5X5 APP
-	// // setArr.forEach((set) => {
-  // //   repsArr.push(set.numRepsActual);
-	// // });
-	// // console.log(setArr);
-	// for(let i = 0; i < setArr.length; i++) {
-	// 	repsArr.push(setArr[i].numRepsActual);
-	// }
-	// for(let i = setArr.length; i < 5; i++) {
-	// 	if(name==='DEADLIFT')	repsArr.push('noSet');
-	// 	else repsArr.push(null);
-	// }
-	// // console.log(repsArr, name);
 	if(exercise.setIds.length === 1) {
 		exercise.setIds.push('emptySet','emptySet','emptySet','emptySet');
 	}

@@ -17,6 +17,7 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 
 .randoNav {
 	justify-content: flex-end;
+	/* margin-left: 2vw; */
 }
 
 .userNav {
@@ -40,6 +41,8 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 	white-space: nowrap;
 	/* flex-wrap: nowrap; */
 	/* margin: 0 6px; */
+	margin-left: 2vw;
+	margin-right:2vw;
 }
 
 .nav:hover {

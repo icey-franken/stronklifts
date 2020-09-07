@@ -24,7 +24,7 @@ export default function AuthPage() {
   const match = useRouteMatch();
 
   //changed to isLoggedIn for semantic reasons
-  if (isLoggedIn) return <Redirect to="/" />;
+  if (isLoggedIn) return <Redirect to="/history" />;
   // not sure why we have root in classes - is it because container has a class of root put on it by MUI?
   const signingUp = match.path === "/signup";
   return (

@@ -3,24 +3,25 @@ import Workout from "../components/Workout";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createWorkoutThunk,
-  saveWorkoutThunk,
   updateWorkoutCompleteThunk,
 } from "../store/workouts";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import WorkoutHistoryPage from "../pages/WorkoutHistoryPage";
+import AuthSubmitButton from "../components/auth/AuthSubmitButton";
+import "./ActiveWorkout.css";
 
 export default function ActiveWorkout() {
   const [complete, setComplete] = useState(false);
   const [workoutId, setWorkoutId] = useState(null);
-  const workouts = useSelector((state) => state.workouts);
+  // const workouts = useSelector((state) => state.workouts);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.id);
   useEffect(() => {
     dispatch(createWorkoutThunk(userId)).then((res) => {
       setWorkoutId(res);
     });
-  }, []);
+  }, [dispatch, userId]);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -30,21 +31,24 @@ export default function ActiveWorkout() {
   };
 
   if (workoutId === null) return null;
-  const workout = workouts[workoutId];
-  return (
+
+	return (
     <>
       {complete ? (
-        <Redirect to="/">
+        <Redirect to="/history">
           <WorkoutHistoryPage />
         </Redirect>
       ) : (
-        <>
-          <h1>Welcome to the active workout page</h1>
+        <div className="active-workout__container">
+          <h1>Time to get Stronk</h1>
           <Workout workoutId={workoutId} />
-          <button type="submit" onClick={handleClick}>
+          <AuthSubmitButton
+            className="active-workout__complete-button"
+            onClick={handleClick}
+          >
             WORKOUT COMPLETE
-          </button>
-        </>
+          </AuthSubmitButton>
+        </div>
       )}
     </>
   );

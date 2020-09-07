@@ -15,11 +15,10 @@ export default function WorkoutHistoryPage() {
   // 	dispatch(getWorkoutsThunk(userId));
   // }, [dispatch, userId]);
 
-  console.log(userId);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getWorkoutsThunk(userId));
-  }, []); //dispatch, userId
+  }, [dispatch, userId]); //dispatch, userId
 
   const workoutIds = Object.keys(workouts);
 
@@ -39,7 +38,6 @@ export default function WorkoutHistoryPage() {
   //.reverse method works for now - may have to fix in future.
 
   workoutIds.reverse();
-	console.log(workoutIds.length);
 	if(workoutIds.length < 0 ) return null;
   //need to make new components for workout history - for now they're the same.
   //for a single workout view component, you should be able to click (either on whole thing or specific spot) that will take you to the Active workout page but load that workout (based on id) and allow you to edit. Kind of hacky but it'll work.
@@ -53,7 +51,8 @@ export default function WorkoutHistoryPage() {
           })}
         </>
       ) : (
-        <NewLifterForm />
+				// ideally this would be a modal for those without workouts - don't have time.
+          <NewLifterForm userId={userId}/>
       )}
     </div>
   );

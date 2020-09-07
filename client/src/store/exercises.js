@@ -39,7 +39,6 @@ export default function exerciseReducer(state = {}, action) {
     case SET_USER:
       const exerciseIds = Object.keys(newState);
       const userId = action.user.id;
-      console.log(userId);
       exerciseIds.forEach((exerciseId) => {
         newState[exerciseId].userId = userId;
       });

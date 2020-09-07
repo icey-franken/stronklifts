@@ -8,8 +8,8 @@ import "./NavBar.css";
 export function AuthNavBar() {
   return (
     <nav className='userNav navbar'>
-      <NavLink className="nav" activeClassName="navActive" exact to="/">
-        Home
+      <NavLink className="nav" activeClassName="navActive" exact to="/history">
+        History
       </NavLink>
       {/* <NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar

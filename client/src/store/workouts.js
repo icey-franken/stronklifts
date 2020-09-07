@@ -48,7 +48,6 @@ export const createWorkoutThunk = (userId, wwValues) => {
       };
       if (wwValues) {
         let body = JSON.stringify({ wwValues });
-        console.log("wwValues truthy");
         options = {
           method: "post",
           headers: {
@@ -80,7 +79,6 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
-      console.log(body);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -146,7 +144,6 @@ export default function workoutReducer(state = {}, action) {
           newState[workoutId].workoutNote = WorkoutNote.description;
         }
         //pull exercises object off of workout
-        let stateToPassToExerciseRed = Object.assign({}, workout.Exercises);
         const exercises = workout.Exercises;
         const exerciseIds = [];
         //get exercise ids from exercises object
@@ -197,22 +194,24 @@ export default function workoutReducer(state = {}, action) {
         const exerciseIds = [];
         //get exercise ids from exercises object
         const workoutSetIds = [];
-        exercises.forEach((exercise) => {
-          exercise.workoutId = workoutId;
-          exerciseIds.push(exercise.id);
-          const exerciseSetIds = [];
-          exercise.Sets.forEach((set) => {
-            exerciseSetIds.push(set.id);
+        if (exercises) {
+          exercises.forEach((exercise) => {
+            exercise.workoutId = workoutId;
+            exerciseIds.push(exercise.id);
+            const exerciseSetIds = [];
+            exercise.Sets.forEach((set) => {
+              exerciseSetIds.push(set.id);
+            });
+            exercise.setIds = exerciseSetIds;
+            workoutSetIds.push(...exerciseSetIds);
+            newState[workoutId].setIds = workoutSetIds;
+            newState[workoutId].exerciseIds = exerciseIds;
+            workout.Exercises.forEach((exercise) => {
+              const exerciseCopy = Object.assign({}, exercise);
+              action.exercises[exercise.id] = exerciseCopy;
+            });
           });
-          exercise.setIds = exerciseSetIds;
-          workoutSetIds.push(...exerciseSetIds);
-          newState[workoutId].setIds = workoutSetIds;
-          newState[workoutId].exerciseIds = exerciseIds;
-          workout.Exercises.forEach((exercise) => {
-            const exerciseCopy = Object.assign({}, exercise);
-            action.exercises[exercise.id] = exerciseCopy;
-          });
-        });
+        }
         delete action.workout;
       }
       return newState;

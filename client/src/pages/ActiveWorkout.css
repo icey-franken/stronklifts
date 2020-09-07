@@ -1,0 +1,14 @@
+.active-workout__container{
+	display: flex;
+	flex-direction: column;
+	align-items:center;
+}
+
+.active-workout__complete-button{
+	justify-content: center;
+	/* display: flex; */
+	width: 55vw;
+	height: 9.8vw;
+	padding: 0!important;
+	font-size: 4vw!important;
+}

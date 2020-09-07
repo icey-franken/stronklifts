@@ -4,7 +4,8 @@
 }
 
 h1 {
-  text-align: center;
+	text-align: center;
+	margin-bottom: 30px;
 }
 
 form,
@@ -12,6 +13,16 @@ TextField:-webkit-autofill {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.form__title{
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.form__intro{
+	font-size: 16px;
+	text-align: center;
 }
 
 .errorsList {
@@ -27,14 +38,30 @@ TextField:-webkit-autofill {
 
 form,
 TextField:-webkit-autofill {
+	margin-top: 20px;
   display: flex;
-  flex-direction: column;
+	flex-direction: column;
+	text-align: center;
 	width: 100%;
 	padding-bottom: 20px;
+	align-items: space-between;
+	padding-left: 10px;
+	padding-right: 10px;
+
 }
 .inputItem {
-  padding: 8px 0;
+	padding: 8px 0 8px 0;
+	/* padding-left: 8vw; */
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+	align-items:center;
 }
+
+.inputItem__label{
+	margin-left: 2vw;
+}
+
 div.MuiFormLabel-root,
 div.MuiSelect-root {
   /* margin: 0 0 8px; */

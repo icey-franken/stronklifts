@@ -1,37 +1,44 @@
 .exercise__set-container {
-	padding-top: 19%;
-	box-sizing: border-box;
-	width: 19%;
-	height: 0;
-	position: relative;
-	user-select: none
-
+  padding-top: 19%;
+  box-sizing: border-box;
+  width: 19%;
+  height: 0;
+  position: relative;
+  user-select: none;
 }
 
 .exercise__set {
-	display: flex;
-	border: 0.5vw solid rgb(210,46,46);
-	background-color: rgb(210,46,46);
-	border-radius: 50%;
-	height: 100%;
-	width: 100%;
-	position: absolute;
-	top:0;
-	left: 0;
-	align-items: center;
-	justify-content:center;
-	color: white;
-	font-size: 10vw;
-	cursor: pointer;
+  display: flex;
+  border: 0.5vw solid rgb(210, 46, 46);
+  background-color: rgb(210, 46, 46);
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10vw;
+  cursor: pointer;
+}
+
+.exercise__set:hover {
+  border-color: rgb(240, 46, 46);
 }
 
 .exercise__set--emptySet {
-	background-color: rgba(210,46,46,0.5);
+  background-color: rgba(210, 46, 46, 0.5);
 }
 
 .exercise__set--noSet {
-content: '\2716';
-border: 0.5vw solid rgb(169,169,169);
-background-color: rgba(220,220,220, 0.5);
-cursor: default;
+  content: "\2716";
+  border: 0.5vw solid rgb(169, 169, 169);
+  background-color: rgba(220, 220, 220, 0.5);
+  cursor: default;
+}
+
+.exercise__set--noSet:hover {
+  border-color: rgb(169, 169, 169);
 }
