@@ -7,11 +7,11 @@ import {
 } from "../store/workouts";
 import { useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import WorkoutHistoryPage from "../pages/WorkoutHistoryPage";
+import WorkoutHistoryPage from "./WorkoutHistoryPage";
 import AuthSubmitButton from "../components/auth/AuthSubmitButton";
 import "./ActiveWorkout.css";
 
-export default function ActiveWorkout() {
+export default function ActiveWorkoutPage() {
   const [complete, setComplete] = useState(false);
   const [workoutId, setWorkoutId] = useState(null);
   // const workouts = useSelector((state) => state.workouts);

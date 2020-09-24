@@ -3,6 +3,8 @@ import Exercise from "./Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
 import { deleteWorkoutThunk } from "../store/workouts";
+import DeleteWorkoutButton from './DeleteWorkoutButton'
+
 
 export default function Workout({ workoutId }) {
   // console.log(workout);
@@ -43,9 +45,7 @@ export default function Workout({ workoutId }) {
       <div className="workout__info-container">
         <div className="workout__title">{workout.workoutSplit} Day</div>
         <div className="workout__date">{dateStr}</div>
-        <div className="workout__delete-button" onClick={handleDelete}>
-          <i className="fa fa-trash" id={workout.id} />
-        </div>
+        <DeleteWorkoutButton id={workoutId}/>
       </div>
       <div className="workout__exercises">
         {workout.exerciseIds.map((exerciseId, index) => {
