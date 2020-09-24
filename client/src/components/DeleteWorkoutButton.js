@@ -1,13 +1,13 @@
 import React from "react";
 import {useDispatch} from 'react-redux';
-import { deleteWorkoutThunk } from "../store/workouts";
+import { workoutThunks } from "../store/workouts";
 
 export default function DeleteWorkoutButton({id}) {
 	const dispatch = useDispatch();
 
   const handleDelete = (e) => {
     e.preventDefault();
-    dispatch(deleteWorkoutThunk(id));
+    dispatch(workoutThunks.deleteWorkout(id));
   };
   return (
     <div className="workout__delete-button" onClick={handleDelete}>

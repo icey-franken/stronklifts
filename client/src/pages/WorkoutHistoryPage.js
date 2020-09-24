@@ -1,7 +1,7 @@
 import React from "react";
 import Workout from "../components/Workout";
 import { useDispatch, useSelector } from "react-redux";
-import { getWorkoutsThunk } from "../store/workouts";
+import { workoutThunks } from "../store/workouts";
 import { useEffect } from "react";
 import NewLifterForm from "../components/NewLifterForm";
 
@@ -17,7 +17,7 @@ export default function WorkoutHistoryPage() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getWorkoutsThunk(userId));
+    dispatch(workoutThunks.getWorkouts(userId));
   }, [dispatch, userId]); //dispatch, userId
 
   const workoutIds = Object.keys(workouts);

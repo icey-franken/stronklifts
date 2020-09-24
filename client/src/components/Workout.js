@@ -2,7 +2,6 @@ import React from "react";
 import Exercise from "./Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
-import { deleteWorkoutThunk } from "../store/workouts";
 import DeleteWorkoutButton from './DeleteWorkoutButton'
 
 
@@ -16,10 +15,6 @@ export default function Workout({ workoutId }) {
   // 	return useSelector(state=> state.exercises[exerciseId].wasSuccessful);
   // })
   // console.log('exercisesuccessarray from workout component', exerciseSuccessArray);
-  const handleDelete = (e) => {
-    e.preventDefault();
-    dispatch(deleteWorkoutThunk(parseInt(e.target.id, 10)));
-  };
 
   //date formatting
   const dateFormat = new Intl.DateTimeFormat("en", {

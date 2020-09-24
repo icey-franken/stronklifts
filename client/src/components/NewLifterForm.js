@@ -6,7 +6,7 @@ import AuthSubmitButton from "./auth/AuthSubmitButton";
 import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
-import { createWorkoutThunk, getWorkoutsThunk } from "../store/workouts";
+import { workoutThunks } from "../store/workouts";
 import { Redirect } from "react-router-dom";
 import ActiveWorkoutPage from "../pages/ActiveWorkoutPage";
 
@@ -137,8 +137,8 @@ export default function NewLifterForm({ userId }) {
     const wwValues = [];
     wwStates.forEach((wwState) => wwValues.push(wwState[0]));
     //dispatch(createWorkoutThunk(userId, wwState)
-    dispatch(createWorkoutThunk(userId, wwValues)).then(() =>
-      dispatch(getWorkoutsThunk(userId))
+    dispatch(workoutThunks.createWorkout(userId, wwValues)).then(() =>
+      dispatch(workoutThunks.getWorkouts(userId))
     );
     setWW(true);
 

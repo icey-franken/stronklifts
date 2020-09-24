@@ -7,22 +7,32 @@ export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
 export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
 
 //action pojo creator function
-export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
-export const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
-export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
+const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
+
+const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
+
+const updateWorkoutComplete = (workoutId, workoutComplete) => ({
   type: COMPLETE_WORKOUT,
   workoutId,
   workoutComplete,
 });
-export const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
+
+const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
   type: DELETE_WORKOUT,
   workoutId,
   exerciseIds,
   setIds,
 });
 
+export const workoutActions = {
+	getWorkouts,
+	createWorkout,
+	updateWorkoutComplete,
+	deleteWorkout
+};
+
 //thunk action creator
-export const getWorkoutsThunk = (userId) => {
+const getWorkoutsThunk = (userId) => {
   return async (dispatch) => {
     const res = await fetch(`/api/workouts/${userId}`);
     res.data = await res.json();
@@ -30,10 +40,9 @@ export const getWorkoutsThunk = (userId) => {
     return res;
   };
 };
-window.getWorkoutsThunk = getWorkoutsThunk;
 
 //needs work - need to figure out what to send to backend route.
-export const createWorkoutThunk = (userId, wwValues) => {
+const createWorkoutThunk = (userId, wwValues) => {
   //can pass an array of wwStates for exercisenames to change default values of new workouts.
   // setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0])
 
@@ -75,7 +84,7 @@ window.createWorkoutThunk = createWorkoutThunk;
 
 //I think it can dispatch a createWorkout action all the same - it does the same stuff?
 //Actually the workout should already be created, and as it is changed by user it should be updated in the store. So what we send to the database doesn't need to be seen by the store at all because it'll already be there.
-export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
+const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
@@ -103,7 +112,7 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   };
 };
 
-export const deleteWorkoutThunk = (workoutId) => {
+const deleteWorkoutThunk = (workoutId) => {
   return async (dispatch) => {
     try {
       const res = await fetch(`/api/workouts/${workoutId}`, {
@@ -121,6 +130,13 @@ export const deleteWorkoutThunk = (workoutId) => {
     }
   };
 };
+
+export const workoutThunks = {
+	getWorkouts: getWorkoutsThunk,
+	createWorkout: createWorkoutThunk,
+	updateWorkoutComplete: updateWorkoutCompleteThunk,
+	deleteWorkout: deleteWorkoutThunk
+}
 
 //workout reducer
 export default function workoutReducer(state = {}, action) {

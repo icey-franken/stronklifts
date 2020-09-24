@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Workout from "../components/Workout";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createWorkoutThunk,
-  updateWorkoutCompleteThunk,
-} from "../store/workouts";
+import { workoutThunks} from "../store/workouts";
 import { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import WorkoutHistoryPage from "./WorkoutHistoryPage";
@@ -18,14 +15,14 @@ export default function ActiveWorkoutPage() {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.auth.id);
   useEffect(() => {
-    dispatch(createWorkoutThunk(userId)).then((res) => {
+    dispatch(workoutThunks.createWorkout(userId)).then((res) => {
       setWorkoutId(res);
     });
   }, [dispatch, userId]);
 
   const handleClick = (e) => {
     e.preventDefault();
-    dispatch(updateWorkoutCompleteThunk(workoutId, true));
+    dispatch(workoutThunks.updateWorkoutComplete(workoutId, true));
     setComplete(true);
     //this should send everything to the database
   };
