@@ -1,5 +1,5 @@
 import React from "react";
-import Workout from "../components/Workout";
+import WorkoutHistory from "../components/history/WorkoutHistory";
 import { useDispatch, useSelector } from "react-redux";
 import { workoutThunks } from "../store/workouts";
 import { useEffect } from "react";
@@ -38,7 +38,7 @@ export default function WorkoutHistoryPage() {
   //.reverse method works for now - may have to fix in future.
 
   workoutIds.reverse();
-	if(workoutIds.length < 0 ) return null;
+  if (workoutIds.length < 0) return null;
   //need to make new components for workout history - for now they're the same.
   //for a single workout view component, you should be able to click (either on whole thing or specific spot) that will take you to the Active workout page but load that workout (based on id) and allow you to edit. Kind of hacky but it'll work.
   return (
@@ -47,12 +47,12 @@ export default function WorkoutHistoryPage() {
         <>
           <h1>Workout History</h1>
           {workoutIds.map((workoutId, index) => {
-            return <Workout id={workoutId} key={index} workoutId={workoutId} />;
+            return <WorkoutHistory key={index} workoutId={workoutId} />;
           })}
         </>
       ) : (
-				// ideally this would be a modal for those without workouts - don't have time.
-          <NewLifterForm userId={userId}/>
+        // ideally this would be a modal for those without workouts - don't have time.
+        <NewLifterForm userId={userId} />
       )}
     </div>
   );

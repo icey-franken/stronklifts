@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Workout from "../components/Workout";
+import Workout from "../components/activeWorkout/Workout";
 import { useDispatch, useSelector } from "react-redux";
 import { workoutThunks} from "../store/workouts";
 import { useEffect } from "react";

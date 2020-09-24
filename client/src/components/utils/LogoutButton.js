@@ -2,7 +2,7 @@ import React from "react";
 // import {Button} from '@material-ui/core';
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, NavLink } from "react-router-dom";
-import * as AuthActions from "../store/auth";
+import * as AuthActions from "../../store/auth";
 
 export default function LogoutButton() {
   const loggedOut = useSelector((state) => !state.auth.id); //should I change auth state to include token?

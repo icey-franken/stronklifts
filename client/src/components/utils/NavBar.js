@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import LogoutButton from "../components/LogoutButton";
+import LogoutButton from "./LogoutButton";
 import "./NavBar.css";
 
 //nav bar navlink rendering looks like shit if width less than 200 px on rando nav bar because text goes to new line - how to set minimum page width?

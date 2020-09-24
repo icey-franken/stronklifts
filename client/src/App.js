@@ -6,8 +6,8 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { setUser } from "./store/auth";
 import { useDispatch } from "react-redux";
-import { AuthNavBar, RandoNavBar } from "./components/NavBar";
-import Footer from "./components/Footer";
+import { AuthNavBar, RandoNavBar } from "./components/utils/NavBar";
+import Footer from "./components/utils/Footer";
 import "./App.css";
 
 //pass in an object with overrides - override MuiCssBaseline

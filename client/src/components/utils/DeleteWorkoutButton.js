@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch} from 'react-redux';
-import { workoutThunks } from "../store/workouts";
+import { workoutThunks } from "../../store/workouts";
 
 export default function DeleteWorkoutButton({id}) {
 	const dispatch = useDispatch();

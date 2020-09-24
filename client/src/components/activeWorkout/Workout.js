@@ -2,7 +2,7 @@ import React from "react";
 import Exercise from "./Exercise";
 import { useDispatch, useSelector } from "react-redux";
 import "./Workout.css";
-import DeleteWorkoutButton from './DeleteWorkoutButton'
+import DeleteWorkoutButton from '../utils/DeleteWorkoutButton'
 
 
 export default function Workout({ workoutId }) {
