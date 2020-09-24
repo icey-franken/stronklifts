@@ -8,18 +8,18 @@ import "./NavBar.css";
 export function AuthNavBar() {
   return (
     <nav className='userNav navbar'>
-      <NavLink className="nav" activeClassName="navActive" exact to="/">
-        Home
+      <NavLink className="nav" activeClassName="navActive" exact to="/history">
+        History
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/calendar">
+      {/* <NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar
-      </NavLink>
+      </NavLink> */}
       <NavLink className="nav" activeClassName="navActive" to="/workout">
         Workout
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/demos">
+      {/* <NavLink className="nav" activeClassName="navActive" to="/demos">
         Demos
-      </NavLink>
+      </NavLink> */}
       <LogoutButton />
     </nav>
   ); //proper pathname for navlink to logout?????

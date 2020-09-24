@@ -1,16 +1,23 @@
 /* backgroundover: "rgb(240,46,46)",
 backgroundDisabled: "rgba(210,46,46,0.5)", */
 .navbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
 	width: 100%;
-	height: 40px;
+	height: 5vw;
 	display: flex;
 	background-color: rgb(210,46,46);
-	margin-bottom: 18.76px;
 	padding: 0 6px;
+	/* border-bottom: black 3px solid; */
+	/* rbg(210,46,46); */
+	box-shadow: 0px 0.01vw 0.5vw black;
+	/* border: 5px solid black; */
 }
 
 .randoNav {
 	justify-content: flex-end;
+	/* margin-left: 2vw; */
 }
 
 .userNav {
@@ -18,21 +25,33 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 }
 
 .nav{
+	box-sizing: border-box;
 	color: white;
 	background-color: rgb(210,46,46);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	text-decoration: none;
-	font-size: 16px;
+	font-size: 2.8vw;
 	height: 100%;
-	align-self: center;
+	/* width: fit-content; */
 	/* line-height: 100%; */
 	/* text-align: center; */
-	padding: 8px 16px;
+	padding: 0 2vw;
 	white-space: nowrap;
 	/* flex-wrap: nowrap; */
-	margin: 0 6px;
+	/* margin: 0 6px; */
+	margin-left: 2vw;
+	margin-right:2vw;
+}
+
+.nav:hover {
+	border-bottom: 0.5vw white solid;
+/* wanted to make text "pop out" on hover BUT since width changes, then all the nav elements wiggle and I don't like that */
+	/* font-size: 3vw; */
 }
 
 .navActive {
 	background-color:rgb(240,46,46);
-	border-bottom: 2px white solid;
+	border-bottom: 0.4vw white solid;
 }

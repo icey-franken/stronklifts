@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       numRepsActual: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: null,
       },
     },
     {}
@@ -26,5 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "exerciseId",
     });
   };
+
+  Set.createBasicSets = async function (exerciseId, numSets) {
+    for (let i = 1; i <= numSets; i++) {
+      await Set.create({ exerciseId, setOrder: i });
+    }
+  };
+
   return Set;
 };

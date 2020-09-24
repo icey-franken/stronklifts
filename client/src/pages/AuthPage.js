@@ -12,17 +12,19 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+		alignItems: "center",
+		paddingTop: '18px',
   },
 });
 
+//remove material ui AS A BONUS - I like it how it is now so if it doesn't mess other things up, LEAVE IT
 export default function AuthPage() {
   const isLoggedIn = useSelector((state) => !!state.auth.id);
   const classes = useStyles();
   const match = useRouteMatch();
 
   //changed to isLoggedIn for semantic reasons
-  if (isLoggedIn) return <Redirect to="/" />;
+  if (isLoggedIn) return <Redirect to="/history" />;
   // not sure why we have root in classes - is it because container has a class of root put on it by MUI?
   const signingUp = match.path === "/signup";
   return (

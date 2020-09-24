@@ -1,0 +1,80 @@
+.exerciseView {
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  height: 100px !important;
+}
+
+.workout-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 0.2vw solid black;
+  box-shadow: 0 0 0.35vw 0px black;
+  border-radius: 3vw;
+  margin: 0 0 3vw;
+  padding: 0.8vw 0vw;
+  background-color: #e2e2e2;
+}
+
+.workout__info-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-bottom: 0.2vw solid black;
+  padding-bottom: 0.8vw;
+}
+
+.workout__title {
+  text-align: center;
+  font-size: 3vw;
+  line-height: 2.8vw;
+  width: 20%;
+  word-wrap: break-word;
+	padding: 0 0.8vw;
+	font-weight: 500;
+}
+
+.workout__date {
+  width: 80%;
+  font-size: 5vw;
+	justify-content: center;
+	justify-self: center;
+  display: flex;
+	padding: 0 0.8vw;
+
+}
+
+.workout__delete-button {
+  align-self: flex-start;
+  margin-right: 0.8vw;
+  border: none;
+  background-color: inherit;
+	cursor: pointer;
+	padding-top: 0.6vw;
+	padding-right: 0.6vw;
+	width: 20%;
+	display: flex;
+	justify-content: flex-end;
+	font-size: 3.5vw;
+}
+.workout__delete-button:hover {
+	color: rgb(240, 46, 46);
+	font-size: 4vw;
+
+}
+
+.workout__delete-button:focus{
+	outline:none;
+}
+
+.workout__exercises {
+  padding-right: 0.8vw;
+}
+
+.workout__note {
+  font-size: 2.5vw;
+  /* margin-top: 0.8vw; */
+  /* margin-bottom: 0.8vw; */
+  padding: 0 1.6vw;
+}

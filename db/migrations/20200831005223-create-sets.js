@@ -10,13 +10,17 @@ module.exports = {
       },
       exerciseId: {
 				type: Sequelize.INTEGER,
-				references: {model: 'Exercises'}
+				references: {model: 'Exercises'},
+				allowNull: false,
       },
       setOrder: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: false,
       },
       numRepsActual: {
-        type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: true,
+				defaultValue: null,
       },
       createdAt: {
         allowNull: false,

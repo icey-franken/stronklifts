@@ -6,7 +6,6 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { setUser } from "./store/auth";
 import { useDispatch } from "react-redux";
-import { Container } from "@material-ui/core";
 import { AuthNavBar, RandoNavBar } from "./components/NavBar";
 import Footer from "./components/Footer";
 import "./App.css";
@@ -17,7 +16,7 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       "@global": {
         body: {
-          backgroundColor: "pink",
+          backgroundColor: "#efefef",
         },
       },
     },
@@ -54,7 +53,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <BrowserRouter>
-          <Container className="pageContainer" fluid="true" maxWidth={false}>
+          <div className="pageContainer">
             {needLogin ? <RandoNavBar /> : <AuthNavBar />}
             <div className="content">
               <Pages />
@@ -62,7 +61,7 @@ function App() {
             <div className="footer">
               <Footer />
             </div>
-          </Container>
+          </div>
         </BrowserRouter>
       </ThemeProvider>
     </>

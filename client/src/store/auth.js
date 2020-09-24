@@ -2,8 +2,8 @@ import Cookies from 'js-cookie';//this module allows us to grab cookies
 // create all actions and reducer related to auth in this file
 
 //action type
-const SET_USER = 'auth/SET_USER';
-const REMOVE_USER = 'auth/REMOVE_USER';
+export const SET_USER = 'auth/SET_USER';
+export const REMOVE_USER = 'auth/REMOVE_USER';
 // const CREATE_USER = 'auth/CREATE_USER';//uses set user action creator - difference is thunk action creator called
 
 // action pojo creator function
@@ -49,13 +49,14 @@ export const logout = () => async (dispatch) => {
 //NEED TO ALTER THIS THUNK FOR SIGNUP!!!
 export const signup = (username, email, password, confirmPassword) => {
 	return async dispatch => {
+		const body = JSON.stringify({username,email,password, confirmPassword});
 		const res = await fetch('/api/users', {
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/json',
 				'XSRF-TOKEN': Cookies.get('XSRF-TOKEN'),
 			},
-			body: JSON.stringify({username,email,password, confirmPassword}),
+			body,
 		});
 		res.data = await res.json()//this should be everything EXCEPT hashed password (see user model)
 		//now we put user data in our redux store.

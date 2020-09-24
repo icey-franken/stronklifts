@@ -4,11 +4,9 @@ const { check } = require("express-validator");
 
 const { User } = require("../../db/models");
 const { handleValidationErrors } = require("../util/validation");
-const {
-  requireUser,
-  generateToken,
-  AuthenticationError,
-} = require("../util/auth");
+
+const { getCurrentUser, generateToken } = require("../util/auth");
+
 const {
   jwtConfig: { expiresIn },
 } = require("../../config");
@@ -19,14 +17,11 @@ const validateLogin = [check("username").exists(), check("password").exists()];
 
 router.get(
   "/",
-  requireUser,
+  getCurrentUser,
   asyncHandler(async function (req, res, next) {
-    if (req.user) {
-      return res.json({
-        user: req.user,
-      });
-    }
-    next(new AuthenticationError());
+    return res.json({
+      user: req.user || {}
+    });
   })
 );
 
