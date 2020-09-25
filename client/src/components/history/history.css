@@ -1,0 +1,40 @@
+.workout-history-container{
+	display: flex;
+	width: 800px;
+}
+
+.workout-history__exercises-container{
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	/* align-items: flex-start; */
+	border: 1px solid blue;
+}
+
+.workout-history__exercise-container{
+	display: flex;
+	width: 100%;
+	/* justify-content: space-between; */
+	/* align-items: flex-start; */
+	border: 1px solid red;
+	flex-direction:column;
+}
+
+
+.workout-history__exercise-info{
+	display: flex;
+	flex-direction: row;
+	justify-content:space-around;
+	width: 100%;
+	border: 1px solid black;
+}
+
+.workout-history__exercise{
+	display: flex;
+	flex-direction: column;
+}
+
+.workout-history__sets-container{
+	display:flex;
+	justify-content: space-around;
+}
