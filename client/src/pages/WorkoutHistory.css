@@ -1,0 +1,80 @@
+/* .workout-history__header{
+	border-bottom: 1px solid black;
+	padding-bottom: 30px;
+	margin-bottom: 0px;
+
+} */
+
+.workout-history-container{
+	/* display: flex; */
+	/* change width in future */
+	/* width: 800px; */
+	/* align-items: center; */
+	/* box-sizing: border-box; */
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+
+	width: 800px;
+	margin-bottom: 16px;
+
+
+}
+.workout-history__workout-container{
+	display: flex;
+	/* margin-bottom: 6px; */
+	padding-bottom: 6px;
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+	padding-top: 6px;
+
+	/* align-items: center; */
+	/* change width in future */
+}
+
+.workout-history__workout-info{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	/* border: 1px solid orange; */
+	/* change width */
+	width: 200px;
+}
+
+.workout-history__exercises-container{
+	display: flex;
+	justify-content: space-between;
+	/* border: 1px solid blue; */
+	/* align-items: flex-start; */
+	width: 100%;
+
+}
+
+.workout-history__exercise-container{
+	display: flex;
+	width: 100%;
+	margin: 0px 12px;
+	justify-content: space-between;
+	/* align-items: flex-start; */
+	/* border: 1px solid red; */
+	flex-direction:column;
+}
+
+
+.workout-history__exercise-info{
+	display: flex;
+	justify-content: center;
+	/* flex-direction: row; */
+	/* width: 100%; */
+	/* border: 1px solid black; */
+}
+
+.workout-history__exercise{
+	display: flex;
+	flex-direction: column;
+}
+
+.workout-history__sets-container{
+	display:flex;
+	justify-content: space-around;
+}

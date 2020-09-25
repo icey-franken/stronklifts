@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { workoutThunks } from "../store/workouts";
 import { useEffect } from "react";
 import NewLifterForm from "../components/NewLifterForm";
+import './WorkoutHistory.css'
 
 export default function WorkoutHistoryPage() {
   const workouts = useSelector((state) => state.workouts);
@@ -45,10 +46,12 @@ export default function WorkoutHistoryPage() {
     <div onClick={handleClick}>
       {workoutIds.length !== 0 ? (
         <>
-          <h1>Workout History</h1>
-          {workoutIds.map((workoutId, index) => {
-            return <WorkoutHistory key={index} workoutId={workoutId} />;
-          })}
+          <h1 className='workout-history__header'>Workout History</h1>
+          <div className="workout-history-container">
+            {workoutIds.map((workoutId, index) => {
+              return <WorkoutHistory key={index} workoutId={workoutId} />;
+            })}
+          </div>
         </>
       ) : (
         // ideally this would be a modal for those without workouts - don't have time.

@@ -10,12 +10,13 @@ export default function ExerciseHistory({ exerciseId }) {
   return (
     <div className="workout-history__exercise-container">
       <div className="workout-history__exercise-info">
-        <div className="workout-history__exercise-name">
+        {exercise.exerciseName} ({exercise.workingWeight} lbs)
+				{/* <div className="workout-history__exercise-name">
           {exercise.exerciseName}
         </div>
         <div className="workout-history__exercise-weight">
           {exercise.workingWeight} lbs
-        </div>
+        </div> */}
       </div>
       <div className="workout-history__sets-container">
         {setIds.map((setId, index) =>
