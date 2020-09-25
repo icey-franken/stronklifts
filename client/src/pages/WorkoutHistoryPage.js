@@ -45,14 +45,14 @@ export default function WorkoutHistoryPage() {
   return (
     <div onClick={handleClick}>
       {workoutIds.length !== 0 ? (
-        <>
+        <div className='workout-history-container'>
           <h1 className='workout-history__header'>Workout History</h1>
-          <div className="workout-history-container">
+          <div className="workout-history__workouts-container">
             {workoutIds.map((workoutId, index) => {
               return <WorkoutHistory key={index} workoutId={workoutId} />;
             })}
           </div>
-        </>
+        </div>
       ) : (
         // ideally this would be a modal for those without workouts - don't have time.
         <NewLifterForm userId={userId} />
