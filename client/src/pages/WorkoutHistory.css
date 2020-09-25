@@ -23,7 +23,8 @@
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 
-	width: 1000px;
+	/* width: 1000px; */
+	min-width: 800px;
 	margin-bottom: 16px;
 }
 
@@ -83,4 +84,10 @@
 .workout-history__sets-container{
 	display:flex;
 	justify-content: space-around;
+	padding: 0 20px;
+}
+
+.workout-history__button-container{
+	display: flex;
+	width: 20%;
 }

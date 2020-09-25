@@ -3,12 +3,14 @@ import Workout from "../components/activeWorkout/Workout";
 import { useDispatch, useSelector } from "react-redux";
 import { workoutThunks} from "../store/workouts";
 import { useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import WorkoutHistoryPage from "./WorkoutHistoryPage";
 import AuthSubmitButton from "../components/auth/AuthSubmitButton";
-import "./ActiveWorkout.css";
+import "./WorkoutContainer.css";
 
 export default function ActiveWorkoutPage() {
+	const {id} = useParams();
+	console.log(id)
   const [complete, setComplete] = useState(false);
   const [workoutId, setWorkoutId] = useState(null);
   // const workouts = useSelector((state) => state.workouts);

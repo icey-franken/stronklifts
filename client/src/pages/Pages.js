@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
-import ActiveWorkoutPage from "./ActiveWorkoutPage";
+import WorkoutContainerPage from "./WorkoutContainerPage";
 import WorkoutHistoryPage from './WorkoutHistoryPage';
 
 export default function Pages() {
@@ -23,7 +23,13 @@ export default function Pages() {
           path="/workout"
           exact={true}
           needLogin={needLogin}
-          component={ActiveWorkoutPage}
+          component={WorkoutContainerPage}
+        />
+				<ProtectedRoute
+          path="/workout/edit/:id"
+          exact={true}
+          needLogin={needLogin}
+          component={WorkoutContainerPage}
         />
       </Switch>
   );
