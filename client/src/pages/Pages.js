@@ -5,7 +5,9 @@ import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
 import EditWorkoutPage from "./EditWorkoutPageContainer";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
-
+import DemosPage from './DemosPage'
+import CalendarPage from './CalendarPage'
+import NewLifterForm from '../components/NewLifterForm';
 import WorkoutHistoryPage from './WorkoutHistoryPage';
 
 export default function Pages() {
@@ -21,7 +23,12 @@ export default function Pages() {
           needLogin={needLogin}
           component={WorkoutHistoryPage}
         />
-				{/* change to /workout/new later */}
+				<ProtectedRoute
+          path="/calendar"
+          exact={true}
+          needLogin={needLogin}
+          component={CalendarPage}
+        />
 				<ProtectedRoute
           path="/workout/new"
           exact={true}
@@ -29,10 +36,22 @@ export default function Pages() {
           component={NewWorkoutPage}
         />
 				<ProtectedRoute
+          path="/demos"
+          exact={true}
+          needLogin={needLogin}
+          component={DemosPage}
+        />
+				<ProtectedRoute
           path="/workout/edit/:workoutId"
           exact={true}
           needLogin={needLogin}
           component={EditWorkoutPage}
+        />
+				<ProtectedRoute
+          path="/newLifterForm"
+          exact={true}
+          needLogin={needLogin}
+          component={NewLifterForm}
         />
       </Switch>
   );

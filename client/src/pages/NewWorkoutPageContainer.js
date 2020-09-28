@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import WorkoutPage from "./WorkoutPage";
 
 export default function NewWorkoutPageContainer() {
-  //change route to /workout/new
   const [workoutId, setWorkoutId] = useState(null);
   const userId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();

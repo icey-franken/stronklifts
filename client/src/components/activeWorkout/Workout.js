@@ -1,6 +1,6 @@
 import React from "react";
 import Exercise from "./Exercise";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Workout.css";
 import DeleteWorkoutButton from '../utils/DeleteWorkoutButton'
 

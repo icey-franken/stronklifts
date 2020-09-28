@@ -11,7 +11,7 @@ export default function EditWorkoutPageContainer() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(workoutThunks.updateWorkoutComplete(workoutId, false));
-  }, []);
+  }, [dispatch, workoutId]);
 
   return <WorkoutPage workoutId={workoutId} />;
 }

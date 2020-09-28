@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Select, InputLabel, MenuItem } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SLLogo from "../components/auth/SLLogo";
 import AuthSubmitButton from "./auth/AuthSubmitButton";
 import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import WorkoutContainerPage from "../pages/WorkoutPage";
 
 //lifted from auth page - in the future you should integrate this as an option
@@ -20,8 +20,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function NewLifterForm({ userId }) {
-  // const userId = useSelector((state) => state.auth.id);
+export default function NewLifterForm() {
+  const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
   const [WW, setWW] = useState(false);
   const squatState = useState(10);
@@ -131,6 +131,7 @@ export default function NewLifterForm({ userId }) {
   ];
   const recommendedStartingWeight = [45, 45, 95, 45, 45];
   const dispatch = useDispatch();
+  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
     //dispatch an event that sends a setStartingWeight which includes userId, exerciseNameId, workingWeightId
@@ -141,7 +142,7 @@ export default function NewLifterForm({ userId }) {
       dispatch(workoutThunks.getWorkouts(userId))
     );
     setWW(true);
-
+    history.push("/workout/new");
     // exerciseNameIds.forEach(async(exerciseNameId, index)=>{
     // await dispatch(setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0]));
     // })
@@ -152,11 +153,12 @@ export default function NewLifterForm({ userId }) {
   const classes = useStyles();
   return (
     <>
-      {WW ? (
+      {/* {WW ? (
         <Redirect to="/workout" render={() => WorkoutContainerPage} />
-      ) : (
-        /* <ActiveWorkout />
-        </Redirect> */
+      ) : ( */}
+      {/* /* <ActiveWorkout /> */}
+      {
+        /* </Redirect> */
         <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
           <SLLogo />
 
@@ -205,7 +207,8 @@ export default function NewLifterForm({ userId }) {
             </form>
           </Container>
         </Container>
-      )}
+        // )
+      }
     </>
   );
 }

@@ -2,10 +2,6 @@ import React from "react";
 import ExerciseHistory from "./ExerciseHistory";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory} from 'react-router-dom';
-// import WorkoutContainerPage from '../../pages/WorkoutPage';
-// import "./WorkoutHistory.css"; //need to create
-// import DeleteWorkoutButton from "../utils/DeleteWorkoutButton";
-// import "./history.css";
 import { workoutThunks } from "../../store/workouts";
 
 export default function WorkoutHistory({ workoutId }) {
@@ -23,9 +19,6 @@ export default function WorkoutHistory({ workoutId }) {
   const handleEdit = (e) => {
     e.preventDefault();
 		history.push(`/workout/edit/${workoutId}`);
-		// return (
-    //   <Redirect to={`/workout/edit/${workoutId}`}/>
-    // );
   };
 
   // import date formatter - for now we copy
