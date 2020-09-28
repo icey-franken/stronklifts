@@ -14,7 +14,7 @@ export function AuthNavBar() {
       {/* <NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar
       </NavLink> */}
-      <NavLink className="nav" activeClassName="navActive" to="/workout">
+      <NavLink className="nav" activeClassName="navActive" to="/workout/new">
         Workout
       </NavLink>
       {/* <NavLink className="nav" activeClassName="navActive" to="/demos">

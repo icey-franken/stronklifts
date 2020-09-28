@@ -25,10 +25,10 @@ const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
 });
 
 export const workoutActions = {
-	getWorkouts,
-	createWorkout,
-	updateWorkoutComplete,
-	deleteWorkout
+  getWorkouts,
+  createWorkout,
+  updateWorkoutComplete,
+  deleteWorkout,
 };
 
 //thunk action creator
@@ -66,7 +66,7 @@ const createWorkoutThunk = (userId, wwValues) => {
           body,
         };
       }
-      const res = await fetch(`api/workouts/${userId}`, options);
+      const res = await fetch(`/api/workouts/${userId}`, options);
       if (!res.ok) {
         throw res;
       }
@@ -88,6 +88,7 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
+      console.log("line91workout.js", workoutId, workoutComplete);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -104,7 +105,7 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
       //   dispatch(createWorkout(workout));
       //   return workout.id;
       // }
-      return res;
+      // return res;
     } catch (err) {
       console.log(err);
     }
@@ -132,11 +133,11 @@ const deleteWorkoutThunk = (workoutId) => {
 };
 
 export const workoutThunks = {
-	getWorkouts: getWorkoutsThunk,
-	createWorkout: createWorkoutThunk,
-	updateWorkoutComplete: updateWorkoutCompleteThunk,
-	deleteWorkout: deleteWorkoutThunk
-}
+  getWorkouts: getWorkoutsThunk,
+  createWorkout: createWorkoutThunk,
+  updateWorkoutComplete: updateWorkoutCompleteThunk,
+  deleteWorkout: deleteWorkoutThunk,
+};
 
 //workout reducer
 export default function workoutReducer(state = {}, action) {

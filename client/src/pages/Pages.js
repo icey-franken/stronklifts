@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import AuthPage from "./AuthPage";
 import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
-import WorkoutPage from "./WorkoutPage";
+import EditWorkoutPage from "./EditWorkoutPageContainer";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
 
 import WorkoutHistoryPage from './WorkoutHistoryPage';
@@ -23,16 +23,16 @@ export default function Pages() {
         />
 				{/* change to /workout/new later */}
 				<ProtectedRoute
-          path="/workout"
+          path="/workout/new"
           exact={true}
           needLogin={needLogin}
           component={NewWorkoutPage}
         />
 				<ProtectedRoute
-          path="/workout/edit/:id"
+          path="/workout/edit/:workoutId"
           exact={true}
           needLogin={needLogin}
-          component={WorkoutPage}
+          component={EditWorkoutPage}
         />
       </Switch>
   );

@@ -17,7 +17,7 @@ export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
 	return async (dispatch) => {
 		try{
 			const body = JSON.stringify({wasSuccessful});
-			const res = await fetch(`api/exercises/${exerciseId}`, {
+			const res = await fetch(`/api/exercises/${exerciseId}`, {
 				method: "put",
         headers: {
           "Content-Type": "application/json",
