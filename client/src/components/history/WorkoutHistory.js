@@ -1,10 +1,10 @@
 import React from "react";
 import ExerciseHistory from "./ExerciseHistory";
 import { useDispatch, useSelector } from "react-redux";
-import {Redirect, useHistory} from 'react-router-dom';
-import WorkoutContainerPage from '../../pages/WorkoutContainerPage';
+import { useHistory} from 'react-router-dom';
+// import WorkoutContainerPage from '../../pages/WorkoutPage';
 // import "./WorkoutHistory.css"; //need to create
-import DeleteWorkoutButton from "../utils/DeleteWorkoutButton";
+// import DeleteWorkoutButton from "../utils/DeleteWorkoutButton";
 // import "./history.css";
 import { workoutThunks } from "../../store/workouts";
 

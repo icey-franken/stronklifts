@@ -12,7 +12,7 @@ export default function SetHistory({setId}) {
 	const numReps = useSelector((state)=>state.sets[setId].numRepsActual)
 
 	// if (setId !== 'emptySet') {}
-	console.log(numReps)
+	// console.log(numReps)
 	return (
 		<div className='workout-history__set'>
 			{numReps === null ? '-' : numReps}

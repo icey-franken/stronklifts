@@ -6,7 +6,7 @@ import SetEmptyHistory from "./SetEmptyHistory";
 export default function ExerciseHistory({ exerciseId }) {
   const exercise = useSelector((state) => state.exercises[exerciseId]);
   const { setIds } = exercise;
-	console.log(setIds);
+	// console.log(setIds);
 	let exerciseFail = '';
 	if(!exercise.wasSuccessful) exerciseFail='fail';
 	let exerciseDeload = '';

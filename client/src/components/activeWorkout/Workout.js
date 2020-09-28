@@ -7,7 +7,7 @@ import DeleteWorkoutButton from '../utils/DeleteWorkoutButton'
 
 export default function Workout({ workoutId }) {
   // console.log(workout);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const workout = useSelector((state) => state.workouts[workoutId]);
   if (!workout) return null;
   // const exerciseIds = workout.exerciseIds;

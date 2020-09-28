@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
 import { Redirect } from "react-router-dom";
-import WorkoutContainerPage from "../pages/WorkoutContainerPage";
+import WorkoutContainerPage from "../pages/WorkoutPage";
 
 //lifted from auth page - in the future you should integrate this as an option
 const useStyles = makeStyles({
