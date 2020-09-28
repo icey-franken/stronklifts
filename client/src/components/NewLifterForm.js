@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
 import { useHistory } from "react-router-dom";
-import WorkoutContainerPage from "../pages/WorkoutPage";
 
 //lifted from auth page - in the future you should integrate this as an option
 const useStyles = makeStyles({
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
 export default function NewLifterForm() {
   const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
-  const [WW, setWW] = useState(false);
+  // const [WW, setWW] = useState(false);
   const squatState = useState(10);
   const ohpState = useState(10);
   const dlState = useState(20);
@@ -134,81 +133,64 @@ export default function NewLifterForm() {
   const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
-    //dispatch an event that sends a setStartingWeight which includes userId, exerciseNameId, workingWeightId
     const wwValues = [];
     wwStates.forEach((wwState) => wwValues.push(wwState[0]));
-    //dispatch(createWorkoutThunk(userId, wwState)
     dispatch(workoutThunks.createWorkout(userId, wwValues)).then(() =>
       dispatch(workoutThunks.getWorkouts(userId))
     );
-    setWW(true);
+    // setWW(true);
     history.push("/workout/new");
-    // exerciseNameIds.forEach(async(exerciseNameId, index)=>{
-    // await dispatch(setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0]));
-    // })
-    //send them to the workout page for their first workout, using whatever values they selected.
-    // const res = await dispatch(setStartingWeight())
   };
 
   const classes = useStyles();
   return (
-    <>
-      {/* {WW ? (
-        <Redirect to="/workout" render={() => WorkoutContainerPage} />
-      ) : ( */}
-      {/* /* <ActiveWorkout /> */}
-      {
-        /* </Redirect> */
-        <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
-          <SLLogo />
+    <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
+      <SLLogo />
 
-          <h1>Welcome to Stronklifts</h1>
-          <div className="form__intro">
-            Please select your starting weights in the form below.
-            <p /> You are strongly advised to use the recommended values if you
-            do not have experience with these exercises.
-            <p />
-            <span style={{ fontWeight: "bold" }}>Remember:</span> proper form is
-            the name of the game. Impressive working weights don't matter if
-            you're injured.
-            <p />
-            Click "Workout" in the navbar above if you'd like to get started
-            with the recommended values.
-            <p />
-          </div>
-          <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
-            <form onSubmit={handleSubmit}>
-              <div className="form__title">Working Weights</div>
-              {exerciseNames.map((exerciseName, index) => {
-                return (
-                  <div className="inputItem" key={index}>
-                    <InputLabel className="inputItem__label" id={exerciseName}>
-                      {exerciseName} (recommended:{" "}
-                      {recommendedStartingWeight[index]} lbs)
-                    </InputLabel>
-                    <Select
-                      labelId={exerciseName}
-                      id="select"
-                      value={wwStates[index][0]}
-                      onChange={(e) => wwStates[index][1](e.target.value)}
-                    >
-                      {workingWeights.map((workingWeight, index) => {
-                        return (
-                          <MenuItem key={index} value={workingWeightIds[index]}>
-                            {workingWeight} lbs
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </div>
-                );
-              })}
-              <AuthSubmitButton>Get Started</AuthSubmitButton>
-            </form>
-          </Container>
-        </Container>
-        // )
-      }
-    </>
+      <h1>Welcome to Stronklifts</h1>
+      <div className="form__intro">
+        Please select your starting weights in the form below.
+        <p /> You are strongly advised to use the recommended values if you do
+        not have experience with these exercises.
+        <p />
+        <span style={{ fontWeight: "bold" }}>Remember:</span> proper form is the
+        name of the game. Impressive working weights don't matter if you're
+        injured.
+        <p />
+        Click "Workout" in the navbar above if you'd like to get started with
+        the recommended values.
+        <p />
+      </div>
+      <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
+        <form onSubmit={handleSubmit}>
+          <div className="form__title">Working Weights</div>
+          {exerciseNames.map((exerciseName, index) => {
+            return (
+              <div className="inputItem" key={index}>
+                <InputLabel className="inputItem__label" id={exerciseName}>
+                  {exerciseName} (recommended:{" "}
+                  {recommendedStartingWeight[index]} lbs)
+                </InputLabel>
+                <Select
+                  labelId={exerciseName}
+                  id="select"
+                  value={wwStates[index][0]}
+                  onChange={(e) => wwStates[index][1](e.target.value)}
+                >
+                  {workingWeights.map((workingWeight, index) => {
+                    return (
+                      <MenuItem key={index} value={workingWeightIds[index]}>
+                        {workingWeight} lbs
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </div>
+            );
+          })}
+          <AuthSubmitButton>Get Started</AuthSubmitButton>
+        </form>
+      </Container>
+    </Container>
   );
 }

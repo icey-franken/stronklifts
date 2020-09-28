@@ -11,7 +11,10 @@ export function AuthNavBar() {
       <NavLink className="nav" activeClassName="navActive" exact to="/history">
         History
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/calendar">
+      <NavLink className="nav" activeClassName="navActive" to="/graph">
+        Graph
+      </NavLink>
+			<NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar
       </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/workout/new">
