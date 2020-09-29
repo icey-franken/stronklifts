@@ -3,18 +3,19 @@ import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
 
 export default function Graph({ dataPoints }) {
-	console.log(dataPoints);
-  // take in userDayDiff as a prop - span of data they want to see.
-  //hard code for now
-  const userDayDiff = 0.05; //showing 30 days.
-  // const maxWeight =
-  //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" values will be based on screen size.
-  const exerciseName = dataPoints.shift();
-	// console.log(dataPoints);
-	const margin = 50;
+	const exerciseName = dataPoints.shift();
+
+	//eventually userDayDiff will be a selectable button available to the user. Hard code for now.
+	const userDayDiff = 15;
+	const msPerDay = 8.64e+7;
+
+	//goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   const width = 750;
   const height = 700;
-  const axisOffset = 100;
+	//margin and axisOffset will probably remain constant
+	const margin = 50;
+	const axisOffset = 100;
+	//plot ranges are based on previous inputs!
   const yRange = height - axisOffset-margin;
   const xRange = width - axisOffset-margin;
 
@@ -39,7 +40,7 @@ export default function Graph({ dataPoints }) {
   // const width = xMax - axisOffset + 150;
 
   //based on weight range we can pick y range. Maybe pick the max weight in the array and have y go from 0lbs to max weight - or have it auto adjust to minimum working weight in that range for max visibility
-  const now = Date.now();
+	const now = Date.now();
   let xDataIdx = [];
   let xDataDate = [];
   let yDataWeight = [];
@@ -48,7 +49,7 @@ export default function Graph({ dataPoints }) {
   //if multiple single level - only need for each loop. Otherwise use reduce function.
   const relevantDataPoints = dataPoints.reduce((result, [rawDate, weight]) => {
     const date = new Date(rawDate);
-    const dayDiff = (now - date) / 8.64e7;
+    const dayDiff = (now - date) / msPerDay;
     if (dayDiff < userDayDiff) {
 			xDataDate.push(date); //necessary?
 			console.log(dayDiff, userDayDiff)
@@ -80,6 +81,16 @@ export default function Graph({ dataPoints }) {
   const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun", 'jul'];
 
   // const weightLabels = [0, 5, 10, 15, 20, 25, 30];
+
+//this is for generating date labels
+console.log(plotDateFormat(now));
+xDataDate.forEach(date=>{
+	console.log('start date?', plotDateFormat(now-msPerDay*userDayDiff))
+	console.log('ms between now and workout date', now-date);
+	console.log('ms now - since 1970?', now);
+	console.log('ms in user day diff', msPerDay*userDayDiff);
+	console.log('beginning of valid ms range based on user day diff', now - msPerDay*userDayDiff);
+})
 
 	//the below code is for generating suitable y data labels
 	//make the incrementing smarter instead of caveman style - later
