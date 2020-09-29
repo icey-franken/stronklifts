@@ -5,7 +5,7 @@ import Graph from "../components/Graph";
 export default function GraphPage() {
   const exercises = useSelector((state) => state.exercises);
 	const exercisesArr = Object.values(exercises);
-
+	exercisesArr.sort((a,b)=>(a.workoutDate> b.workoutDate) ? 1 : -1)
   //consider adding a selector to redux store that separates by exercise name.
   //for now I will do it caveman style
   let squatData = ['Squat'];
@@ -25,7 +25,8 @@ export default function GraphPage() {
     } else if (exerciseName === "Pendlay Row") {
       rowData.push([workoutDate, workingWeight]);
     }
-  });
+	});
+	//just squat data for now to simplify progress on graph component
   let graphData = [squatData]//, overheadData, deadliftData, benchData, rowData];
   return (
     <>
