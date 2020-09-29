@@ -1,10 +1,15 @@
 import React from "react";
 import "./Graph.css";
+import {plotDateFormat} from './utils/Formatter';
 
 export default function Graph({ dataPoints }) {
+// take in userDayDiff as a prop - span of data they want to see.
+//hard code for now
+const userDayDiff = 30; //showing 30 days.
+
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" values will be based on screen size.
   const exerciseName = dataPoints.shift();
-  console.log(dataPoints);
+  // console.log(dataPoints);
 
   const height = 500;
   const width = 500;
@@ -24,11 +29,75 @@ export default function Graph({ dataPoints }) {
   const yStep = (yMax - yMin) / ySteps;
 
   //based on weight range we can pick y range. Maybe pick the max weight in the array and have y go from 0lbs to max weight - or have it auto adjust to minimum working weight in that range for max visibility
+	function longDateFormat(date) {
+		const dateFormat = new Intl.DateTimeFormat("en", {
+			day: "2-digit",
+			month: "long",
+			year: "numeric",
+		});
+		let dateArr;
+		if (date === null) {
+			dateArr = dateFormat.formatToParts(Date.now());
+		} else {
+			dateArr = dateFormat.formatToParts(new Date(date));
+		}
+		let dateStr = "";
+		dateArr.forEach((el) => (dateStr += el.value));
+		return dateStr
+	}
+	console.log(dataPoints);
+	const now = Date.now();
+	console.log(now);
+	console.log(longDateFormat(now))
+
+	const relevantDataPoints = [];
+	dataPoints.forEach(([rawDate, weight])=>{
+		const date = new Date(rawDate)
+		const dayDiff = (now-date)/8.64e+7
+		// console.log(dayDiff, ' days ago');
+		if(dayDiff < userDayDiff) {
+			//maybe format date here?
+			//all I want is mm/dd
+			relevantDataPoints.push([date, weight]);
+		}
+	})
+	//sort relevant data points here - then to plotting
+	//minimum date in plot based off of now - userDayDiff
+	// console.log(relevantDataPoints);
+
+	//convert dates to the format desired as plot labels.
+	//	I might want to make my own plot labels so they can be regularly spaced - then labels will be based on max time span. I think that's the move....
+	relevantDataPoints.map((dataTuple)=>{
+		dataTuple[0] = plotDateFormat(dataTuple[0])
+	})
+	console.log(relevantDataPoints);
+
+
+	//right before we get to the actual plot I think I want to split things to x and y to simplify mapping
+	let xData = [];
+	let yData = [];
+	relevantDataPoints.forEach(([date, weight])=>{
+		xData.push(date);
+		yData.push(weight);
+	})
+	console.log(xData);
+	console.log(yData);
 
   //dummy hard coded date labels
   const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun"];
 
 	const weightLabels = [0, 5, 10, 15, 20, 25, 30];
+
+
+	//CIRCLE ELEMENTS
+	// <circle cx='25' cy='75' r='20'/>
+	// where cx and cy are position from center of circle and r is radius. All data points should be same size.
+	//Consider hover effect of size increase; consider linking to that workout.
+	//It WOULD be possible to use a complex path element to draw the graphs, but I think that since I have data points that that is extra work - INSTEAD I will use line elements.
+
+	//LINE ELEMENTS
+	//e.g. <line x1='10' y1='110' x2='50' y2='150' />
+	//I can use these line elements to draw straight lines between each data point. That way, for each data point I can have a line (minus 1)
 
   return (
     <>

@@ -26,7 +26,7 @@ export default function GraphPage() {
       rowData.push([workoutDate, workingWeight]);
     }
   });
-  let graphData = [squatData, overheadData, deadliftData, benchData, rowData];
+  let graphData = [squatData]//, overheadData, deadliftData, benchData, rowData];
   return (
     <>
       <div>hi from graph page</div>
