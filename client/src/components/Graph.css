@@ -5,6 +5,21 @@
 }
 
 .data-line {
-	stroke:rgb(255,0,0);
+	stroke:#D22E2E;
 	stroke-width:1.5;
+}
+
+.data-point{
+	stroke: #D22e2e;
+	background-color:#D22e2e;
+	color: #d22e2e
+}
+/* transform-origin: 20px 200px; */
+.y-label-title{
+	text-anchor: middle;
+	/* transform-origin: center; */
+	transform:rotate(-90deg);
+}
+.grid{
+	stroke: black;
 }

@@ -92,9 +92,13 @@ export default function Graph({ dataPoints }) {
   console.log(weightLabels);
 
   //map xDataIdx and yDataIdx to actual data points based on min/max/range values
-  let xDataNum = xDataIdx.map((x) => x * xRange + xMin);
-  let yDataNum = yDataIdx.map((y) => y * yRange + yMin);
-
+  let xDataNum = xDataIdx.map((x) => xMax - x * xRange);
+  let yDataNum = yDataIdx.map((y) => yMin+ y * yRange);
+  console.log(xDataIdx, yDataIdx);
+	const yLabelXPos = `${xAxisBase - 80}px`;
+	const yLabelYPos = `${(yMax - yAxisBase) / 2}px`;
+	console.log(yLabelXPos, yLabelYPos);
+	const yLabelTransOrigin=yLabelXPos+' '+yLabelYPos;
   return (
     <>
       <div>I'm a graph for {exerciseName}</div>
@@ -112,18 +116,19 @@ export default function Graph({ dataPoints }) {
         // xmlns="http://www.w3.org/2000/svg"
         // xmlns:xlink="http://www.w3.org/1999/xlink"
         className="graph"
-        // aria-labelledby="title"
+        aria-labelledby="title"
         width={width}
         height={height}
         role="img"
       >
         <title id="title">A line chart showing some information</title>
         <g className="grid x-grid" id="xGrid">
-          <line x1="90" x2="90" y1="5" y2="371"></line>
+          <line x1={xAxisBase} x2={xAxisBase} y1='0' y2={yAxisBase}/>
         </g>
         <g className="grid y-grid" id="yGrid">
-          <line x1="90" x2="705" y1="370" y2="370"></line>
+          <line x1={xAxisBase} x2={xMax} y1={yAxisBase} y2={yAxisBase} />
         </g>
+
         <g className="labels x-labels">
           {dateLabels.map((date, index) => {
             return (
@@ -135,7 +140,7 @@ export default function Graph({ dataPoints }) {
           <text
             x={xMid + xAxisBase / 2}
             y={yAxisBase + 40}
-            className="label-title"
+            className="label-title x-label-title"
           >
             Date
           </text>
@@ -154,9 +159,10 @@ export default function Graph({ dataPoints }) {
           })}
 
           <text
-            x={xAxisBase - 120}
-            y={(yMax - yAxisBase) / 2}
-            className="label-title"
+            x={yLabelXPos}
+            y={yLabelYPos}
+						className="label-title y-label-title"
+						style={{transformOrigin: `${yLabelXPos} ${yLabelYPos}`}}
           >
             Weight (lbs)
           </text>
@@ -168,6 +174,8 @@ export default function Graph({ dataPoints }) {
 }
 
 function buildGraph(xDataNum, yDataNum) {
+  console.log(xDataNum, yDataNum);
+
   let graphArr = [];
   for (let i = 0; i < xDataNum.length - 1; i++) {
     graphArr.push(
