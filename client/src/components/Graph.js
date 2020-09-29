@@ -11,6 +11,8 @@ export default function Graph({ dataPoints }) {
   const exerciseName = dataPoints.shift();
   // console.log(dataPoints);
 
+  const dummyXLines = [100, 200, 300, 400, 500, 600];
+  const dummyYLines = [100,200,300,400, 500, 600];
   const xAxisBase = 100;
   const xMin = 100;
   const xMax = 600;
@@ -19,7 +21,7 @@ export default function Graph({ dataPoints }) {
   const xSteps = 5;
   const xStep = (xMax - xMin) / xSteps;
 
-  const yAxisBase = 500;
+  const yAxisBase = 550;
   const yMin = 400;
   const yMax = 900;
   const yRange = yMax - yMin;
@@ -27,8 +29,8 @@ export default function Graph({ dataPoints }) {
   const ySteps = 5;
   const yStep = (yMax - yMin) / ySteps;
 
-  const height = yMax - yMin + 100;
-  const width = xMax - xMin + 100;
+  const height = yMax - yMin + 150;
+  const width = xMax - xMin + 150;
 
   //based on weight range we can pick y range. Maybe pick the max weight in the array and have y go from 0lbs to max weight - or have it auto adjust to minimum working weight in that range for max visibility
   const now = Date.now();
@@ -93,12 +95,11 @@ export default function Graph({ dataPoints }) {
 
   //map xDataIdx and yDataIdx to actual data points based on min/max/range values
   let xDataNum = xDataIdx.map((x) => xMax - x * xRange);
-  let yDataNum = yDataIdx.map((y) => yMin+ y * yRange);
+  let yDataNum = yDataIdx.map((y) => yMin - y * yRange);
   console.log(xDataIdx, yDataIdx);
-	const yLabelXPos = `${xAxisBase - 80}px`;
-	const yLabelYPos = `${(yMax - yAxisBase) / 2}px`;
-	console.log(yLabelXPos, yLabelYPos);
-	const yLabelTransOrigin=yLabelXPos+' '+yLabelYPos;
+  const yLabelXPos = `${xAxisBase - 80}px`;
+  const yLabelYPos = `${(yMax - yAxisBase) / 2}px`;
+  console.log(yLabelXPos, yLabelYPos);
   return (
     <>
       <div>I'm a graph for {exerciseName}</div>
@@ -123,12 +124,25 @@ export default function Graph({ dataPoints }) {
       >
         <title id="title">A line chart showing some information</title>
         <g className="grid x-grid" id="xGrid">
-          <line x1={xAxisBase} x2={xAxisBase} y1='0' y2={yAxisBase}/>
+          <line x1={xAxisBase} x2={xAxisBase} y1="0" y2={yAxisBase} />
         </g>
         <g className="grid y-grid" id="yGrid">
           <line x1={xAxisBase} x2={xMax} y1={yAxisBase} y2={yAxisBase} />
         </g>
-
+        {/* dummy lines to make life easier */}
+        {dummyXLines.map((xCoord, idx) => {
+          return (
+            <g key={idx} className='dummy-grid'>
+                <line
+                  x1={0}
+                  x2={1000}
+                  y1={dummyYLines[idx]}
+                  y2={dummyYLines[idx]}
+                />
+                <line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
+            </g>
+          );
+        })}
         <g className="labels x-labels">
           {dateLabels.map((date, index) => {
             return (
@@ -161,8 +175,8 @@ export default function Graph({ dataPoints }) {
           <text
             x={yLabelXPos}
             y={yLabelYPos}
-						className="label-title y-label-title"
-						style={{transformOrigin: `${yLabelXPos} ${yLabelYPos}`}}
+            className="label-title y-label-title"
+            style={{ transformOrigin: `${yLabelXPos} ${yLabelYPos}` }}
           >
             Weight (lbs)
           </text>

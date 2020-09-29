@@ -22,4 +22,12 @@
 }
 .grid{
 	stroke: black;
+
+}
+.dummy-grid{
+	stroke: orange;
+}
+
+.y-labels, .x-labels{
+	text-anchor: middle;
 }
