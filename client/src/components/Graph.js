@@ -5,32 +5,30 @@ import { plotDateFormat } from "./utils/Formatter";
 export default function Graph({ dataPoints }) {
   // take in userDayDiff as a prop - span of data they want to see.
   //hard code for now
-  const userDayDiff = 1; //showing 30 days.
+  const userDayDiff = 0.2; //showing 30 days.
   // const maxWeight =
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" values will be based on screen size.
   const exerciseName = dataPoints.shift();
   // console.log(dataPoints);
-
-  const dummyXLines = [100, 200, 300, 400, 500, 600];
-  const dummyYLines = [100,200,300,400, 500, 600];
-  const xAxisBase = 100;
-  const xMin = 100;
-  const xMax = 600;
-  const xRange = xMax - xMin;
-  const xMid = (xMax - xMin) / 2;
+	const width = 700;
+	const height = 700;
+	const axisOffset = 100;
+	let dummyLines = [];
+	for(let i = 0; i <=5; i ++) {
+		dummyLines.push(axisOffset+i*100)
+	}
+  // const axisOffset = 100;
+  const xMax = width - axisOffset;
   const xSteps = 5;
-  const xStep = (xMax - xMin) / xSteps;
+  const xStep = (xMax - axisOffset) / xSteps;
 
-  const yAxisBase = 550;
   const yMin = 400;
-  const yMax = 900;
-  const yRange = yMax - yMin;
-  const yMid = (yMax - yMin) / 2;
+  const yMax = height-axisOffset;
   const ySteps = 5;
   const yStep = (yMax - yMin) / ySteps;
 
-  const height = yMax - yMin + 150;
-  const width = xMax - xMin + 150;
+  // const height = yMax - yMin + 150;
+  // const width = xMax - axisOffset + 150;
 
   //based on weight range we can pick y range. Maybe pick the max weight in the array and have y go from 0lbs to max weight - or have it auto adjust to minimum working weight in that range for max visibility
   const now = Date.now();
@@ -45,7 +43,7 @@ export default function Graph({ dataPoints }) {
     const dayDiff = (now - date) / 8.64e7;
     if (dayDiff < userDayDiff) {
       xDataDate.push(date); //necessary?
-      xDataIdx.push(dayDiff / userDayDiff);
+      xDataIdx.push(1-dayDiff / userDayDiff);
       yDataWeight.push(weight); //necessary?
       return [...result, [date, weight]];
     } else {
@@ -71,7 +69,7 @@ export default function Graph({ dataPoints }) {
   //	use plotDateFormat function to generate suitable labels
 
   //(workoutDate - now)/userDayDiff will give a value between 0 and 1.
-  //The x position will be that value times (xMax-xMin), plus xMin.
+  //The x position will be that value times (xMax-axisOffset), plus axisOffset.
 
   //dummy hard coded date labels
   const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun"];
@@ -88,18 +86,19 @@ export default function Graph({ dataPoints }) {
     yLabelSpacing = 5;
   }
   let weightLabels = [];
-  for (let i = 0; i <= numYLabels; i++) {
-    weightLabels.push(minWeight + i * yLabelSpacing);
+  // for (let i = 0; i <= numYLabels; i++) {
+  //   weightLabels.push(minWeight + i * yLabelSpacing);
+  // }
+  for (let i = 0; i <= (weightRange/5); i++) {
+    weightLabels.push(minWeight + i * 5);
   }
-  console.log(weightLabels);
+
+	console.log(weightLabels);
 
   //map xDataIdx and yDataIdx to actual data points based on min/max/range values
-  let xDataNum = xDataIdx.map((x) => xMax - x * xRange);
-  let yDataNum = yDataIdx.map((y) => yMin - y * yRange);
-  console.log(xDataIdx, yDataIdx);
-  const yLabelXPos = `${xAxisBase - 80}px`;
-  const yLabelYPos = `${(yMax - yAxisBase) / 2}px`;
-  console.log(yLabelXPos, yLabelYPos);
+  let xDataNum = xDataIdx.map((x) => axisOffset + (width-axisOffset)*x);
+  let yDataNum = yDataIdx.map((y) => (1-y)*(height-axisOffset));
+  console.log(xDataIdx, xDataNum);
   return (
     <>
       <div>I'm a graph for {exerciseName}</div>
@@ -124,36 +123,36 @@ export default function Graph({ dataPoints }) {
       >
         <title id="title">A line chart showing some information</title>
         <g className="grid x-grid" id="xGrid">
-          <line x1={xAxisBase} x2={xAxisBase} y1="0" y2={yAxisBase} />
+          <line x1={axisOffset} x2={axisOffset} y1="0" y2={height-axisOffset} />
         </g>
         <g className="grid y-grid" id="yGrid">
-          <line x1={xAxisBase} x2={xMax} y1={yAxisBase} y2={yAxisBase} />
+          <line x1={axisOffset} x2={width} y1={height-axisOffset} y2={height-axisOffset} />
         </g>
         {/* dummy lines to make life easier */}
-        {dummyXLines.map((xCoord, idx) => {
+        {dummyLines.map((xCoord, idx) => {
           return (
-            <g key={idx} className='dummy-grid'>
-                <line
-                  x1={0}
-                  x2={1000}
-                  y1={dummyYLines[idx]}
-                  y2={dummyYLines[idx]}
-                />
-                <line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
+            <g key={idx} className="dummy-grid">
+              <line
+                x1={0}
+                x2={1000}
+                y1={dummyLines[idx]}
+                y2={dummyLines[idx]}
+              />
+              <line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
             </g>
           );
         })}
         <g className="labels x-labels">
           {dateLabels.map((date, index) => {
             return (
-              <text key={index} x={xMin + xStep * index} y={yAxisBase + 20}>
+              <text key={index} x={axisOffset + xStep * index} y={height-3*axisOffset/4}>
                 {date}
               </text>
             );
           })}
           <text
-            x={xMid + xAxisBase / 2}
-            y={yAxisBase + 40}
+            x={(width-axisOffset)/2 + axisOffset}
+            y={height-axisOffset/2}
             className="label-title x-label-title"
           >
             Date
@@ -164,8 +163,8 @@ export default function Graph({ dataPoints }) {
             return (
               <text
                 key={index}
-                x={xAxisBase - 20}
-                y={yMin - yStep * (index - 1)}
+                x={3*axisOffset/4}
+                y={(height-axisOffset)- (height-axisOffset)/(weightLabels.length-1) * (index)}
               >
                 {weight}
               </text>
@@ -173,10 +172,10 @@ export default function Graph({ dataPoints }) {
           })}
 
           <text
-            x={yLabelXPos}
-            y={yLabelYPos}
+            x={axisOffset/2}
+            y={(height-axisOffset)/2}
             className="label-title y-label-title"
-            style={{ transformOrigin: `${yLabelXPos} ${yLabelYPos}` }}
+            style={{ transformOrigin: `${axisOffset/2}px ${(height-axisOffset)/2}px` }}
           >
             Weight (lbs)
           </text>
