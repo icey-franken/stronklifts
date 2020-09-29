@@ -1,7 +1,7 @@
 .graph {
-	/* height: 500px; */
-	/* width: 500px; */
-	border: 1px solid blue;
+	border: 1px solid black;
+	display: flex;
+	margin: 0 auto;
 }
 
 .data-line {
@@ -14,15 +14,16 @@
 }
 /* transform-origin: 20px 200px; */
 .y-label-title{
-	text-anchor: middle;
 	/* transform-origin: center; */
 	transform:rotate(-90deg);
+	text-anchor: middle;
 }
 
-.x-labels{
+.x-label{
 	text-anchor: middle;
 	/* transform-origin: center; */
-	/* transform:rotate(-90deg); */
+	transform:translate(0.3em) rotate(45deg);
+
 }
 .y-labels{
 	text-anchor:start;
