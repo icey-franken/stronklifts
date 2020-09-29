@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Select, InputLabel, MenuItem } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SLLogo from "../components/auth/SLLogo";
 import AuthSubmitButton from "./auth/AuthSubmitButton";
 import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
-import { createWorkoutThunk, getWorkoutsThunk } from "../store/workouts";
-import { Redirect } from "react-router-dom";
-import ActiveWorkout from "../pages/ActiveWorkout";
+import { workoutThunks } from "../store/workouts";
+import { useHistory } from "react-router-dom";
 
 //lifted from auth page - in the future you should integrate this as an option
 const useStyles = makeStyles({
@@ -20,10 +19,10 @@ const useStyles = makeStyles({
   },
 });
 
-export default function NewLifterForm({ userId }) {
-  // const userId = useSelector((state) => state.auth.id);
+export default function NewLifterForm() {
+  const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
-  const [WW, setWW] = useState(false);
+  // const [WW, setWW] = useState(false);
   const squatState = useState(10);
   const ohpState = useState(10);
   const dlState = useState(20);
@@ -131,81 +130,67 @@ export default function NewLifterForm({ userId }) {
   ];
   const recommendedStartingWeight = [45, 45, 95, 45, 45];
   const dispatch = useDispatch();
+  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
-    //dispatch an event that sends a setStartingWeight which includes userId, exerciseNameId, workingWeightId
     const wwValues = [];
     wwStates.forEach((wwState) => wwValues.push(wwState[0]));
-    //dispatch(createWorkoutThunk(userId, wwState)
-    dispatch(createWorkoutThunk(userId, wwValues)).then(() =>
-      dispatch(getWorkoutsThunk(userId))
+    dispatch(workoutThunks.createWorkout(userId, wwValues)).then(() =>
+      dispatch(workoutThunks.getWorkouts(userId))
     );
-    setWW(true);
-
-    // exerciseNameIds.forEach(async(exerciseNameId, index)=>{
-    // await dispatch(setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0]));
-    // })
-    //send them to the workout page for their first workout, using whatever values they selected.
-    // const res = await dispatch(setStartingWeight())
+    // setWW(true);
+    history.push("/workout/new");
   };
 
   const classes = useStyles();
   return (
-    <>
-      {WW ? (
-        <Redirect to="/workout" render={() => ActiveWorkout} />
-      ) : (
-        /* <ActiveWorkout />
-        </Redirect> */
-        <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
-          <SLLogo />
+    <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
+      <SLLogo />
 
-          <h1>Welcome to Stronklifts</h1>
-          <div className="form__intro">
-            Please select your starting weights in the form below.
-            <p /> You are strongly advised to use the recommended values if you
-            do not have experience with these exercises.
-            <p />
-            <span style={{ fontWeight: "bold" }}>Remember:</span> proper form is
-            the name of the game. Impressive working weights don't matter if
-            you're injured.
-            <p />
-            Click "Workout" in the navbar above if you'd like to get started
-            with the recommended values.
-            <p />
-          </div>
-          <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
-            <form onSubmit={handleSubmit}>
-              <div className="form__title">Working Weights</div>
-              {exerciseNames.map((exerciseName, index) => {
-                return (
-                  <div className="inputItem" key={index}>
-                    <InputLabel className="inputItem__label" id={exerciseName}>
-                      {exerciseName} (recommended:{" "}
-                      {recommendedStartingWeight[index]} lbs)
-                    </InputLabel>
-                    <Select
-                      labelId={exerciseName}
-                      id="select"
-                      value={wwStates[index][0]}
-                      onChange={(e) => wwStates[index][1](e.target.value)}
-                    >
-                      {workingWeights.map((workingWeight, index) => {
-                        return (
-                          <MenuItem key={index} value={workingWeightIds[index]}>
-                            {workingWeight} lbs
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </div>
-                );
-              })}
-              <AuthSubmitButton>Get Started</AuthSubmitButton>
-            </form>
-          </Container>
-        </Container>
-      )}
-    </>
+      <h1>Welcome to Stronklifts</h1>
+      <div className="form__intro">
+        Please select your starting weights in the form below.
+        <p /> You are strongly advised to use the recommended values if you do
+        not have experience with these exercises.
+        <p />
+        <span style={{ fontWeight: "bold" }}>Remember:</span> proper form is the
+        name of the game. Impressive working weights don't matter if you're
+        injured.
+        <p />
+        Click "Workout" in the navbar above if you'd like to get started with
+        the recommended values.
+        <p />
+      </div>
+      <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
+        <form onSubmit={handleSubmit}>
+          <div className="form__title">Working Weights</div>
+          {exerciseNames.map((exerciseName, index) => {
+            return (
+              <div className="inputItem" key={index}>
+                <InputLabel className="inputItem__label" id={exerciseName}>
+                  {exerciseName} (recommended:{" "}
+                  {recommendedStartingWeight[index]} lbs)
+                </InputLabel>
+                <Select
+                  labelId={exerciseName}
+                  id="select"
+                  value={wwStates[index][0]}
+                  onChange={(e) => wwStates[index][1](e.target.value)}
+                >
+                  {workingWeights.map((workingWeight, index) => {
+                    return (
+                      <MenuItem key={index} value={workingWeightIds[index]}>
+                        {workingWeight} lbs
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </div>
+            );
+          })}
+          <AuthSubmitButton>Get Started</AuthSubmitButton>
+        </form>
+      </Container>
+    </Container>
   );
 }

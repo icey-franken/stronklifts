@@ -7,22 +7,32 @@ export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
 export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
 
 //action pojo creator function
-export const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
-export const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
-export const updateWorkoutComplete = (workoutId, workoutComplete) => ({
+const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
+
+const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
+
+const updateWorkoutComplete = (workoutId, workoutComplete) => ({
   type: COMPLETE_WORKOUT,
   workoutId,
   workoutComplete,
 });
-export const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
+
+const deleteWorkout = (workoutId, exerciseIds, setIds) => ({
   type: DELETE_WORKOUT,
   workoutId,
   exerciseIds,
   setIds,
 });
 
+export const workoutActions = {
+  getWorkouts,
+  createWorkout,
+  updateWorkoutComplete,
+  deleteWorkout,
+};
+
 //thunk action creator
-export const getWorkoutsThunk = (userId) => {
+const getWorkoutsThunk = (userId) => {
   return async (dispatch) => {
     const res = await fetch(`/api/workouts/${userId}`);
     res.data = await res.json();
@@ -30,10 +40,9 @@ export const getWorkoutsThunk = (userId) => {
     return res;
   };
 };
-window.getWorkoutsThunk = getWorkoutsThunk;
 
 //needs work - need to figure out what to send to backend route.
-export const createWorkoutThunk = (userId, wwValues) => {
+const createWorkoutThunk = (userId, wwValues) => {
   //can pass an array of wwStates for exercisenames to change default values of new workouts.
   // setStartingWeightThunk(userId, exerciseNameId, wwStates[index][0])
 
@@ -57,7 +66,7 @@ export const createWorkoutThunk = (userId, wwValues) => {
           body,
         };
       }
-      const res = await fetch(`api/workouts/${userId}`, options);
+      const res = await fetch(`/api/workouts/${userId}`, options);
       if (!res.ok) {
         throw res;
       }
@@ -75,10 +84,11 @@ window.createWorkoutThunk = createWorkoutThunk;
 
 //I think it can dispatch a createWorkout action all the same - it does the same stuff?
 //Actually the workout should already be created, and as it is changed by user it should be updated in the store. So what we send to the database doesn't need to be seen by the store at all because it'll already be there.
-export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
+const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
+      console.log("line91workout.js", workoutId, workoutComplete);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -95,7 +105,7 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
       //   dispatch(createWorkout(workout));
       //   return workout.id;
       // }
-      return res;
+      // return res;
     } catch (err) {
       console.log(err);
     }
@@ -103,7 +113,7 @@ export const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   };
 };
 
-export const deleteWorkoutThunk = (workoutId) => {
+const deleteWorkoutThunk = (workoutId) => {
   return async (dispatch) => {
     try {
       const res = await fetch(`/api/workouts/${workoutId}`, {
@@ -122,6 +132,13 @@ export const deleteWorkoutThunk = (workoutId) => {
   };
 };
 
+export const workoutThunks = {
+  getWorkouts: getWorkoutsThunk,
+  createWorkout: createWorkoutThunk,
+  updateWorkoutComplete: updateWorkoutCompleteThunk,
+  deleteWorkout: deleteWorkoutThunk,
+};
+
 //workout reducer
 export default function workoutReducer(state = {}, action) {
   Object.freeze(state);
@@ -130,10 +147,11 @@ export default function workoutReducer(state = {}, action) {
     case GET_WORKOUTS:
       action.exercises = {};
       action.workouts.forEach((workout) => {
-        const workoutId = workout.id;
+				const workoutId = workout.id;
+				const {workoutDate} = workout;
         newState[workoutId] = {
           id: workoutId,
-          workoutDate: workout.workoutDate,
+          workoutDate,
           workoutComplete: workout.workoutComplete,
           workoutSplit: workout.workoutSplit,
         };
@@ -149,7 +167,8 @@ export default function workoutReducer(state = {}, action) {
         //get exercise ids from exercises object
         const workoutSetIds = [];
         exercises.forEach((exercise) => {
-          exercise.workoutId = workoutId;
+					exercise.workoutId = workoutId;
+					exercise.workoutDate = workoutDate
           exerciseIds.push(exercise.id);
           const exerciseSetIds = [];
           exercise.Sets.forEach((set) => {
@@ -175,10 +194,11 @@ export default function workoutReducer(state = {}, action) {
       } else {
         action.exercises = {};
         const workout = action.workout;
-        const workoutId = workout.id;
+				const workoutId = workout.id;
+				const {workoutDate} = workout;
         newState[workoutId] = {
           id: workoutId,
-          workoutDate: workout.workoutDate,
+          workoutDate,
           workoutComplete: workout.workoutComplete,
           workoutSplit: workout.workoutSplit,
         };
@@ -196,7 +216,8 @@ export default function workoutReducer(state = {}, action) {
         const workoutSetIds = [];
         if (exercises) {
           exercises.forEach((exercise) => {
-            exercise.workoutId = workoutId;
+						exercise.workoutId = workoutId;
+						exercise.workoutDate = workoutDate;
             exerciseIds.push(exercise.id);
             const exerciseSetIds = [];
             exercise.Sets.forEach((set) => {

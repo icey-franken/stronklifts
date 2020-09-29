@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateRepsThunk } from "../store/sets";
-import { updateExerciseSuccessThunk } from "../store/exercises";
+import { updateRepsThunk } from "../../store/sets";
+import { updateExerciseSuccessThunk } from "../../store/exercises";
 import "./Set.css";
 
 export default function Set({ setId }) {
