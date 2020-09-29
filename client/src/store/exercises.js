@@ -67,7 +67,8 @@ export default function exerciseReducer(state = {}, action) {
 					"workoutId",
 					'wasSuccessful',
 					'numFails',
-					'didDeload'
+					'didDeload',
+					'workoutDate'
         ];
         relevantExerciseKeys.forEach((relevantExerciseKey) => {
           newState[id][relevantExerciseKey] = exercise[relevantExerciseKey];
@@ -102,7 +103,8 @@ export default function exerciseReducer(state = {}, action) {
 					"workoutId",
 					'wasSuccessful',
 					'numFails',
-					'didDeload'
+					'didDeload',
+					'workoutDate'
         ];
         relevantExerciseKeys.forEach((relevantExerciseKey) => {
           newState[id][relevantExerciseKey] = exercise[relevantExerciseKey];

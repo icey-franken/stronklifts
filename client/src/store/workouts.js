@@ -147,10 +147,11 @@ export default function workoutReducer(state = {}, action) {
     case GET_WORKOUTS:
       action.exercises = {};
       action.workouts.forEach((workout) => {
-        const workoutId = workout.id;
+				const workoutId = workout.id;
+				const {workoutDate} = workout;
         newState[workoutId] = {
           id: workoutId,
-          workoutDate: workout.workoutDate,
+          workoutDate,
           workoutComplete: workout.workoutComplete,
           workoutSplit: workout.workoutSplit,
         };
@@ -166,7 +167,8 @@ export default function workoutReducer(state = {}, action) {
         //get exercise ids from exercises object
         const workoutSetIds = [];
         exercises.forEach((exercise) => {
-          exercise.workoutId = workoutId;
+					exercise.workoutId = workoutId;
+					exercise.workoutDate = workoutDate
           exerciseIds.push(exercise.id);
           const exerciseSetIds = [];
           exercise.Sets.forEach((set) => {
@@ -192,10 +194,11 @@ export default function workoutReducer(state = {}, action) {
       } else {
         action.exercises = {};
         const workout = action.workout;
-        const workoutId = workout.id;
+				const workoutId = workout.id;
+				const {workoutDate} = workout;
         newState[workoutId] = {
           id: workoutId,
-          workoutDate: workout.workoutDate,
+          workoutDate,
           workoutComplete: workout.workoutComplete,
           workoutSplit: workout.workoutSplit,
         };
@@ -213,7 +216,8 @@ export default function workoutReducer(state = {}, action) {
         const workoutSetIds = [];
         if (exercises) {
           exercises.forEach((exercise) => {
-            exercise.workoutId = workoutId;
+						exercise.workoutId = workoutId;
+						exercise.workoutDate = workoutDate;
             exerciseIds.push(exercise.id);
             const exerciseSetIds = [];
             exercise.Sets.forEach((set) => {
