@@ -3,29 +3,37 @@ import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
 
 export default function Graph({ dataPoints }) {
+	console.log(dataPoints);
   // take in userDayDiff as a prop - span of data they want to see.
   //hard code for now
-  const userDayDiff = 0.2; //showing 30 days.
+  const userDayDiff = 0.05; //showing 30 days.
   // const maxWeight =
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" values will be based on screen size.
   const exerciseName = dataPoints.shift();
-  // console.log(dataPoints);
-	const width = 700;
-	const height = 700;
-	const axisOffset = 100;
-	let dummyLines = [];
-	for(let i = 0; i <=5; i ++) {
-		dummyLines.push(axisOffset+i*100)
-	}
-  // const axisOffset = 100;
-  const xMax = width - axisOffset;
-  const xSteps = 5;
-  const xStep = (xMax - axisOffset) / xSteps;
+	// console.log(dataPoints);
+	const margin = 50;
+  const width = 750;
+  const height = 700;
+  const axisOffset = 100;
+  const yRange = height - axisOffset-margin;
+  const xRange = width - axisOffset-margin;
 
-  const yMin = 400;
-  const yMax = height-axisOffset;
-  const ySteps = 5;
-  const yStep = (yMax - yMin) / ySteps;
+	//make dummy graph lines so I can see what's happening
+	let dummyLines = [];
+	let i = 0;
+	while (i * 100<=xRange){
+		dummyLines.push(axisOffset + i * 100);
+		i++
+	}
+
+	//step sizes for axis labels
+  const xSteps = 5;
+  const xStep = (xRange - axisOffset) / xSteps;
+
+  // const yMin = 400;
+  // const yMax = height - axisOffset;
+  // const ySteps = 5;
+  // const yStep = (yMax - yMin) / ySteps;
 
   // const height = yMax - yMin + 150;
   // const width = xMax - axisOffset + 150;
@@ -42,18 +50,15 @@ export default function Graph({ dataPoints }) {
     const date = new Date(rawDate);
     const dayDiff = (now - date) / 8.64e7;
     if (dayDiff < userDayDiff) {
-      xDataDate.push(date); //necessary?
-      xDataIdx.push(1-dayDiff / userDayDiff);
+			xDataDate.push(date); //necessary?
+			console.log(dayDiff, userDayDiff)
+      xDataIdx.push(1 - dayDiff / userDayDiff);
       yDataWeight.push(weight); //necessary?
       return [...result, [date, weight]];
     } else {
       return [...result];
     }
   }, []);
-  console.log(relevantDataPoints);
-  console.log(xDataDate);
-  console.log(xDataIdx);
-  console.log(yDataWeight);
   const maxWeight = Math.max(...yDataWeight) + 5;
   const minWeight = Math.min(...yDataWeight) - 5;
   yDataWeight.forEach((weight) => {
@@ -72,32 +77,37 @@ export default function Graph({ dataPoints }) {
   //The x position will be that value times (xMax-axisOffset), plus axisOffset.
 
   //dummy hard coded date labels
-  const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun"];
+  const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun", 'jul'];
 
   // const weightLabels = [0, 5, 10, 15, 20, 25, 30];
 
-  //the below code is for generating suitable y data labels
-  let numYLabels = 5;
+	//the below code is for generating suitable y data labels
+	//make the incrementing smarter instead of caveman style - later
   const weightRange = maxWeight - minWeight;
-  const maxNumYLabels = Math.floor(weightRange / 5);
-  let yLabelSpacing = maxNumYLabels;
-  if (maxNumYLabels < 5) {
-    numYLabels = maxNumYLabels;
-    yLabelSpacing = 5;
-  }
+	const numWeightIncrements = Math.floor(weightRange / 5);
+	let numYLabels =10;
+	if(numWeightIncrements<numYLabels) {
+		numYLabels = numWeightIncrements;
+	};
+	let yLabelSpacing = 5;
+	i = 5;
+	while(numWeightIncrements<i) {
+		yLabelSpacing = i
+		i+=5;
+	}
   let weightLabels = [];
   // for (let i = 0; i <= numYLabels; i++) {
   //   weightLabels.push(minWeight + i * yLabelSpacing);
   // }
-  for (let i = 0; i <= (weightRange/5); i++) {
-    weightLabels.push(minWeight + i * 5);
+  for (let i = 0; i <= numYLabels; i++) {
+    weightLabels.push(minWeight + i * yLabelSpacing);
   }
 
-	console.log(weightLabels);
+  console.log(weightLabels);
 
   //map xDataIdx and yDataIdx to actual data points based on min/max/range values
-  let xDataNum = xDataIdx.map((x) => axisOffset + (width-axisOffset)*x);
-  let yDataNum = yDataIdx.map((y) => (1-y)*(height-axisOffset));
+  let xDataNum = xDataIdx.map((x) => axisOffset + (xRange) * x);
+  let yDataNum = yDataIdx.map((y) => (1 - y) * (height - axisOffset));
   console.log(xDataIdx, xDataNum);
   return (
     <>
@@ -123,10 +133,10 @@ export default function Graph({ dataPoints }) {
       >
         <title id="title">A line chart showing some information</title>
         <g className="grid x-grid" id="xGrid">
-          <line x1={axisOffset} x2={axisOffset} y1="0" y2={height-axisOffset} />
+          <line x1={axisOffset} x2={axisOffset} y1="0" y2={margin+yRange} />
         </g>
         <g className="grid y-grid" id="yGrid">
-          <line x1={axisOffset} x2={width} y1={height-axisOffset} y2={height-axisOffset} />
+          <line x1={axisOffset} x2={width} y1={margin+yRange} y2={margin+yRange} />
         </g>
         {/* dummy lines to make life easier */}
         {dummyLines.map((xCoord, idx) => {
@@ -145,14 +155,18 @@ export default function Graph({ dataPoints }) {
         <g className="labels x-labels">
           {dateLabels.map((date, index) => {
             return (
-              <text key={index} x={axisOffset + xStep * index} y={height-3*axisOffset/4}>
+              <text
+                key={index}
+                x={axisOffset + xStep * index}
+                y={height - (3 * axisOffset) / 4}
+              >
                 {date}
               </text>
             );
           })}
           <text
-            x={(width-axisOffset)/2 + axisOffset}
-            y={height-axisOffset/2}
+            x={width / 2}
+            y={height - (2 * axisOffset) / 5}
             className="label-title x-label-title"
           >
             Date
@@ -163,8 +177,8 @@ export default function Graph({ dataPoints }) {
             return (
               <text
                 key={index}
-                x={3*axisOffset/4}
-                y={(height-axisOffset)- (height-axisOffset)/(weightLabels.length-1) * (index)}
+                x={(3 * axisOffset) / 4}
+                y={margin+yRange * (1 - index / (weightLabels.length - 1))}
               >
                 {weight}
               </text>
@@ -172,10 +186,14 @@ export default function Graph({ dataPoints }) {
           })}
 
           <text
-            x={axisOffset/2}
-            y={(height-axisOffset)/2}
+            x={axisOffset / 2}
+            y={(yRange) / 2}
             className="label-title y-label-title"
-            style={{ transformOrigin: `${axisOffset/2}px ${(height-axisOffset)/2}px` }}
+            style={{
+              transformOrigin: `${(2 * axisOffset) / 5}px ${
+                (yRange) / 2
+              }px`,
+            }}
           >
             Weight (lbs)
           </text>

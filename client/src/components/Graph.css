@@ -10,9 +10,7 @@
 }
 
 .data-point{
-	stroke: #D22e2e;
-	background-color:#D22e2e;
-	color: #d22e2e
+	fill: #d22e2e
 }
 /* transform-origin: 20px 200px; */
 .y-label-title{
@@ -20,6 +18,22 @@
 	/* transform-origin: center; */
 	transform:rotate(-90deg);
 }
+
+.x-labels{
+	text-anchor: middle;
+	/* transform-origin: center; */
+	/* transform:rotate(-90deg); */
+}
+.y-labels{
+	text-anchor:start;
+	transform: translate(0, 0.4em)
+}
+
+.label-title{
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
 .grid{
 	stroke: black;
 
@@ -29,5 +43,5 @@
 }
 
 .y-labels, .x-labels{
-	text-anchor: middle;
+	text-anchor: center;
 }
