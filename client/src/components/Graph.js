@@ -5,8 +5,8 @@ import { plotDateFormat } from "./utils/Formatter";
 export default function Graph({ dataPoints }) {
   // take in userDayDiff as a prop - span of data they want to see.
   //hard code for now
-  const userDayDiff = 30; //showing 30 days.
-
+  const userDayDiff = 1; //showing 30 days.
+  // const maxWeight =
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" values will be based on screen size.
   const exerciseName = dataPoints.shift();
   // console.log(dataPoints);
@@ -14,6 +14,7 @@ export default function Graph({ dataPoints }) {
   const xAxisBase = 100;
   const xMin = 100;
   const xMax = 600;
+  const xRange = xMax - xMin;
   const xMid = (xMax - xMin) / 2;
   const xSteps = 5;
   const xStep = (xMax - xMin) / xSteps;
@@ -21,79 +22,78 @@ export default function Graph({ dataPoints }) {
   const yAxisBase = 500;
   const yMin = 400;
   const yMax = 900;
+  const yRange = yMax - yMin;
   const yMid = (yMax - yMin) / 2;
   const ySteps = 5;
   const yStep = (yMax - yMin) / ySteps;
 
-  const height = yMax - yMin + 50;
-  const width = xMax - xMin + 50;
+  const height = yMax - yMin + 100;
+  const width = xMax - xMin + 100;
 
   //based on weight range we can pick y range. Maybe pick the max weight in the array and have y go from 0lbs to max weight - or have it auto adjust to minimum working weight in that range for max visibility
-  function longDateFormat(date) {
-    const dateFormat = new Intl.DateTimeFormat("en", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
-    let dateArr;
-    if (date === null) {
-      dateArr = dateFormat.formatToParts(Date.now());
-    } else {
-      dateArr = dateFormat.formatToParts(new Date(date));
-    }
-    let dateStr = "";
-    dateArr.forEach((el) => (dateStr += el.value));
-    return dateStr;
-  }
-  console.log(dataPoints);
   const now = Date.now();
-  console.log(now);
-  console.log(longDateFormat(now));
-
-  const relevantDataPoints = [];
-  dataPoints.forEach(([rawDate, weight]) => {
+  let xDataIdx = [];
+  let xDataDate = [];
+  let yDataWeight = [];
+  let yDataIdx = [];
+  //can't decide if I want all data in an array of an array, or multiple single level arrays for each data type. Both for now.
+  //if multiple single level - only need for each loop. Otherwise use reduce function.
+  const relevantDataPoints = dataPoints.reduce((result, [rawDate, weight]) => {
     const date = new Date(rawDate);
     const dayDiff = (now - date) / 8.64e7;
-    // console.log(dayDiff, ' days ago');
     if (dayDiff < userDayDiff) {
-      //maybe format date here?
-      //all I want is mm/dd
-      relevantDataPoints.push([date, weight]);
+      xDataDate.push(date); //necessary?
+      xDataIdx.push(dayDiff / userDayDiff);
+      yDataWeight.push(weight); //necessary?
+      return [...result, [date, weight]];
+    } else {
+      return [...result];
     }
+  }, []);
+  console.log(relevantDataPoints);
+  console.log(xDataDate);
+  console.log(xDataIdx);
+  console.log(yDataWeight);
+  const maxWeight = Math.max(...yDataWeight) + 5;
+  const minWeight = Math.min(...yDataWeight) - 5;
+  yDataWeight.forEach((weight) => {
+    yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
   });
-  //sort relevant data points here - then to plotting
+  console.log(yDataIdx);
   //minimum date in plot based off of now - userDayDiff
   // console.log(relevantDataPoints);
 
   //convert dates to the format desired as plot labels.
   //	I might want to make my own plot labels so they can be regularly spaced - then labels will be based on max time span. I think that's the move....
-  // relevantDataPoints.map((dataTuple) => {
-  //   dataTuple[0] = plotDateFormat(dataTuple[0]);
-  // });
-  // console.log(relevantDataPoints);
+  //	starting plot label is now - userDayDiff; ending plot label is now; labels in between are based off of size i.e. how many I can fit reasonably.
+  //	use plotDateFormat function to generate suitable labels
 
-  //right before we get to the actual plot I think I want to split things to x and y to simplify mapping
-  let xDataDate = [];
-  let xDataNum = [];
-  let yData = [];
-  relevantDataPoints.forEach(([date, weight]) => {
-    xDataDate.push(date);
-    const dayDiff = (now - date) / 8.64e7;
-    console.log(date, now, userDayDiff);
-    const dayIndex = dayDiff / userDayDiff;
-    console.log("index from 0-1", dayIndex);
-    console.log("works?", userDayDiff);
-    yData.push(weight);
-  });
-  console.log(xDataDate);
-  console.log(yData);
-  //I think I will need to convert yData to differences for plotting purposes - index dates to values
   //(workoutDate - now)/userDayDiff will give a value between 0 and 1.
   //The x position will be that value times (xMax-xMin), plus xMin.
+
   //dummy hard coded date labels
   const dateLabels = ["jan", "feb", "mar", "apr", "may", "jun"];
 
-  const weightLabels = [0, 5, 10, 15, 20, 25, 30];
+  // const weightLabels = [0, 5, 10, 15, 20, 25, 30];
+
+  //the below code is for generating suitable y data labels
+  let numYLabels = 5;
+  const weightRange = maxWeight - minWeight;
+  const maxNumYLabels = Math.floor(weightRange / 5);
+  let yLabelSpacing = maxNumYLabels;
+  if (maxNumYLabels < 5) {
+    numYLabels = maxNumYLabels;
+    yLabelSpacing = 5;
+  }
+  let weightLabels = [];
+  for (let i = 0; i <= numYLabels; i++) {
+    weightLabels.push(minWeight + i * yLabelSpacing);
+  }
+  console.log(weightLabels);
+
+  //map xDataIdx and yDataIdx to actual data points based on min/max/range values
+  let xDataNum = xDataIdx.map((x) => x * xRange + xMin);
+  let yDataNum = yDataIdx.map((y) => y * yRange + yMin);
 
   return (
     <>
@@ -143,7 +143,11 @@ export default function Graph({ dataPoints }) {
         <g className="labels y-labels">
           {weightLabels.map((weight, index) => {
             return (
-              <text key={index} x={xAxisBase} y={xMax - xStep * index}>
+              <text
+                key={index}
+                x={xAxisBase - 20}
+                y={yMin - yStep * (index - 1)}
+              >
                 {weight}
               </text>
             );
@@ -157,13 +161,67 @@ export default function Graph({ dataPoints }) {
             Weight (lbs)
           </text>
         </g>
-        <g className="data-point">
-          <circle cx={xDataDate[0]} cy={yData[0]} r="20" />
-        </g>
+        <g className="data-points">{buildGraph(xDataNum, yDataNum)}</g>
       </svg>
     </>
   );
 }
+
+function buildGraph(xDataNum, yDataNum) {
+  let graphArr = [];
+  for (let i = 0; i < xDataNum.length - 1; i++) {
+    graphArr.push(
+      <g key={i}>
+        <circle
+          key={i}
+          className="data-point"
+          cx={xDataNum[i]}
+          cy={yDataNum[i]}
+          r="5"
+        />
+        <line
+          className="data-line"
+          x1={xDataNum[i]}
+          y1={yDataNum[i]}
+          x2={xDataNum[i + 1]}
+          y2={yDataNum[i + 1]}
+        />
+      </g>
+    );
+  }
+  graphArr.push(
+    <circle
+      key={xDataNum.length - 1}
+      className="data-point"
+      cx={xDataNum[xDataNum.length - 1]}
+      cy={yDataNum[xDataNum.length - 1]}
+      r="5"
+    />
+  );
+  return graphArr;
+}
+
+// function buildGraph(xDataNum, yDataNum) {
+//   let graphStr = "";
+//   for (let i = 0; i < xDataNum.length - 1; i++) {
+//     graphStr += `<circle cx={${xDataNum[i]}} cy={${yDataNum[i]}} r="5" />
+// 				<line
+// 					x1={${xDataNum[i]}}
+// 					y1={${yDataNum[i]}}
+// 					x2={${xDataNum[i + 1]}}
+// 					y2={${yDataNum[i + 1]}}
+// 				/>`;
+//   }
+//   graphStr += (
+//     `<circle
+//       cx={${xDataNum[xDataNum.length - 1]}}
+//       cy={${yDataNum[xDataNum.length - 1]}}
+//       r="5"
+//     />`
+//   );
+//   return graphStr;
+// }
+
 //CIRCLE ELEMENTS
 // <circle cx='25' cy='75' r='20'/>
 // where cx and cy are position from center of circle and r is radius. All data points should be same size.

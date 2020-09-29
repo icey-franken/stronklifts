@@ -3,3 +3,8 @@
 	/* width: 500px; */
 	border: 1px solid blue;
 }
+
+.data-line {
+	stroke:rgb(255,0,0);
+	stroke-width:1.5;
+}
