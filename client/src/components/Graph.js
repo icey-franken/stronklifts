@@ -10,8 +10,8 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
-  const width = 700;
-  const height = 400;
+  const width = 600;
+  const height = 500;
 
   //margin and axisOffset will probably remain constant
   const xMargin = 50;
@@ -94,7 +94,7 @@ export default function Graph({ dataPoints, exerciseName }) {
   //TODO: add logic that changes dates to months if 3month view selected?
   function makeXLabels(dateRange, nowMs, msPerDay) {
     const startDateMs = nowMs - msPerDay * dateRange;
-    let numXLabels = 6;
+    const numXLabels = Math.floor(width/100);
     let xLabelSpacing = msPerDay;
     let i = 7;
     while (dateRange > i) {
@@ -111,9 +111,10 @@ export default function Graph({ dataPoints, exerciseName }) {
   // generate y axis labels based on min and max weight values
   //TODO: implement a user option to view a zoomed in plot or a plot from 0 to max weight.
   function makeYLabels(minWeight, maxWeight) {
-    let numHiddenLabels = 0;
-    let i = 5;
-    while ((maxWeight - minWeight) / i > 6) {
+		const numYLabels = Math.floor(height/50)
+		let numHiddenLabels = 0;
+		let i = 5;
+    while ((maxWeight - minWeight) / i > numYLabels) {
       //6 is max num labels
       i += 5;
       numHiddenLabels++;

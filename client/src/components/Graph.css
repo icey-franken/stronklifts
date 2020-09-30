@@ -1,15 +1,29 @@
 /* formatting for overall graph page */
+html, body {
+
+	/* height: fit-content; */
+	/* width: 95%; */
+	/* overflow-y: visible !important; */
+	overflow-x: hidden !important;
+
+}
+
 .graph-page-container {
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px !important;
+	padding-bottom: 24px !important;
+	height: 100%;
+	width: 100%;
 }
+
 /* formatting for each graph */
 .graph-container {
   font-family: "Capsule Sans Text", -apple-system, BlinkMacSystemFont,
     sans-serif;
-  margin: 16px auto;
-  padding: 0 6px;
+	margin: 0 auto;
+	/* display: flex;
+	flex-direction: column; */
+  /* padding: 0 6px; */
 }
 
 .graph-info {
