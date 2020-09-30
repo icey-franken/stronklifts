@@ -43,9 +43,9 @@
   /* transform-origin: center; */
   transform: translate(0.3em) rotate(45deg);
 }
-.y-labels {
-  text-anchor: start;
-  transform: translate(0, 0.4em);
+.y-label {
+	text-anchor: end;
+  transform: translate(1.2em, 0.4em);
 }
 
 .grid {

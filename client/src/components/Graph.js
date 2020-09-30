@@ -1,22 +1,37 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
 
 export default function Graph({ dataPoints, exerciseName }) {
-  const nowMs = Date.now(); //constant used for date range calcs
-  const msPerDay = 8.64e7; //constant used to convert ms to days
-
+  console.log(exerciseName, dataPoints);
   //eventually userDayDiff will be a selectable button available to the user. Hard code for now.
   //value MUST be >= 7
-  let userDayDiff = 7;
 
+	//hacky way to get graph to re-render - fix in future by breaking into components.
+	//doesn't work - will find another fix.
+  const useForceUpdate = () => useState()[1];
+  const forceUpdate = useForceUpdate();
+
+  let userDayDiff = 7;
   const highlightedElementRef = useRef(null);
 
   // let highlightedElement = null;
   useEffect(() => {
     highlightedElementRef.current = document.getElementById("7");
     console.log(highlightedElementRef.current);
+    console.log(highlightedElementRef.current.id);
   }, []);
+
+  useEffect(() => {
+    [
+      dateLabels,
+      mappedDateData,
+      weightLabels,
+      mappedWeightData,
+    ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
+    forceUpdate();
+  }, [userDayDiff]);
+
   // console.log(exerciseName);
 
   // console.log(dataPoints);
@@ -29,12 +44,17 @@ export default function Graph({ dataPoints, exerciseName }) {
     console.log(!e.target.id);
     let id = e.target.id;
     //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
-    if (!id) {
+    if (id) {
+      userDayDiff = id;
+    } else {
       id = e.target.parentElement.id;
-      if (!id) {
+      if (id) {
+        userDayDiff = id;
+      } else {
         return; //this way, if the user clicked the container element instead, then id will still be undefined and this handler will do nothing. I tried using pointer-events:none along with z-index but I still am able to get an error. This is hacky but it should work.
       }
     }
+    console.log(userDayDiff);
     highlightedElementRef.current.classList.remove(
       "user-day-diff__option--pressed"
     );
@@ -52,12 +72,12 @@ export default function Graph({ dataPoints, exerciseName }) {
   const height = 400;
 
   //margin and axisOffset will probably remain constant
-  const margin = 50;
+  const xMargin = 50;
   const axisOffset = 100;
 
   //plot ranges are based on previous inputs!
-  const yRange = height - axisOffset - margin;
-  const xRange = width - axisOffset - margin;
+  const yRange = height - axisOffset;
+  const xRange = width - axisOffset - xMargin;
 
   //make dummy graph lines so I can see what's happening
   //DELETE once happy
@@ -68,66 +88,140 @@ export default function Graph({ dataPoints, exerciseName }) {
     i++;
   }
 
-  let xDataDate = []; //don't need
-  let xDataIdx = [];
-  let yDataWeight = [];
-  let yDataIdx = [];
+  // let weightLabels;
+  // let dateLabels;
   //grab only data within the user selected userDayDiff range
   //put data in separate arrays for x and y data
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
-  dataPoints.forEach(([sqlDate, weight]) => {
-    const dateMs = new Date(sqlDate);
-    const dayDiff = (nowMs - dateMs) / msPerDay;
-    if (dayDiff < userDayDiff) {
-      xDataDate.push(dateMs); //don't need xDataDate
-      xDataIdx.push(1 - dayDiff / userDayDiff); //do this while we're here
-      yDataWeight.push(weight);
-    }
-  });
+  function grabDataForUserDayDiff(userDayDiff, dataPoints) {
+    const nowMs = Date.now(); //constant used for date range calcs
+    const msPerDay = 8.64e7; //constant used to convert ms to days
+    // let xDataDate = []; //don't need
+    let xDataIdx = [];
+    let yDataWeight = [];
+    let yDataIdx = [];
+    dataPoints.forEach(([sqlDate, weight]) => {
+      const dateMs = new Date(sqlDate);
+      const dayDiff = (nowMs - dateMs) / msPerDay;
+      if (dayDiff < userDayDiff) {
+        // xDataDate.push(dateMs); //don't need xDataDate
+        xDataIdx.push(1 - dayDiff / userDayDiff); //do this while we're here
+        yDataWeight.push(weight);
+      }
+    });
+    //at this point we have xDataIdx array and yDataWeight array
+    //we need full yDataWeight array in order to construct yDataIdx
+    //we can do that here:
+    const maxWeight = Math.max(...yDataWeight) + 5;
+    const minWeight = Math.min(...yDataWeight) - 5;
+    yDataWeight.forEach((weight) => {
+      //generate weight scalar array
+      yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
+    });
+    //NEED WEIGHT LABELS AND DATELABELS ARRAY
+    return [
+      makeXLabels(userDayDiff, nowMs, msPerDay),
+      mapXIdxToDataPoints(xDataIdx),
+      makeYLabels(minWeight, maxWeight),
+      mapYIdxToDataPoints(yDataIdx),
+    ];
+  }
 
   // generate x axis labels based on current day and userDayDiff input
   //TODO: add logic that changes dates to months if 3month view selected?
-  const startDateMs = nowMs - msPerDay * userDayDiff;
-  let numXLabels = 7;
-  let xLabelSpacing = msPerDay;
-  i = 7;
-  while (userDayDiff > i) {
-    xLabelSpacing += msPerDay;
-    i += 7;
-  }
-  let dateLabels = [];
-  for (let i = 0; i <= numXLabels; i++) {
-    dateLabels.push(plotDateFormat(startDateMs + i * xLabelSpacing));
+  function makeXLabels(dateRange, nowMs, msPerDay) {
+    const startDateMs = nowMs - msPerDay * dateRange;
+    let numXLabels = 6;
+    let xLabelSpacing = msPerDay;
+    i = 7;
+    while (dateRange > i) {
+      xLabelSpacing += msPerDay;
+      i += 7;
+    }
+    let dateLabels = [];
+    for (let i = 0; i <= numXLabels; i++) {
+      dateLabels.push(plotDateFormat(startDateMs + i * xLabelSpacing));
+    }
+    return dateLabels;
   }
 
   // generate y axis labels based on min and max weight values
   //TODO: implement a user option to view a zoomed in plot or a plot from 0 to max weight.
-  const maxWeight = Math.max(...yDataWeight) + 5;
-  const minWeight = Math.min(...yDataWeight) - 5;
-  yDataWeight.forEach((weight) => {
-    //generate weight scalar array
-    yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
-  });
-  const weightRange = maxWeight - minWeight;
-  const numWeightIncrements = Math.floor(weightRange / 5);
-  let numYLabels = 5;
-  if (numWeightIncrements < numYLabels) {
-    numYLabels = numWeightIncrements;
-  }
-  let yLabelSpacing = 5;
-  i = 5;
-  while (numWeightIncrements < i) {
-    yLabelSpacing = i;
-    i += 5;
-  }
-  let weightLabels = [];
-  for (let i = 0; i <= numYLabels; i++) {
-    weightLabels.push(minWeight + i * yLabelSpacing);
+  function makeYLabels(minWeight, maxWeight) {
+    let numHiddenLabels = 0;
+    let i = 5;
+    while ((maxWeight - minWeight) / i > 6) {
+      //6 is max num labels
+      i += 5;
+      numHiddenLabels++;
+    }
+    let counter = 0;
+    let weightLabels = [];
+    for (let val = minWeight; val <= maxWeight; val += 5) {
+      //eliminates topmost label being cut off
+      //allows weightLabels array length to be as expected without displaying too many labels
+      counter === 0 && val < maxWeight
+        ? weightLabels.push(val)
+        : weightLabels.push("");
+      counter >= numHiddenLabels ? (counter = 0) : counter++;
+    }
+    return weightLabels;
   }
 
   //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
-  let xDataNum = xDataIdx.map((x) => axisOffset + xRange * x);
-  let yDataNum = yDataIdx.map((y) => (1 - y) * (height - axisOffset));
+  function mapXIdxToDataPoints(xDataIdx) {
+    return xDataIdx.map((x) => axisOffset + xRange * x);
+  }
+
+  function mapYIdxToDataPoints(yDataIdx) {
+    return yDataIdx.map((y) => (1 - y) * yRange);
+  }
+
+  function buildPlotArea(mappedDateData, mappedWeightData) {
+    console.log(mappedDateData, mappedWeightData);
+
+    let graphArr = [];
+    for (let i = 0; i < mappedDateData.length - 1; i++) {
+      graphArr.push(
+        <g key={i}>
+          <circle
+            key={i}
+            className="data-point"
+            cx={mappedDateData[i]}
+            cy={mappedWeightData[i]}
+            r="5"
+          />
+          <line
+            className="data-line"
+            x1={mappedDateData[i]}
+            y1={mappedWeightData[i]}
+            x2={mappedDateData[i + 1]}
+            y2={mappedWeightData[i + 1]}
+          />
+        </g>
+      );
+    }
+    graphArr.push(
+      <circle
+        key={mappedDateData.length - 1}
+        className="data-point"
+        cx={mappedDateData[mappedDateData.length - 1]}
+        cy={mappedWeightData[mappedDateData.length - 1]}
+        r="5"
+      />
+    );
+    return graphArr;
+  }
+
+  let [
+    dateLabels,
+    mappedDateData,
+    weightLabels,
+    mappedWeightData,
+  ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
+
+  //build functions that create the axis in html later
+
   // color change based on if first weight value is greater/less than last weight value.
   return (
     <div className="graph-container">
@@ -149,15 +243,10 @@ export default function Graph({ dataPoints, exerciseName }) {
       >
         <title id="title">A plot of {exerciseName} weight over time.</title>
         <g className="grid x-grid" id="xGrid">
-          <line x1={axisOffset} x2={axisOffset} y1="0" y2={margin + yRange} />
+          <line x1={axisOffset} x2={axisOffset} y1="0" y2={yRange} />
         </g>
         <g className="grid y-grid" id="yGrid">
-          <line
-            x1={axisOffset}
-            x2={width}
-            y1={margin + yRange}
-            y2={margin + yRange}
-          />
+          <line x1={axisOffset} x2={width} y1={yRange} y2={yRange} />
         </g>
         {/* dummy lines to make life easier */}
         {dummyLines.map((xCoord, idx) => {
@@ -179,11 +268,11 @@ export default function Graph({ dataPoints, exerciseName }) {
               <text
                 className="x-label"
                 key={index}
-                x={axisOffset + (xRange / numXLabels) * index}
+                x={axisOffset + (xRange / (dateLabels.length - 1)) * index}
                 y={height - (3 * axisOffset) / 4}
                 style={{
                   transformOrigin: `${
-                    axisOffset + (xRange / numXLabels) * index
+                    axisOffset + (xRange / (dateLabels.length - 1)) * index
                   }px ${height - (3 * axisOffset) / 4}px`,
                 }}
               >
@@ -199,13 +288,14 @@ export default function Graph({ dataPoints, exerciseName }) {
             Date
           </text>
         </g>
-        <g className="labels y-labels">
+        <g className="labels">
           {weightLabels.map((weight, index) => {
             return (
               <text
+                className="y-label"
                 key={index}
                 x={(3 * axisOffset) / 4}
-                y={margin + yRange * (1 - index / (weightLabels.length - 1))}
+                y={yRange * (1 - index / (weightLabels.length - 1))}
               >
                 {weight}
               </text>
@@ -222,7 +312,9 @@ export default function Graph({ dataPoints, exerciseName }) {
             Weight (lbs)
           </text>
         </g>
-        <g className="data-points">{buildGraph(xDataNum, yDataNum)}</g>
+        <g className="data-points">
+          {buildPlotArea(mappedDateData, mappedWeightData)}
+        </g>
       </svg>
       <div className="user-day-diff__container">
         <div
@@ -260,57 +352,21 @@ export default function Graph({ dataPoints, exerciseName }) {
   );
 }
 
-function buildGraph(xDataNum, yDataNum) {
-  // console.log(xDataNum, yDataNum);
-
-  let graphArr = [];
-  for (let i = 0; i < xDataNum.length - 1; i++) {
-    graphArr.push(
-      <g key={i}>
-        <circle
-          key={i}
-          className="data-point"
-          cx={xDataNum[i]}
-          cy={yDataNum[i]}
-          r="5"
-        />
-        <line
-          className="data-line"
-          x1={xDataNum[i]}
-          y1={yDataNum[i]}
-          x2={xDataNum[i + 1]}
-          y2={yDataNum[i + 1]}
-        />
-      </g>
-    );
-  }
-  graphArr.push(
-    <circle
-      key={xDataNum.length - 1}
-      className="data-point"
-      cx={xDataNum[xDataNum.length - 1]}
-      cy={yDataNum[xDataNum.length - 1]}
-      r="5"
-    />
-  );
-  return graphArr;
-}
-
-// function buildGraph(xDataNum, yDataNum) {
+// function buildGraph(mappedDateData, mappedWeightData) {
 //   let graphStr = "";
-//   for (let i = 0; i < xDataNum.length - 1; i++) {
-//     graphStr += `<circle cx={${xDataNum[i]}} cy={${yDataNum[i]}} r="5" />
+//   for (let i = 0; i < mappedDateData.length - 1; i++) {
+//     graphStr += `<circle cx={${mappedDateData[i]}} cy={${mappedWeightData[i]}} r="5" />
 // 				<line
-// 					x1={${xDataNum[i]}}
-// 					y1={${yDataNum[i]}}
-// 					x2={${xDataNum[i + 1]}}
-// 					y2={${yDataNum[i + 1]}}
+// 					x1={${mappedDateData[i]}}
+// 					y1={${mappedWeightData[i]}}
+// 					x2={${mappedDateData[i + 1]}}
+// 					y2={${mappedWeightData[i + 1]}}
 // 				/>`;
 //   }
 //   graphStr += (
 //     `<circle
-//       cx={${xDataNum[xDataNum.length - 1]}}
-//       cy={${yDataNum[xDataNum.length - 1]}}
+//       cx={${mappedDateData[mappedDateData.length - 1]}}
+//       cy={${mappedWeightData[mappedDateData.length - 1]}}
 //       r="5"
 //     />`
 //   );
