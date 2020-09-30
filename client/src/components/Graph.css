@@ -59,43 +59,35 @@
 /* formatting for graph view options */
 .user-day-diff__container {
   font-size: 13px;
-	margin-left: -12px;
+  margin-left: -12px;
   font-weight: 700;
-	letter-spacing: -0.1px;
-	display: flex;
-	border-bottom: 1px solid 	#C0C0C0;
+  letter-spacing: -0.1px;
+  display: flex;
+  border-bottom: 1px solid #c0c0c0;
+}
+
+.user-day-diff__options-container:hover {
+  cursor: pointer;
 }
 
 .user-day-diff__option-container {
-	padding-top: 2px;
-	z-index: 1;
-	/* padding-left: -12px; */
-	/* padding: 2px -12px 12px; */
+  padding-top: 2px;
+  /* z-index: 1; */
   line-height: 20px;
-	outline:none;
-	display: inline-block;
-	box-sizing: border-box;
-	/* border-bottom: 2px solid #d22e2e; */
-	/* border: 1px solid blue; */
-}
-
-.user-day-diff__option {
-	margin: 0 12px -2px;
-	margin-bottom:-2px;
-  padding-bottom: 12px;
-	pointer-events: none;
-}
-
-.user-day-diff__options-container:hover{
-	cursor:pointer;
+  display: inline-block;
 }
 
 .user-day-diff__option-container:hover {
-  cursor: pointer;
-	color: #d22e2e;
+  color: #d22e2e;
 }
 
-.user-day-diff__option--pressed>div{
-  color: #d22e2e;
-  border-bottom: 2px solid #d22e2e;
+.user-day-diff__option {
+  margin: 0 12px -2px;
+  padding-bottom: 12px;
+  pointer-events: none;
+}
+
+.user-day-diff__option--pressed > div {
+  color: #f02e2e;
+  border-bottom: 2px solid #f02e2e;
 }
