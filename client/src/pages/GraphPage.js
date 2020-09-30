@@ -12,7 +12,10 @@ export default function GraphPage() {
   let overheadData = ['Overhead Press'];
   let deadliftData = ['Deadlift'];
 	let benchData = ['Bench Press'];
-  let rowData = ['Pendlay Row'];
+	let rowData = ['Pendlay Row'];
+
+	//turn this into an action - put this stuff in the redux store
+	//then based on the graph view selected we can grab that set of data and render a graph page quickly.
   exercisesArr.forEach(({ exerciseName, workingWeight, workoutDate }) => {
     if (exerciseName === "Squat") {
       squatData.push([workoutDate, workingWeight]);
@@ -27,11 +30,11 @@ export default function GraphPage() {
     }
 	});
 	//just squat data for now to simplify progress on graph component
-  let graphData = [squatData]//, overheadData, deadliftData, benchData, rowData];
+	let graphData = [squatData, overheadData, deadliftData, benchData, rowData];
   return (
-    <>
-      <div>hi from graph page</div>
+    <div className='graph-page-container'>
+      <div className='graph-page-container'>hi from graph page</div>
 			{graphData.map((dataPoints, index)=><Graph key={index} dataPoints={dataPoints}/>)}
-    </>
+    </div>
   );
 }

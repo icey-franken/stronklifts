@@ -1,48 +1,100 @@
+.graph-page-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px !important;
+}
+.graph-container {
+  font-family: "Capsule Sans Text", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+
+  /* border: 1px solid black; */
+  margin: 16px auto;
+  padding: 0 6px;
+}
+.graph-info {
+  font-size: 32px;
+}
+
 .graph {
-	border: 1px solid black;
-	display: flex;
-	margin: 0 auto;
 }
 
 .data-line {
-	stroke:#D22E2E;
-	stroke-width:1.5;
+  stroke: #d22e2e;
+  stroke-width: 1.5;
 }
 
-.data-point{
-	fill: #d22e2e
+.data-point {
+  fill: #d22e2e;
 }
 /* transform-origin: 20px 200px; */
-.y-label-title{
-	/* transform-origin: center; */
-	transform:rotate(-90deg);
-	text-anchor: middle;
+.y-label-title {
+  /* transform-origin: center; */
+  transform: rotate(-90deg);
+  text-anchor: middle;
 }
 
-.x-label{
-	text-anchor: middle;
-	/* transform-origin: center; */
-	transform:translate(0.3em) rotate(45deg);
-
+.x-label {
+  text-anchor: middle;
+  /* transform-origin: center; */
+  transform: translate(0.3em) rotate(45deg);
 }
-.y-labels{
-	text-anchor:start;
-	transform: translate(0, 0.4em)
-}
-
-.label-title{
-	font-weight: bold;
-	font-size: 1.5em;
+.y-labels {
+  text-anchor: start;
+  transform: translate(0, 0.4em);
 }
 
-.grid{
-	stroke: black;
-
-}
-.dummy-grid{
-	stroke: orange;
+.label-title {
+  font-weight: bold;
+  font-size: 1.5em;
 }
 
-.y-labels, .x-labels{
-	text-anchor: center;
+.grid {
+  stroke: black;
+}
+.dummy-grid {
+  stroke: orange;
+}
+
+.y-labels,
+.x-labels {
+  text-anchor: center;
+}
+
+.user-day-diff__container {
+  font-size: 13px;
+	margin-left: -12px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.user-day-diff__container--line {
+	border-bottom: 1px solid black;
+}
+
+
+.user-day-diff__option-container {
+	margin: 0 12px;
+	display: inline-block;
+  line-height: 20px;
+  padding-bottom: 12px;
+	padding-top: 2px;
+	margin-bottom:-2px;
+	outline:none;
+  /* border-bottom: 2px solid #d22e2e; */
+
+}
+
+.user-day-diff__option {
+	padding-bottom:2px;
+}
+
+.user-day-diff__option:hover {
+  cursor: pointer;
+	color: #d22e2e;
+
+}
+
+.user-day-diff__option-container--pressed{
+  color: #d22e2e;
+  border-bottom: 2px solid #d22e2e;
 }
