@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
 import GraphPlotArea from "./GraphPlotArea";
 
 export default function Graph({ dataPoints, exerciseName }) {
-	//whenever userDayDiff is changed the entire component rerenders
-	// this is how I got the buttons to work properly
+  //whenever userDayDiff is changed the entire component rerenders
+  // this is how I got the buttons to work properly
   const [userDayDiff, setUserDayDiff] = useState("7");
-
+  const [userExDisp, setUserExDisp] = useState(["sq"]);
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
   const width = 600;
@@ -23,35 +23,100 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   //make dummy graph lines so I can see what's happening
   //DELETE once happy
-  let dummyLines = [];
-  let i = 0;
-  while (i * 100 <= xRange) {
-    dummyLines.push(axisOffset + i * 100);
-    i++;
-  }
+  let dummyXLines = [];
+  let dummyYLines = [];
 
-	//these are recreated on every rerender - makes sense.
-	//slight optimization would be to check if max/min weights change - then we don't need to change any y data, but this is a slight improvement and not worth the effort right now.
+  // let i = 0;
+  // while (i<= Math.floor(width/100)) {
+  //   dummyXLines.push(axisOffset + i * xRange/Math.floor(width/100));
+  //   i++;
+  // }
+  // i = 0;
+  // while (i <= Math.floor(height/50)) {
+  //   i++;
+  //   dummyYLines.push(i * yRange/Math.floor(yRange/50));
+  // }
+
+  //these are recreated on every rerender - makes sense.
+  //slight optimization would be to check if max/min weights change - then we don't need to change any y data, but this is a slight improvement and not worth the effort right now.
   let [
     dateLabels,
     mappedDateData,
     weightLabels,
     mappedWeightData,
-	] = grabDataForUserDayDiff(userDayDiff, dataPoints);
+  ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
 
-	//event handler that changes highlighted date range and updates userDayDiff, forcing Graph component to rerender
+  //event handler that changes highlighted date range and updates userDayDiff, forcing Graph component to rerender
   const handleDayDiffChange = (e) => {
     let newEl = e.target;
     const oldEl = document.getElementById(userDayDiff);
-		//can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
-		//TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
-    newEl.id ? setUserDayDiff(newEl.id) : (newEl = newEl.parentElement);
-    newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
+    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
+    //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
+    newEl.id
+      ? setUserDayDiff(newEl.id)
+      : newEl.parentElement.id
+      ? (newEl = newEl.parentElement && setUserDayDiff(newEl.id))
+      : (newEl = oldEl);
+
+    // (newEl = newEl.parentElement);
+    // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
     if (newEl !== oldEl) {
       oldEl.classList.remove("user-day-diff__option--pressed");
       newEl.classList.add("user-day-diff__option--pressed");
     }
   };
+
+  const handleExDispChange = (e) => {
+    let newEl = e.target;
+    // const oldEl = document.getElementById(userDayDiff);
+    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
+    //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
+    let selectedIds = [...userExDisp]; //array of selected exercises
+    if (newEl.id) {
+      //check if id in userExDisp state
+      const idx = selectedIds.indexOf(newEl.id);
+      if (idx === -1) {
+        //if pressed, remove from userExDisp state, toggle
+        selectedIds.push(newEl.id);
+        setUserExDisp([...selectedIds]);
+        newEl.classList.add("user-day-diff__option--pressed");
+      } else {
+        //if not pressed, add to userExDisp state, toggle
+        selectedIds.splice(idx, 1);
+        setUserExDisp([...selectedIds]);
+        newEl.classList.remove("user-day-diff__option--pressed");
+      }
+    } else if (newEl.parentElement.id) {
+      newEl = newEl.parentElement;
+      const idx = selectedIds.indexOf(newEl.id);
+      if (idx === -1) {
+        //if pressed, remove from userExDisp state, toggle
+        selectedIds.push(newEl.id);
+        setUserExDisp([...selectedIds]);
+        newEl.classList.add("user-day-diff__option--pressed");
+      } else {
+        //if not pressed, add to userExDisp state, toggle
+        selectedIds.splice(idx, 1);
+        setUserExDisp([...selectedIds]);
+        newEl.classList.remove("user-day-diff__option--pressed");
+      }
+    }
+
+    console.log(selectedIds);
+    console.log(userExDisp);
+    // newEl.id ? setUserExDisp(newEl.id) : (newEl = newEl.parentElement);
+    // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
+    // if (newEl !== oldEl) {
+    //   oldEl.classList.remove("user-day-diff__option--pressed");
+    //   newEl.classList.add("user-day-diff__option--pressed");
+    // }
+  };
+
+  //adds pressed class to 1W option on initial page load - do same for exercise selection button.
+  useEffect(() => {
+    const defaultRange = document.getElementById(userDayDiff);
+    defaultRange.classList.add("user-day-diff__option--pressed");
+  }, []);
 
   //grab only data within the user selected userDayDiff range
   //put data in separate arrays for x and y data
@@ -94,7 +159,8 @@ export default function Graph({ dataPoints, exerciseName }) {
   //TODO: add logic that changes dates to months if 3month view selected?
   function makeXLabels(dateRange, nowMs, msPerDay) {
     const startDateMs = nowMs - msPerDay * dateRange;
-    const numXLabels = Math.floor(width/100);
+    // const numXLabels = Math.floor(width/100);
+    const numXLabels = 8;
     let xLabelSpacing = msPerDay;
     let i = 7;
     while (dateRange > i) {
@@ -102,8 +168,8 @@ export default function Graph({ dataPoints, exerciseName }) {
       i += 7;
     }
     let dateLabels = [];
-    for (let i = 0; i <= numXLabels; i++) {
-      dateLabels.push(plotDateFormat(startDateMs + i * xLabelSpacing));
+    for (let i = 0; i < numXLabels; i++) {
+      dateLabels.unshift(plotDateFormat(nowMs - i * xLabelSpacing));
     }
     return dateLabels;
   }
@@ -111,9 +177,9 @@ export default function Graph({ dataPoints, exerciseName }) {
   // generate y axis labels based on min and max weight values
   //TODO: implement a user option to view a zoomed in plot or a plot from 0 to max weight.
   function makeYLabels(minWeight, maxWeight) {
-		const numYLabels = Math.floor(height/50)
-		let numHiddenLabels = 0;
-		let i = 5;
+    const numYLabels = Math.floor(yRange / 50);
+    let numHiddenLabels = 0;
+    let i = 5;
     while ((maxWeight - minWeight) / i > numYLabels) {
       //6 is max num labels
       i += 5;
@@ -141,7 +207,7 @@ export default function Graph({ dataPoints, exerciseName }) {
     return yDataIdx.map((y) => (1 - y) * yRange);
   }
 
-	//I think this check is no longer necessary.
+  //I think this check is no longer necessary.
   // if (!mappedDateData) {
   //   return null;
   // }
@@ -149,6 +215,25 @@ export default function Graph({ dataPoints, exerciseName }) {
   //build functions that create the axis in html later
 
   // color change based on if first weight value is greater/less than last weight value.
+
+  const userDayDiffOptions = [
+    ["1W", 7],
+    ["2W", 14],
+    ["1M", 30],
+    ["3M", 91],
+    ["6M", 182],
+    ["1Y", 365],
+    ["ALL", "ALL"],
+  ];
+
+  const userExerciseDisplayOptions = [
+    ["SQUAT", "sq"],
+    ["OVERHEAD PRESS", "oh"],
+    ["DEADLIFT", "dl"],
+    ["BENCH PRESS", "bp"],
+    ["PENDLAY ROW", "pr"],
+  ];
+
   return (
     <div className="graph-container">
       <div className="graph-info">
@@ -175,16 +260,17 @@ export default function Graph({ dataPoints, exerciseName }) {
           <line x1={axisOffset} x2={width} y1={yRange} y2={yRange} />
         </g>
         {/* dummy lines to make life easier */}
-        {dummyLines.map((xCoord, idx) => {
+        {dummyXLines.map((xCoord, idx) => {
           return (
             <g key={idx} className="dummy-grid">
-              <line
-                x1={0}
-                x2={1000}
-                y1={dummyLines[idx]}
-                y2={dummyLines[idx]}
-              />
               <line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
+            </g>
+          );
+        })}
+        {dummyYLines.map((yCoord, idx) => {
+          return (
+            <g key={idx} className="dummy-grid">
+              <line x1={0} x2={1000} y1={yCoord} y2={yCoord} />
             </g>
           );
         })}
@@ -243,37 +329,29 @@ export default function Graph({ dataPoints, exerciseName }) {
           mappedWeightData={mappedWeightData}
         />
       </svg>
-      <div className="user-day-diff__container">
-        <div
-          onClick={handleDayDiffChange}
-          className="user-day-diff__options-container"
-        >
-          <div
-            id="7"
-            className="user-day-diff__option-container  user-day-diff__option--pressed"
-          >
-            <div className="user-day-diff__option">1W</div>
-          </div>
-          <div id="14" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">2W</div>
-          </div>
-          <div id="30" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">1M</div>
-          </div>
-          <div id="91" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">3M</div>
-          </div>
-          <div id="182" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">6M</div>
-          </div>
-          <div id="365" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">1Y</div>
-          </div>
-          <div id="all" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">ALL</div>
-          </div>
+      <div className="user-options-container">
+        <div className="user-day-diff__container" onClick={handleDayDiffChange}>
+          {userDayDiffOptions.map(([optionText, optionId]) => {
+            return (
+              <div id={optionId} className="user-day-diff__option-container">
+                <div className="user-day-diff__option">{optionText}</div>
+              </div>
+            );
+          })}
         </div>
-        <div className="user-day-diff__container-placeholder"> </div>
+        <div className="user-options-container__placeholder"> </div>
+      </div>
+      <div className="user-options-container">
+        <div className="user-day-diff__container" onClick={handleExDispChange}>
+          {userExerciseDisplayOptions.map(([exerciseName, exerciseId]) => {
+            return (
+              <div id={exerciseId} className="user-day-diff__option-container">
+                <div className="user-day-diff__option">{exerciseName}</div>
+              </div>
+            );
+          })}
+          <div className="user-options-container__placeholder"> </div>
+        </div>
       </div>
     </div>
   );

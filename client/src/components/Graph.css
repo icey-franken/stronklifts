@@ -67,28 +67,36 @@ html, body {
 }
 
 .dummy-grid {
-  stroke: orange;
+	stroke: #c0c0c0;
+	z-index: -1;
 }
 
 /* formatting for graph view options */
-.user-day-diff__container {
+.user-options-container {
   font-size: 13px;
   margin-left: -12px;
   font-weight: 700;
   letter-spacing: -0.1px;
-  display: flex;
+	display: flex;
+	/* flex-direction: row; */
+	justify-content: space-between;
   border-bottom: 1px solid #c0c0c0;
 }
 
-.user-day-diff__options-container:hover {
+
+.user-day-diff__container, .user-ex-disp__container{
+	display: flex;
+}
+
+.user-day-diff__container:hover, .user-ex-disp__container:hover {
   cursor: pointer;
 }
 
 .user-day-diff__option-container {
-  padding-top: 2px;
+  padding-top: px;
   /* z-index: 1; */
   line-height: 20px;
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 .user-day-diff__option-container:hover {
