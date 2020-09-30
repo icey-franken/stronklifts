@@ -30,8 +30,8 @@ export default function GraphPage() {
     }
 	});
 	//just squat data for now to simplify progress on graph component
-	let graphData = [squatData, overheadData, deadliftData, benchData, rowData];
-	let graphNames = ['Squat', 'Overhead Press', 'Deadlift', 'Bench Press', 'Pendlay Row'];
+	let graphData = [squatData]//, overheadData, deadliftData, benchData, rowData];
+	let graphNames = ['Squat']//, 'Overhead Press', 'Deadlift', 'Bench Press', 'Pendlay Row'];
   return (
     <div className='graph-page-container'>
       <div className='graph-page-container'>hi from graph page</div>

@@ -1,70 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
+import GraphPlotArea from "./GraphPlotArea";
 
 export default function Graph({ dataPoints, exerciseName }) {
-  console.log(exerciseName, dataPoints);
+  // console.log(exerciseName, dataPoints);
   //eventually userDayDiff will be a selectable button available to the user. Hard code for now.
   //value MUST be >= 7
 
-	//hacky way to get graph to re-render - fix in future by breaking into components.
-	//doesn't work - will find another fix.
-  const useForceUpdate = () => useState()[1];
-  const forceUpdate = useForceUpdate();
-
-  let userDayDiff = 7;
-  const highlightedElementRef = useRef(null);
-
-  // let highlightedElement = null;
-  useEffect(() => {
-    highlightedElementRef.current = document.getElementById("7");
-    console.log(highlightedElementRef.current);
-    console.log(highlightedElementRef.current.id);
-  }, []);
-
-  useEffect(() => {
-    [
-      dateLabels,
-      mappedDateData,
-      weightLabels,
-      mappedWeightData,
-    ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
-    forceUpdate();
-  }, [userDayDiff]);
-
-  // console.log(exerciseName);
-
-  // console.log(dataPoints);
-  // console.log(!dataPoints);
-  // if (!dataPoints) return null;
-
-  const handleDayDiffChange = (e) => {
-    console.log(e.target);
-    console.log(e.target.id);
-    console.log(!e.target.id);
-    let id = e.target.id;
-    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
-    if (id) {
-      userDayDiff = id;
-    } else {
-      id = e.target.parentElement.id;
-      if (id) {
-        userDayDiff = id;
-      } else {
-        return; //this way, if the user clicked the container element instead, then id will still be undefined and this handler will do nothing. I tried using pointer-events:none along with z-index but I still am able to get an error. This is hacky but it should work.
-      }
-    }
-    console.log(userDayDiff);
-    highlightedElementRef.current.classList.remove(
-      "user-day-diff__option--pressed"
-    );
-
-    highlightedElementRef.current = document.getElementById(id);
-    console.log(highlightedElementRef.current);
-    highlightedElementRef.current.classList.add(
-      "user-day-diff__option--pressed"
-    );
-  };
+  const [dateDiff, setDateDiff] = useState("7");
 
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
@@ -87,6 +31,93 @@ export default function Graph({ dataPoints, exerciseName }) {
     dummyLines.push(axisOffset + i * 100);
     i++;
   }
+
+  //hacky way to get graph to re-render - fix in future by breaking into components.
+  //doesn't work - will find another fix.
+  // const useForceUpdate = () => useState()[1];
+  // const forceUpdate = useForceUpdate();
+
+  // let userDayDiff = 30;
+  const userDayDiff = useRef("7");
+  const bullshitArr = grabDataForUserDayDiff(userDayDiff.current, dataPoints);
+  const dateLabels = useRef(bullshitArr[0]);
+  const mappedDateData = useRef(bullshitArr[1]);
+  const weightLabels = useRef(bullshitArr[2]);
+  const mappedWeightData = useRef(bullshitArr[3]);
+  // let highlightedElement = null;
+  // useEffect(() => {
+  // 	console.log(document.getElementById('7'))
+  //   // highlightedElementRef.current = document.getElementById("7");
+  //   console.log(highlightedElementRef.current);
+  //   // console.log(highlightedElementRef.current.id);
+  // });
+
+  useEffect(() => {
+    if (!userDayDiff.current) {
+      console.log("hits");
+      return;
+    }
+    console.log("hitttts");
+    setDateDiff(userDayDiff.current);
+    [
+      dateLabels.current,
+      mappedDateData.current,
+      weightLabels.current,
+      mappedWeightData.current,
+    ] = grabDataForUserDayDiff(userDayDiff.current, dataPoints);
+    // plotArea = buildPlotArea(mappedDateData, mappedWeightData)
+    // forceUpdate();
+  }, [userDayDiff.current]);
+
+  // console.log(exerciseName);
+
+  // console.log(dataPoints);
+  // console.log(!dataPoints);
+  // if (!dataPoints) return null;
+
+  const handleDayDiffChange = (e) => {
+    // console.log(e.target);
+    // console.log(e.target.id);
+    let newEl = e.target;
+    const oldEl = document.getElementById(userDayDiff.current);
+    // console.log(!e.target.id);
+    console.log(userDayDiff.current);
+    console.log(userDayDiff);
+    console.log(typeof userDayDiff.current);
+    // let id = e.target.id;
+    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
+    if (newEl.id) {
+      userDayDiff.current = newEl.id;
+      setDateDiff(newEl.id);
+      // highlightedElementRef.current = newEl;
+      // userDayDiff = id;
+    } else {
+      newEl = newEl.parentElement;
+      if (newEl.id) {
+        // oldEl = highlightedElementRef.current;
+        userDayDiff.current = newEl.id;
+        setDateDiff(newEl.id);
+
+        // highlightedElementRef.current = newEl;
+        // userDayDiff = id;
+      } else {
+        return; //this way, if the user clicked the container element instead, then id will still be undefined and this handler will do nothing. I tried using pointer-events:none along with z-index but I still am able to get an error. This is hacky but it should work.
+      }
+    }
+    [
+      dateLabels.current,
+      mappedDateData.current,
+      weightLabels.current,
+      mappedWeightData.current,
+    ] = grabDataForUserDayDiff(userDayDiff.current, dataPoints);
+
+    // console.log(userDayDiff);
+    oldEl.classList.remove("user-day-diff__option--pressed");
+
+    // highlightedElementRef.current = document.getElementById(id);
+    // console.log(highlightedElementRef.current);
+    newEl.classList.add("user-day-diff__option--pressed");
+  };
 
   // let weightLabels;
   // let dateLabels;
@@ -133,7 +164,7 @@ export default function Graph({ dataPoints, exerciseName }) {
     const startDateMs = nowMs - msPerDay * dateRange;
     let numXLabels = 6;
     let xLabelSpacing = msPerDay;
-    i = 7;
+    let i = 7;
     while (dateRange > i) {
       xLabelSpacing += msPerDay;
       i += 7;
@@ -177,49 +208,20 @@ export default function Graph({ dataPoints, exerciseName }) {
     return yDataIdx.map((y) => (1 - y) * yRange);
   }
 
-  function buildPlotArea(mappedDateData, mappedWeightData) {
-    console.log(mappedDateData, mappedWeightData);
+  console.log(userDayDiff, userDayDiff.current);
+  // if (!userDayDiff.current) return null;
 
-    let graphArr = [];
-    for (let i = 0; i < mappedDateData.length - 1; i++) {
-      graphArr.push(
-        <g key={i}>
-          <circle
-            key={i}
-            className="data-point"
-            cx={mappedDateData[i]}
-            cy={mappedWeightData[i]}
-            r="5"
-          />
-          <line
-            className="data-line"
-            x1={mappedDateData[i]}
-            y1={mappedWeightData[i]}
-            x2={mappedDateData[i + 1]}
-            y2={mappedWeightData[i + 1]}
-          />
-        </g>
-      );
-    }
-    graphArr.push(
-      <circle
-        key={mappedDateData.length - 1}
-        className="data-point"
-        cx={mappedDateData[mappedDateData.length - 1]}
-        cy={mappedWeightData[mappedDateData.length - 1]}
-        r="5"
-      />
-    );
-    return graphArr;
+  // let [
+  //   dateLabels,
+  //   mappedDateData,
+  //   weightLabels,
+  //   mappedWeightData,
+  // ] = grabDataForUserDayDiff(userDayDiff.current, dataPoints);
+  console.log(mappedDateData.current, !mappedDateData.current);
+  if (!mappedDateData.current) {
+    return null;
   }
-
-  let [
-    dateLabels,
-    mappedDateData,
-    weightLabels,
-    mappedWeightData,
-  ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
-
+  // let plotArea = buildPlotArea(mappedDateData, mappedWeightData);
   //build functions that create the axis in html later
 
   // color change based on if first weight value is greater/less than last weight value.
@@ -263,16 +265,20 @@ export default function Graph({ dataPoints, exerciseName }) {
           );
         })}
         <g className="labels">
-          {dateLabels.map((date, index) => {
+          {dateLabels.current.map((date, index) => {
             return (
               <text
                 className="x-label"
                 key={index}
-                x={axisOffset + (xRange / (dateLabels.length - 1)) * index}
+                x={
+                  axisOffset +
+                  (xRange / (dateLabels.current.length - 1)) * index
+                }
                 y={height - (3 * axisOffset) / 4}
                 style={{
                   transformOrigin: `${
-                    axisOffset + (xRange / (dateLabels.length - 1)) * index
+                    axisOffset +
+                    (xRange / (dateLabels.current.length - 1)) * index
                   }px ${height - (3 * axisOffset) / 4}px`,
                 }}
               >
@@ -289,13 +295,13 @@ export default function Graph({ dataPoints, exerciseName }) {
           </text>
         </g>
         <g className="labels">
-          {weightLabels.map((weight, index) => {
+          {weightLabels.current.map((weight, index) => {
             return (
               <text
                 className="y-label"
                 key={index}
                 x={(3 * axisOffset) / 4}
-                y={yRange * (1 - index / (weightLabels.length - 1))}
+                y={yRange * (1 - index / (weightLabels.current.length - 1))}
               >
                 {weight}
               </text>
@@ -312,9 +318,10 @@ export default function Graph({ dataPoints, exerciseName }) {
             Weight (lbs)
           </text>
         </g>
-        <g className="data-points">
-          {buildPlotArea(mappedDateData, mappedWeightData)}
-        </g>
+        <GraphPlotArea
+          mappedDateData={mappedDateData.current}
+          mappedWeightData={mappedWeightData.current}
+        />
       </svg>
       <div className="user-day-diff__container">
         <div
