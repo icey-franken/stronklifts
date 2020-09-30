@@ -1,37 +1,55 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./Graph.css";
 import { plotDateFormat } from "./utils/Formatter";
-import {useEffect} from 'react'
 
-export default function Graph({ dataPoints }) {
-  const exerciseName = dataPoints.shift(); //grab exercise name
+export default function Graph({ dataPoints, exerciseName }) {
   const nowMs = Date.now(); //constant used for date range calcs
-	const msPerDay = 8.64e7; //constant used to convert ms to days
+  const msPerDay = 8.64e7; //constant used to convert ms to days
 
   //eventually userDayDiff will be a selectable button available to the user. Hard code for now.
   //value MUST be >= 7
-	let userDayDiff = 7;
-	let highlightedElement = null;
-	useEffect(()=>{
-		highlightedElement = document.getElementById('7');
-		console.log(highlightedElement);
-	}, [])
+  let userDayDiff = 7;
+
+  const highlightedElementRef = useRef(null);
+
+  // let highlightedElement = null;
+  useEffect(() => {
+    highlightedElementRef.current = document.getElementById("7");
+    console.log(highlightedElementRef.current);
+  }, []);
+  // console.log(exerciseName);
+
+  // console.log(dataPoints);
+  // console.log(!dataPoints);
+  // if (!dataPoints) return null;
 
   const handleDayDiffChange = (e) => {
     console.log(e.target);
-		console.log(e.target.id);
-		highlightedElement.classList.remove('user-day-diff__option-container--pressed')
+    console.log(e.target.id);
+    console.log(!e.target.id);
+    let id = e.target.id;
+    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
+    if (!id) {
+      id = e.target.parentElement.id;
+      if (!id) {
+        return; //this way, if the user clicked the container element instead, then id will still be undefined and this handler will do nothing. I tried using pointer-events:none along with z-index but I still am able to get an error. This is hacky but it should work.
+      }
+    }
+    highlightedElementRef.current.classList.remove(
+      "user-day-diff__option--pressed"
+    );
 
-		highlightedElement = document.getElementById(e.target.id);
-		console.log(highlightedElement);
-		highlightedElement.classList.add('user-day-diff__option-container--pressed')
+    highlightedElementRef.current = document.getElementById(id);
+    console.log(highlightedElementRef.current);
+    highlightedElementRef.current.classList.add(
+      "user-day-diff__option--pressed"
+    );
   };
-
 
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
-  const width = 750;
-  const height = 200;
+  const width = 700;
+  const height = 400;
 
   //margin and axisOffset will probably remain constant
   const margin = 50;
@@ -92,7 +110,7 @@ export default function Graph({ dataPoints }) {
   });
   const weightRange = maxWeight - minWeight;
   const numWeightIncrements = Math.floor(weightRange / 5);
-  let numYLabels = 10;
+  let numYLabels = 5;
   if (numWeightIncrements < numYLabels) {
     numYLabels = numWeightIncrements;
   }
@@ -114,7 +132,7 @@ export default function Graph({ dataPoints }) {
   return (
     <div className="graph-container">
       <div className="graph-info">
-        <div className="graph-info__title">{exerciseName.toUpperCase()}</div>
+        <div className="graph-info__title">{exerciseName}</div>
         <div className="graph-info__weight">
           {dataPoints[dataPoints.length - 1][1]} lbs
         </div>
@@ -129,9 +147,7 @@ export default function Graph({ dataPoints }) {
         height={height}
         role="img"
       >
-        <title id="title">
-          A plot of {exerciseName.toUpperCase()} weight over time.
-        </title>
+        <title id="title">A plot of {exerciseName} weight over time.</title>
         <g className="grid x-grid" id="xGrid">
           <line x1={axisOffset} x2={axisOffset} y1="0" y2={margin + yRange} />
         </g>
@@ -208,54 +224,44 @@ export default function Graph({ dataPoints }) {
         </g>
         <g className="data-points">{buildGraph(xDataNum, yDataNum)}</g>
       </svg>
-      <div className="user-day-diff__container user-day-diff__container--line">
-        <span
+      <div className="user-day-diff__container">
+        <div
           onClick={handleDayDiffChange}
-          className="user-day-diff__container"
+          className="user-day-diff__options-container"
         >
-          <div className="user-day-diff__option-container  user-day-diff__option-container--pressed" id="7" >
-            <span className="user-day-diff__option">
-              1W
-            </span>
+          <div
+            id="7"
+            className="user-day-diff__option-container  user-day-diff__option--pressed"
+          >
+            <div className="user-day-diff__option">1W</div>
           </div>
-          <div className="user-day-diff__option-container" id="14" >
-            <span className="user-day-diff__option">
-              2W
-            </span>
+          <div id="14" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">2W</div>
           </div>
-          <span className="user-day-diff__option-container">
-            <span id="30" className="user-day-diff__option">
-              1M
-            </span>
-          </span>
-          <span className="user-day-diff__option-container">
-            <span id="91" className="user-day-diff__option">
-              3M
-            </span>
-          </span>
-          <span className="user-day-diff__option-container">
-            <span id="182" className="user-day-diff__option">
-              6M
-            </span>
-          </span>
-          <span className="user-day-diff__option-container">
-            <span id="365" className="user-day-diff__option">
-              1Y
-            </span>
-          </span>
-          <span className="user-day-diff__option-container">
-            <span id="all" className="user-day-diff__option">
-              ALL
-            </span>
-          </span>
-        </span>
+          <div id="30" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">1M</div>
+          </div>
+          <div id="91" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">3M</div>
+          </div>
+          <div id="182" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">6M</div>
+          </div>
+          <div id="365" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">1Y</div>
+          </div>
+          <div id="all" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">ALL</div>
+          </div>
+        </div>
+        <div className="user-day-diff__container-placeholder"> </div>
       </div>
     </div>
   );
 }
 
 function buildGraph(xDataNum, yDataNum) {
-  console.log(xDataNum, yDataNum);
+  // console.log(xDataNum, yDataNum);
 
   let graphArr = [];
   for (let i = 0; i < xDataNum.length - 1; i++) {

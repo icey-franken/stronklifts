@@ -1,23 +1,24 @@
+/* formatting for overall graph page */
 .graph-page-container {
   display: flex;
   flex-direction: column;
   margin-bottom: 24px !important;
 }
+/* formatting for each graph */
 .graph-container {
   font-family: "Capsule Sans Text", -apple-system, BlinkMacSystemFont,
     sans-serif;
-
-  /* border: 1px solid black; */
   margin: 16px auto;
   padding: 0 6px;
 }
+
 .graph-info {
   font-size: 32px;
 }
-
 .graph {
 }
 
+/* formatting for graph itself */
 .data-line {
   stroke: #d22e2e;
   stroke-width: 1.5;
@@ -26,9 +27,13 @@
 .data-point {
   fill: #d22e2e;
 }
-/* transform-origin: 20px 200px; */
+
+.label-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
 .y-label-title {
-  /* transform-origin: center; */
   transform: rotate(-90deg);
   text-anchor: middle;
 }
@@ -43,58 +48,54 @@
   transform: translate(0, 0.4em);
 }
 
-.label-title {
-  font-weight: bold;
-  font-size: 1.5em;
-}
-
 .grid {
   stroke: black;
 }
+
 .dummy-grid {
   stroke: orange;
 }
 
-.y-labels,
-.x-labels {
-  text-anchor: center;
-}
-
+/* formatting for graph view options */
 .user-day-diff__container {
   font-size: 13px;
 	margin-left: -12px;
   font-weight: 700;
-  letter-spacing: -0.1px;
+	letter-spacing: -0.1px;
+	display: flex;
+	border-bottom: 1px solid 	#C0C0C0;
 }
-
-.user-day-diff__container--line {
-	border-bottom: 1px solid black;
-}
-
 
 .user-day-diff__option-container {
-	margin: 0 12px;
-	display: inline-block;
-  line-height: 20px;
-  padding-bottom: 12px;
 	padding-top: 2px;
-	margin-bottom:-2px;
+	z-index: 1;
+	/* padding-left: -12px; */
+	/* padding: 2px -12px 12px; */
+  line-height: 20px;
 	outline:none;
-  /* border-bottom: 2px solid #d22e2e; */
-
+	display: inline-block;
+	box-sizing: border-box;
+	/* border-bottom: 2px solid #d22e2e; */
+	/* border: 1px solid blue; */
 }
 
 .user-day-diff__option {
-	padding-bottom:2px;
+	margin: 0 12px -2px;
+	margin-bottom:-2px;
+  padding-bottom: 12px;
+	pointer-events: none;
 }
 
-.user-day-diff__option:hover {
+.user-day-diff__options-container:hover{
+	cursor:pointer;
+}
+
+.user-day-diff__option-container:hover {
   cursor: pointer;
 	color: #d22e2e;
-
 }
 
-.user-day-diff__option-container--pressed{
+.user-day-diff__option--pressed>div{
   color: #d22e2e;
   border-bottom: 2px solid #d22e2e;
 }
