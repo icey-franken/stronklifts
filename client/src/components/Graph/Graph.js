@@ -4,8 +4,14 @@ import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
 
-export default function Graph({ dataPoints, exerciseName }) {
-  //whenever userDayDiff is changed the entire component rerenders
+export default function Graph({
+  dataPointsArr,
+  exerciseNamesArr
+}) {
+	const dataPoints = dataPointsArr[0];
+	const exerciseName = exerciseNamesArr[0];
+
+	//whenever userDayDiff is changed the entire component rerenders
   // this is how I got the buttons to work properly
   const [userDayDiff, setUserDayDiff] = useState("7");
   const [userExDisp, setUserExDisp] = useState(["sq"]);
@@ -105,10 +111,8 @@ export default function Graph({ dataPoints, exerciseName }) {
     return xDataIdx;
   }
   //use relevant weight data points to construct xDataIdx
-  function generateYDataIdx(yDataWeight) {
+  function generateYDataIdx(yDataWeight, minWeight, maxWeight) {
     let yDataIdx = [];
-    const maxWeight = Math.max(...yDataWeight) + 5;
-    const minWeight = Math.min(...yDataWeight) - 5;
     yDataWeight.forEach((weight) => {
       //generate weight scalar array
       yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
@@ -128,13 +132,38 @@ export default function Graph({ dataPoints, exerciseName }) {
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //USE FUNCTIONS TO CALCULATE VALUES-------------------------
-  const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
+	//data points will eventually be an array - we will grab relevant data points for each array.
+	//it might be smarter to separate relevant datapoints in upper component but this will work for now
+	const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
   const [xData, yData] = separateDateAndWeight(relevantDataPoints);
-  const dateRange = calculateDateRange(userDayDiff, xData[0]);
+	const dateRange = calculateDateRange(userDayDiff, xData[0]);
+	//TODO - update these so that it selects the very max weight based on all selected exercises
+
+	const minWeight = Math.min(...yData) - 5;
+	const maxWeight = Math.max(...yData) + 5;
   const xDataIdx = generateXDataIdx(xData, dateRange);
-  const yDataIdx = generateYDataIdx(yData);
+  const yDataIdx = generateYDataIdx(yData, minWeight, maxWeight);
   const mappedDateData = mapXIdxToDataPoints(xDataIdx);
   const mappedWeightData = mapYIdxToDataPoints(yDataIdx);
+
+  // const relevantDataPoints2 = grabRelevantDataPoints(userDayDiff, dataPoints2);
+	// const [xData2, yData2] = separateDateAndWeight(relevantDataPoints2);
+	// const minWeight2 = Math.min(...yData2) - 5;
+	// const maxWeight2 = Math.max(...yData2) + 5;
+  // // const dateRange = calculateDateRange(userDayDiff, xData[0]);
+  // const xDataIdx2 = generateXDataIdx(xData2, dateRange);
+  // const yDataIdx2 = generateYDataIdx(yData2, minWeight2, maxWeight2);
+  // const mappedDateData2 = mapXIdxToDataPoints(xDataIdx2);
+  // const mappedWeightData2 = mapYIdxToDataPoints(yDataIdx2);
+
+  //from that, generate multiple GraphPlotArea components
+  //each graph plot area component should have a check that determines exercise name or something and based on that the color of the plot is altered
+  //the kicker now is determining the axes to use based on dayDiff and min/max weight.
+  //THE POINT: multiple GraphPlotArea components stack perfectly well.
+
+  //create a GraphOverlay component that renders multiple GraphPlotArea components based on the input
+  //the input to graph overlay will be:
+  //an array with [[mappedDateData, mappedWeightData], [mappedDateData2, mappedWeightData2]] for each set of data passed in.
 
   // color change based on if first weight value is greater/less than last weight value.
 
@@ -142,8 +171,7 @@ export default function Graph({ dataPoints, exerciseName }) {
   //-------------------------------------------------------------
   //PROPS TO PASS TO VARIOUS GRAPH COMPONENTS---------------------
   //later on you should add these things to the store to avoid unnecessary rerenders of components due to prop threading.
-  const maxWeight = Math.max(...yData) + 5;
-  const minWeight = Math.min(...yData) - 5;
+
   const graphAxesProps = {
     graphLayoutProps,
     dateRange,
@@ -181,6 +209,10 @@ export default function Graph({ dataPoints, exerciseName }) {
           mappedDateData={mappedDateData}
           mappedWeightData={mappedWeightData}
         />
+        {/* <GraphPlotArea
+          mappedDateData={mappedDateData2}
+          mappedWeightData={mappedWeightData2}
+        /> */}
       </svg>
       <UserOptions userOptionsProps={userOptionsProps} />
     </div>

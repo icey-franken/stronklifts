@@ -4,18 +4,18 @@ import Graph from "../components/Graph/Graph";
 
 export default function GraphPage() {
   const exercises = useSelector((state) => state.exercises);
-	const exercisesArr = Object.values(exercises);
-	exercisesArr.sort((a,b)=>(a.workoutDate> b.workoutDate) ? 1 : -1)
+  const exercisesArr = Object.values(exercises);
+  exercisesArr.sort((a, b) => (a.workoutDate > b.workoutDate ? 1 : -1));
   //consider adding a selector to redux store that separates by exercise name.
   //for now I will do it caveman style
   let squatData = [];
   let overheadData = [];
   let deadliftData = [];
-	let benchData = [];
-	let rowData = [];
+  let benchData = [];
+  let rowData = [];
 
-	//turn this into an action - put this stuff in the redux store
-	//then based on the graph view selected we can grab that set of data and render a graph page quickly.
+  //turn this into an action - put this stuff in the redux store
+  //then based on the graph view selected we can grab that set of data and render a graph page quickly.
   exercisesArr.forEach(({ exerciseName, workingWeight, workoutDate }) => {
     if (exerciseName === "Squat") {
       squatData.push([workoutDate, workingWeight]);
@@ -28,14 +28,30 @@ export default function GraphPage() {
     } else if (exerciseName === "Pendlay Row") {
       rowData.push([workoutDate, workingWeight]);
     }
-	});
-	//just squat data for now to simplify progress on graph component
-	let graphData = [squatData]//, overheadData, deadliftData, benchData, rowData];
-	let graphNames = ['Squat']//, 'Overhead Press', 'Deadlift', 'Bench Press', 'Pendlay Row'];
+  });
+  //just squat data for now to simplify progress on graph component
+  let dataPointsArr = [
+    squatData,
+    overheadData,
+    deadliftData,
+    benchData,
+    rowData,
+  ];
+  let exerciseNamesArr = [
+    "Squat",
+    "Overhead Press",
+    "Deadlift",
+    "Bench Press",
+    "Pendlay Row",
+  ];
   return (
-    <div className='graph-page-container'>
-      <div className='graph-page-container'>hi from graph page</div>
-			{graphData.map((dataPoints, index)=><Graph key={index} dataPoints={dataPoints} exerciseName={graphNames[index]}/>)}
+    <div className="graph-page-container">
+      <div className="graph-page-container">hi from graph page</div>
+      <Graph
+        dataPointsArr={dataPointsArr}
+        exerciseNamesArr={exerciseNamesArr}
+      />
+      {/* {graphData.map((dataPoints, index)=><Graph key={index} dataPointsArr={dataPointsArr} dataPoints2={overheadData} exerciseName={graphNames[index]} exerciseName2={graphNames[index+1]}/>)} */}
     </div>
   );
 }
