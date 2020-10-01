@@ -66,14 +66,14 @@ export default function Graph({ dataPoints, exerciseName }) {
     }
   };
 
-  const userExDispIds = ["sq", "op", "dl", "bp", "pr"];
+  // const userExDispIds = ["sq", "op", "dl", "bp", "pr"];
 
   const handleExDispChange = (e) => {
     let newEl = e.target;
     // const oldEl = document.getElementById(userDayDiff);
     //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
     //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
-    let selectedIds = [...userExDisp]; //array of selected exercises
+    // let selectedIds = [...userExDisp]; //array of selected exercises
     //ensure clicked element has an id - if not, minor styling error
     if (newEl.id) {
       __handleExDisp(newEl);
@@ -85,30 +85,57 @@ export default function Graph({ dataPoints, exerciseName }) {
       return;
     }
 
-    //helper function because we do the same exact operation twice in a row - once checking if parent element
-    const __handleExDisp = (element) => {
-      //check if id in userExDisp state
-      if (newEl.id === "all-ex") {
-        if (userExDisp.length === 5) {
-          //if all already selected, we want to unselect all
-        }
+    // console.log(selectedIds);
+    console.log(userExDisp);
+  };
+
+  //helper function because we do the same exact operation twice in a row - once checking if parent element
+  const __handleExDisp = (newEl) => {
+    console.log("newEl ~target", newEl);
+    //check if user clicked all
+    if (newEl.id === "all-ex") {
+      const userExDispIds = ["sq", "op", "dl", "bp", "pr"];
+      //if all already selected, we want to unselect all except for one - default is squat
+      if (userExDisp.length === 5) {
+        setUserExDisp([userExDispIds.shift()]);
+        userExDispIds.forEach((elId) => {
+					console.log('elId', elId);
+					const el = document.getElementById(elId);
+					console.log('el',el);
+          el.classList.remove("user-day-diff__option--pressed");
+        });
       } else {
-        const idx = selectedIds.indexOf(newEl.id);
-        if (idx === -1) {
-          //if pressed, remove from userExDisp state, toggle
-          selectedIds.push(newEl.id);
-          setUserExDisp([...selectedIds]);
-          newEl.classList.add("user-day-diff__option--pressed");
-        } else {
+        //if less than all selected, select all
+        //note: classList.add and remove do nothing if class is already added/not added - no need to check .contains
+        setUserExDisp([...userExDispIds]);
+        userExDispIds.forEach((elId) => {
+					console.log('elId', elId);
+
+					const el = document.getElementById(elId);
+					console.log('el', el);
+					el.classList.add("user-day-diff__option--pressed");
+        });
+      }
+    } else {
+      const idx = userExDisp.indexOf(newEl.id);
+      //check if id in userExDisp state
+      if (idx === -1) {
+        //if exercise not in userExDisp array, add it
+        setUserExDisp([...userExDisp, newEl.id]);
+        newEl.classList.add("user-day-diff__option--pressed");
+      } else {
+        //if exercise already in userExDisp array AND userExDisp contains more than one entry, remove it
+        if (userExDisp.length > 1) {
           //if not pressed, add to userExDisp state, toggle
-          selectedIds.splice(idx, 1);
-          setUserExDisp([...selectedIds]);
+          setUserExDisp([
+            ...userExDisp.slice(0, idx),
+            ...userExDisp.slice(idx + 1),
+          ]);
           newEl.classList.remove("user-day-diff__option--pressed");
         }
+        //if exercise in userExDisp array but only one is selected, do nothing.
       }
-    };
-    console.log(selectedIds);
-    console.log(userExDisp);
+    }
   };
 
   // } else if (newEl.parentElement.id) {
@@ -253,7 +280,7 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   const userExerciseDisplayOptions = [
     ["SQUAT", "sq"],
-    ["OVERHEAD PRESS", "oh"],
+    ["OVERHEAD PRESS", "op"],
     ["DEADLIFT", "dl"],
     ["BENCH PRESS", "bp"],
     ["PENDLAY ROW", "pr"],
@@ -356,9 +383,13 @@ export default function Graph({ dataPoints, exerciseName }) {
       </svg>
       <div className="user-options-container">
         <div className="user-day-diff__container" onClick={handleDayDiffChange}>
-          {userDayDiffOptions.map(([optionText, optionId]) => {
+          {userDayDiffOptions.map(([optionText, optionId], index) => {
             return (
-              <div id={optionId} className="user-day-diff__option-container">
+              <div
+                id={optionId}
+                key={index}
+                className="user-day-diff__option-container"
+              >
                 <div className="user-day-diff__option">{optionText}</div>
               </div>
             );
@@ -368,18 +399,24 @@ export default function Graph({ dataPoints, exerciseName }) {
       </div>
       <div className="user-options-container">
         <div className="user-day-diff__container" onClick={handleExDispChange}>
-          {userExerciseDisplayOptions.map(([exerciseName, exerciseId]) => {
-            return (
-              <div id={exerciseId} className="user-day-diff__option-container">
-                <div className="user-day-diff__option">{exerciseName}</div>
-              </div>
-            );
-          })}
+          {userExerciseDisplayOptions.map(
+            ([exerciseName, exerciseId], index) => {
+              return (
+                <div
+                  id={exerciseId}
+                  key={index}
+                  className="user-day-diff__option-container"
+                >
+                  <div className="user-day-diff__option">{exerciseName}</div>
+                </div>
+              );
+            }
+          )}
           <div id="all-ex" className="user-day-diff__option-container">
             <div className="user-day-diff__option">ALL</div>
           </div>
-          <div className="user-options-container__placeholder"> </div>
         </div>
+        <div className="user-options-container__placeholder"> </div>
       </div>
     </div>
   );
