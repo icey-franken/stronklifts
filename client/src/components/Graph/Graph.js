@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Graph.css";
-import { plotDateFormat } from "../utils/Formatter";
 import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
@@ -25,11 +24,12 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   //these are recreated on every rerender - makes sense.
   //slight optimization would be to check if max/min weights change - then we don't need to change any y data, but this is a slight improvement and not worth the effort right now.
-  let [
-    dateLabels,
+	//fix this so that min and max weight come from somewhere else - SRP!!!
+	let [
     mappedDateData,
-    weightLabels,
     mappedWeightData,
+		minWeight,
+		maxWeight
   ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
 
   //add pressed class to 1W day diff and squat ex disp options on initial page load
@@ -70,58 +70,18 @@ export default function Graph({ dataPoints, exerciseName }) {
     });
     //NEED WEIGHT LABELS AND DATELABELS ARRAY
     return [
-      makeXLabels(userDayDiff),
       mapXIdxToDataPoints(xDataIdx),
-      makeYLabels(minWeight, maxWeight),
-      mapYIdxToDataPoints(yDataIdx),
+			mapYIdxToDataPoints(yDataIdx),
+			minWeight,
+			maxWeight
     ];
   }
 
   // generate x axis labels based on current day and userDayDiff input
   //TODO: add logic that changes dates to months if 3month view selected?
-  function makeXLabels(dateRange) {
-    // const startDateMs = nowMs - msPerDay * dateRange;
-    // const numXLabels = Math.floor(width/100);
-    const nowMs = Date.now(); //constant used for date range calcs
-    const msPerDay = 8.64e7; //constant used to convert ms to days
 
-    const numXLabels = 8;
-    let xLabelSpacing = msPerDay;
-    let i = 7;
-    while (dateRange > i) {
-      xLabelSpacing += msPerDay;
-      i += 7;
-    }
-    let dateLabels = [];
-    for (let i = 0; i < numXLabels; i++) {
-      dateLabels.unshift(plotDateFormat(nowMs - i * xLabelSpacing));
-    }
-    return dateLabels;
-  }
 
-  // generate y axis labels based on min and max weight values
-  //TODO: implement a user option to view a zoomed in plot or a plot from 0 to max weight.
-  function makeYLabels(minWeight, maxWeight) {
-    const numYLabels = Math.floor(yRange / 50);
-    let numHiddenLabels = 0;
-    let i = 5;
-    while ((maxWeight - minWeight) / i > numYLabels) {
-      //6 is max num labels
-      i += 5;
-      numHiddenLabels++;
-    }
-    let counter = 0;
-    let weightLabels = [];
-    for (let val = minWeight; val <= maxWeight; val += 5) {
-      //eliminates topmost label being cut off
-      //allows weightLabels array length to be as expected without displaying too many labels
-      counter === 0 && val < maxWeight
-        ? weightLabels.push(val)
-        : weightLabels.push("");
-      counter >= numHiddenLabels ? (counter = 0) : counter++;
-    }
-    return weightLabels;
-  }
+
 
   //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
   function mapXIdxToDataPoints(xDataIdx) {
@@ -143,8 +103,9 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   const graphAxesProps = {
     graphLayoutProps: { axisOffset, xRange, yRange, height, width },
-    dateLabels,
-    weightLabels,
+    userDayDiff,
+		minWeight,
+		maxWeight
   };
   const userOptionsProps = {
     userDayDiff,
