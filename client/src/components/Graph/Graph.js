@@ -2,12 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./Graph.css";
 import { plotDateFormat } from "../utils/Formatter";
 import GraphPlotArea from "./GraphPlotArea";
-import {
-  XAxisLabels,
-  XAxisLabelTitle,
-  YAxisLabels,
-  YAxisLabelTitle,
-} from "./GraphAxes";
+import { GraphAxes } from "./GraphAxes";
+import { UserOptions } from "./GraphOptions";
 
 export default function Graph({ dataPoints, exerciseName }) {
   //whenever userDayDiff is changed the entire component rerenders
@@ -27,22 +23,6 @@ export default function Graph({ dataPoints, exerciseName }) {
   const yRange = height - axisOffset;
   const xRange = width - axisOffset - xMargin;
 
-  //make dummy graph lines so I can see what's happening
-  //DELETE once happy
-  let dummyXLines = [];
-  let dummyYLines = [];
-
-  // let i = 0;
-  // while (i<= Math.floor(width/100)) {
-  //   dummyXLines.push(axisOffset + i * xRange/Math.floor(width/100));
-  //   i++;
-  // }
-  // i = 0;
-  // while (i <= Math.floor(height/50)) {
-  //   i++;
-  //   dummyYLines.push(i * yRange/Math.floor(yRange/50));
-  // }
-
   //these are recreated on every rerender - makes sense.
   //slight optimization would be to check if max/min weights change - then we don't need to change any y data, but this is a slight improvement and not worth the effort right now.
   let [
@@ -51,85 +31,6 @@ export default function Graph({ dataPoints, exerciseName }) {
     weightLabels,
     mappedWeightData,
   ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
-
-  //event handler that changes highlighted date range and updates userDayDiff, forcing Graph component to rerender
-  const handleDayDiffChange = (e) => {
-    let newEl = e.target;
-    const oldEl = document.getElementById(userDayDiff);
-    //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
-    //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
-    newEl.id
-      ? setUserDayDiff(newEl.id)
-      : newEl.parentElement.id
-      ? (newEl = newEl.parentElement && setUserDayDiff(newEl.id))
-      : (newEl = oldEl);
-
-    // (newEl = newEl.parentElement);
-    // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
-    if (newEl !== oldEl) {
-      oldEl.classList.remove("user-day-diff__option--pressed");
-      newEl.classList.add("user-day-diff__option--pressed");
-    }
-  };
-
-  //helper function for handleExDispChange - same operation twice
-  const __handleExDisp = (newEl) => {
-    //check if user clicked all
-    if (newEl.id === "all-ex") {
-      const userExDispIds = ["sq", "op", "dl", "bp", "pr"];
-      //all selected? Deselect all but squat
-      if (userExDisp.length === 5) {
-        setUserExDisp([userExDispIds.shift()]);
-        userExDispIds.forEach((elId) => {
-          console.log("elId", elId);
-          const el = document.getElementById(elId);
-          console.log("el", el);
-          el.classList.remove("user-day-diff__option--pressed");
-        });
-      } else {
-        //all not selected? Select all
-        //note: classList.add and remove do nothing if class is already added/not added - no need to check .contains
-        setUserExDisp([...userExDispIds]);
-        userExDispIds.forEach((elId) => {
-          const el = document.getElementById(elId);
-          el.classList.add("user-day-diff__option--pressed");
-        });
-      }
-    } else {
-      const idx = userExDisp.indexOf(newEl.id);
-      //check if id in userExDisp state
-      if (idx === -1) {
-        //if exercise not in userExDisp array, add it
-        setUserExDisp([...userExDisp, newEl.id]);
-        newEl.classList.add("user-day-diff__option--pressed");
-      } else {
-        //if exercise already in userExDisp array AND userExDisp contains more than one entry, remove it
-        if (userExDisp.length > 1) {
-          //if not pressed, add to userExDisp state, toggle
-          setUserExDisp([
-            ...userExDisp.slice(0, idx),
-            ...userExDisp.slice(idx + 1),
-          ]);
-          newEl.classList.remove("user-day-diff__option--pressed");
-        }
-        //if exercise in userExDisp array but only one is selected, do nothing.
-      }
-    }
-  };
-
-  //click handler for exercise display change
-  const handleExDispChange = (e) => {
-    let newEl = e.target;
-    //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
-    //does element have id? - if not, minor styling error
-    if (newEl.id) {
-      __handleExDisp(newEl);
-      //does parent element have id? (sytling issue)
-    } else if (newEl.parentElement.id) {
-      __handleExDisp(newEl.parentElement);
-      //if no id on el or parent, do nothing (styling error)
-    }
-  };
 
   //add pressed class to 1W day diff and squat ex disp options on initial page load
   useEffect(() => {
@@ -240,24 +141,17 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   // color change based on if first weight value is greater/less than last weight value.
 
-  const userDayDiffOptions = [
-    ["1W", 7],
-    ["2W", 14],
-    ["1M", 30],
-    ["3M", 91],
-    ["6M", 182],
-    ["1Y", 365],
-    ["ALL", "ALL"],
-  ];
-
-  const userExerciseDisplayOptions = [
-    ["SQUAT", "sq"],
-    ["OVERHEAD PRESS", "op"],
-    ["DEADLIFT", "dl"],
-    ["BENCH PRESS", "bp"],
-    ["PENDLAY ROW", "pr"],
-  ];
-  const graphLayoutProps = { axisOffset, xRange, yRange, height, width };
+  const graphAxesProps = {
+    graphLayoutProps: { axisOffset, xRange, yRange, height, width },
+    dateLabels,
+    weightLabels,
+  };
+  const userOptionsProps = {
+    userDayDiff,
+    setUserDayDiff,
+    userExDisp,
+    setUserExDisp,
+  };
   return (
     <div className="graph-container">
       <div className="graph-info">
@@ -277,83 +171,13 @@ export default function Graph({ dataPoints, exerciseName }) {
         role="img"
       >
         <title id="title">A plot of {exerciseName} weight over time.</title>
-        <g className="grid x-grid" id="xGrid">
-          <line x1={axisOffset} x2={axisOffset} y1="0" y2={yRange} />
-        </g>
-        <g className="grid y-grid" id="yGrid">
-          <line x1={axisOffset} x2={width} y1={yRange} y2={yRange} />
-        </g>
-        {/* dummy lines to make life easier */}
-        {dummyXLines.map((xCoord, idx) => {
-          return (
-            <g key={idx} className="dummy-grid">
-              <line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
-            </g>
-          );
-        })}
-        {dummyYLines.map((yCoord, idx) => {
-          return (
-            <g key={idx} className="dummy-grid">
-              <line x1={0} x2={1000} y1={yCoord} y2={yCoord} />
-            </g>
-          );
-        })}
-        <g className="labels">
-          <XAxisLabels
-            dateLabels={dateLabels}
-            graphLayoutProps={graphLayoutProps}
-          />
-          <XAxisLabelTitle graphLayoutProps={graphLayoutProps} />
-        </g>
-        <g className="labels">
-          <YAxisLabels
-            weightLabels={weightLabels}
-            graphLayoutProps={graphLayoutProps}
-          />
-          <YAxisLabelTitle graphLayoutProps={graphLayoutProps} />
-        </g>
+        <GraphAxes graphAxesProps={graphAxesProps} />
         <GraphPlotArea
           mappedDateData={mappedDateData}
           mappedWeightData={mappedWeightData}
         />
       </svg>
-      <div className="user-options-container">
-        <div className="user-day-diff__container" onClick={handleDayDiffChange}>
-          {userDayDiffOptions.map(([optionText, optionId], index) => {
-            return (
-              <div
-                id={optionId}
-                key={index}
-                className="user-day-diff__option-container"
-              >
-                <div className="user-day-diff__option">{optionText}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="user-options-container__placeholder"> </div>
-      </div>
-      <div className="user-options-container">
-        <div className="user-day-diff__container" onClick={handleExDispChange}>
-          {userExerciseDisplayOptions.map(
-            ([exerciseName, exerciseId], index) => {
-              return (
-                <div
-                  id={exerciseId}
-                  key={index}
-                  className="user-day-diff__option-container"
-                >
-                  <div className="user-day-diff__option">{exerciseName}</div>
-                </div>
-              );
-            }
-          )}
-          <div id="all-ex" className="user-day-diff__option-container">
-            <div className="user-day-diff__option">ALL</div>
-          </div>
-        </div>
-        <div className="user-options-container__placeholder"> </div>
-      </div>
+      <UserOptions userOptionsProps={userOptionsProps} />
     </div>
   );
 }
@@ -367,3 +191,35 @@ export default function Graph({ dataPoints, exerciseName }) {
 //LINE ELEMENTS
 //e.g. <line x1='10' y1='110' x2='50' y2='150' />
 //I can use these line elements to draw straight lines between each data point. That way, for each data point I can have a line (minus 1)
+
+//DUMMY GRID LINES FROM GRAPH CONSTRUCTION
+//make dummy graph lines so I can see what's happening
+//DELETE once happy
+// let dummyXLines = [];
+// let dummyYLines = [];
+// let i = 0;
+// while (i<= Math.floor(width/100)) {
+//   dummyXLines.push(axisOffset + i * xRange/Math.floor(width/100));
+//   i++;
+// }
+// i = 0;
+// while (i <= Math.floor(height/50)) {
+//   i++;
+//   dummyYLines.push(i * yRange/Math.floor(yRange/50));
+// }
+//JSX DUMMY LINE STUFF
+// {/* dummy lines to make life easier */}
+// {dummyXLines.map((xCoord, idx) => {
+// 	return (
+// 		<g key={idx} className="dummy-grid">
+// 			<line x1={xCoord} x2={xCoord} y1={0} y2={1000} />
+// 		</g>
+// 	);
+// })}
+// {dummyYLines.map((yCoord, idx) => {
+// 	return (
+// 		<g key={idx} className="dummy-grid">
+// 			<line x1={0} x2={1000} y1={yCoord} y2={yCoord} />
+// 		</g>
+// 	);
+// })}
