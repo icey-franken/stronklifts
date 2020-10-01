@@ -30,6 +30,7 @@ html, body {
   font-size: 32px;
 }
 .graph {
+	/* border: 1px solid black; */
 }
 
 /* formatting for graph itself */
@@ -44,22 +45,26 @@ html, body {
 
 .label-title {
   font-weight: bold;
-  font-size: 1.5em;
+	font-size: 1.5em;
 }
 
 .y-label-title {
-  transform: rotate(-90deg);
+  transform: rotate(-90deg) translate(0,-0.5em);
   text-anchor: middle;
+}
+
+.x-label-title {
+	transform: translate(0, 0.8em)
 }
 
 .x-label {
   text-anchor: middle;
   /* transform-origin: center; */
-  transform: translate(0.3em) rotate(45deg);
+  transform: translate(0.3em, 0.4em) rotate(45deg);
 }
 .y-label {
 	text-anchor: end;
-  transform: translate(1.2em, 0.4em);
+  transform: translate(0.8em, 0em);
 }
 
 .grid {
@@ -80,7 +85,8 @@ html, body {
 	display: flex;
 	/* flex-direction: row; */
 	justify-content: space-between;
-  border-bottom: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+	margin-bottom: 20px;
 }
 
 
@@ -93,7 +99,7 @@ html, body {
 }
 
 .user-day-diff__option-container {
-  padding-top: px;
+  /* margin-bottom: 20px; */
   /* z-index: 1; */
   line-height: 20px;
   /* display: inline-block; */

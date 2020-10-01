@@ -15,7 +15,7 @@ export default function Graph({ dataPoints, exerciseName }) {
 
   //margin and axisOffset will probably remain constant
   const xMargin = 50;
-  const axisOffset = 100;
+  const axisOffset = 70;
 
   //plot ranges are based on previous inputs!
   const yRange = height - axisOffset;
@@ -66,56 +66,81 @@ export default function Graph({ dataPoints, exerciseName }) {
     }
   };
 
+  const userExDispIds = ["sq", "op", "dl", "bp", "pr"];
+
   const handleExDispChange = (e) => {
     let newEl = e.target;
     // const oldEl = document.getElementById(userDayDiff);
     //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
     //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
     let selectedIds = [...userExDisp]; //array of selected exercises
+    //ensure clicked element has an id - if not, minor styling error
     if (newEl.id) {
-      //check if id in userExDisp state
-      const idx = selectedIds.indexOf(newEl.id);
-      if (idx === -1) {
-        //if pressed, remove from userExDisp state, toggle
-        selectedIds.push(newEl.id);
-        setUserExDisp([...selectedIds]);
-        newEl.classList.add("user-day-diff__option--pressed");
-      } else {
-        //if not pressed, add to userExDisp state, toggle
-        selectedIds.splice(idx, 1);
-        setUserExDisp([...selectedIds]);
-        newEl.classList.remove("user-day-diff__option--pressed");
-      }
+      __handleExDisp(newEl);
+      //see if the parent element has the id we're looking for
     } else if (newEl.parentElement.id) {
-      newEl = newEl.parentElement;
-      const idx = selectedIds.indexOf(newEl.id);
-      if (idx === -1) {
-        //if pressed, remove from userExDisp state, toggle
-        selectedIds.push(newEl.id);
-        setUserExDisp([...selectedIds]);
-        newEl.classList.add("user-day-diff__option--pressed");
-      } else {
-        //if not pressed, add to userExDisp state, toggle
-        selectedIds.splice(idx, 1);
-        setUserExDisp([...selectedIds]);
-        newEl.classList.remove("user-day-diff__option--pressed");
-      }
+      __handleExDisp(newEl.parentElement);
+      //if neither - do nothing
+    } else {
+      return;
     }
 
+    //helper function because we do the same exact operation twice in a row - once checking if parent element
+    const __handleExDisp = (element) => {
+      //check if id in userExDisp state
+      if (newEl.id === "all-ex") {
+        if (userExDisp.length === 5) {
+          //if all already selected, we want to unselect all
+        }
+      } else {
+        const idx = selectedIds.indexOf(newEl.id);
+        if (idx === -1) {
+          //if pressed, remove from userExDisp state, toggle
+          selectedIds.push(newEl.id);
+          setUserExDisp([...selectedIds]);
+          newEl.classList.add("user-day-diff__option--pressed");
+        } else {
+          //if not pressed, add to userExDisp state, toggle
+          selectedIds.splice(idx, 1);
+          setUserExDisp([...selectedIds]);
+          newEl.classList.remove("user-day-diff__option--pressed");
+        }
+      }
+    };
     console.log(selectedIds);
     console.log(userExDisp);
-    // newEl.id ? setUserExDisp(newEl.id) : (newEl = newEl.parentElement);
-    // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
-    // if (newEl !== oldEl) {
-    //   oldEl.classList.remove("user-day-diff__option--pressed");
-    //   newEl.classList.add("user-day-diff__option--pressed");
-    // }
   };
+
+  // } else if (newEl.parentElement.id) {
+  //   newEl = newEl.parentElement;
+  //   const idx = selectedIds.indexOf(newEl.id);
+  //   if (idx === -1) {
+  //     //if pressed, remove from userExDisp state, toggle
+  //     selectedIds.push(newEl.id);
+  //     setUserExDisp([...selectedIds]);
+  //     newEl.classList.add("user-day-diff__option--pressed");
+  //   } else {
+  //     //if not pressed, add to userExDisp state, toggle
+  //     selectedIds.splice(idx, 1);
+  //     setUserExDisp([...selectedIds]);
+  //     newEl.classList.remove("user-day-diff__option--pressed");
+  //   }
+  // }
+
+  // newEl.id ? setUserExDisp(newEl.id) : (newEl = newEl.parentElement);
+  // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
+  // if (newEl !== oldEl) {
+  //   oldEl.classList.remove("user-day-diff__option--pressed");
+  //   newEl.classList.add("user-day-diff__option--pressed");
+  // }
+  // };
 
   //adds pressed class to 1W option on initial page load - do same for exercise selection button.
   useEffect(() => {
     const defaultRange = document.getElementById(userDayDiff);
     defaultRange.classList.add("user-day-diff__option--pressed");
+    const defaultExercise = document.getElementById(userExDisp[0]);
+    defaultExercise.classList.add("user-day-diff__option--pressed");
   }, []);
 
   //grab only data within the user selected userDayDiff range
@@ -158,7 +183,7 @@ export default function Graph({ dataPoints, exerciseName }) {
   // generate x axis labels based on current day and userDayDiff input
   //TODO: add logic that changes dates to months if 3month view selected?
   function makeXLabels(dateRange, nowMs, msPerDay) {
-    const startDateMs = nowMs - msPerDay * dateRange;
+    // const startDateMs = nowMs - msPerDay * dateRange;
     // const numXLabels = Math.floor(width/100);
     const numXLabels = 8;
     let xLabelSpacing = msPerDay;
@@ -350,6 +375,9 @@ export default function Graph({ dataPoints, exerciseName }) {
               </div>
             );
           })}
+          <div id="all-ex" className="user-day-diff__option-container">
+            <div className="user-day-diff__option">ALL</div>
+          </div>
           <div className="user-options-container__placeholder"> </div>
         </div>
       </div>
