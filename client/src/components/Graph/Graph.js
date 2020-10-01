@@ -44,6 +44,9 @@ export default function Graph({ dataPoints, exerciseName }) {
   //GRAB RELEVANT DATA POINTS BASED ON USER INPUT AND SPLIT------
   //extract only data relevant to the selected userDayDiff
   function grabRelevantDataPoints(userDayDiff, dataPoints) {
+    if (userDayDiff === "ALL") {
+      return dataPoints;
+    }
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
     //dataPoints array is sorted from oldest to most recent workout.
@@ -76,17 +79,28 @@ export default function Graph({ dataPoints, exerciseName }) {
     return [xDataDate, yDataWeight];
   }
 
+  function calculateDateRange(userDayDiff, oldestDate) {
+    const nowMs = Date.now(); //constant used for date range calcs
+    const msPerDay = 8.64e7; //constant used to convert ms to days
+    let dateRange = userDayDiff;
+    if (userDayDiff === "ALL") {
+      const dateMs = new Date(oldestDate);
+      dateRange = (nowMs - dateMs) / msPerDay + 1;
+    }
+    return dateRange;
+  }
+
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
   //use relevant date data points to construct xDataIdx
-  function generateXDataIdx(xDataDate, userDayDiff) {
+  function generateXDataIdx(xDataDate, dateRange) {
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
     let xDataIdx = [];
     xDataDate.forEach((sqlDate) => {
       const dateMs = new Date(sqlDate);
       const dayDiff = (nowMs - dateMs) / msPerDay;
-      xDataIdx.push(1 - dayDiff / userDayDiff);
+      xDataIdx.push(1 - dayDiff / dateRange);
     });
     return xDataIdx;
   }
@@ -116,7 +130,8 @@ export default function Graph({ dataPoints, exerciseName }) {
   //USE FUNCTIONS TO CALCULATE VALUES-------------------------
   const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
   const [xData, yData] = separateDateAndWeight(relevantDataPoints);
-  const xDataIdx = generateXDataIdx(xData, userDayDiff);
+  const dateRange = calculateDateRange(userDayDiff, xData[0]);
+  const xDataIdx = generateXDataIdx(xData, dateRange);
   const yDataIdx = generateYDataIdx(yData);
   const mappedDateData = mapXIdxToDataPoints(xDataIdx);
   const mappedWeightData = mapYIdxToDataPoints(yDataIdx);
@@ -131,7 +146,7 @@ export default function Graph({ dataPoints, exerciseName }) {
   const minWeight = Math.min(...yData) - 5;
   const graphAxesProps = {
     graphLayoutProps,
-    userDayDiff,
+    dateRange,
     minWeight,
     maxWeight,
   };

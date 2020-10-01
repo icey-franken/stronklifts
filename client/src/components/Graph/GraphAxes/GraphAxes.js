@@ -8,14 +8,14 @@ import {
 } from ".";
 
 export default function GraphAxes({ graphAxesProps }) {
-  const { graphLayoutProps, userDayDiff, minWeight, maxWeight } = graphAxesProps;
+  const { graphLayoutProps, dateRange, minWeight, maxWeight } = graphAxesProps;
   //again - I am doing too much threading. I should add this stuff to the store and grab from there in my next refactor.
   return (
     <>
       <AxisLines graphLayoutProps={graphLayoutProps} />
       <g className="labels">
         <XAxisLabels
-          userDayDiff={userDayDiff}
+          dateRange={dateRange}
           graphLayoutProps={graphLayoutProps}
         />
         <XAxisLabelTitle graphLayoutProps={graphLayoutProps} />
