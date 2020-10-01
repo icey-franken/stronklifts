@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Graph from "../components/Graph";
+import Graph from "../components/Graph/Graph";
 
 export default function GraphPage() {
   const exercises = useSelector((state) => state.exercises);
