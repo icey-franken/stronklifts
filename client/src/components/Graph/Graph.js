@@ -9,6 +9,18 @@ export default function Graph({ dataPoints, exerciseName }) {
   // this is how I got the buttons to work properly
   const [userDayDiff, setUserDayDiff] = useState("7");
   const [userExDisp, setUserExDisp] = useState(["sq"]);
+
+  //add pressed class to 1W day diff and squat ex disp options on initial page load
+  useEffect(() => {
+    const defaultRange = document.getElementById(userDayDiff);
+    defaultRange.classList.add("user-day-diff__option--pressed");
+    const defaultExercise = document.getElementById(userExDisp[0]);
+    defaultExercise.classList.add("user-day-diff__option--pressed");
+  }, []);
+
+  //-------------------------------------------------------------
+  //-------------------------------------------------------------
+  //SET GRAPH LAYOUT PROPS
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
   const width = 600;
@@ -22,90 +34,106 @@ export default function Graph({ dataPoints, exerciseName }) {
   const yRange = height - axisOffset;
   const xRange = width - axisOffset - xMargin;
 
-  //these are recreated on every rerender - makes sense.
-  //slight optimization would be to check if max/min weights change - then we don't need to change any y data, but this is a slight improvement and not worth the effort right now.
-	//fix this so that min and max weight come from somewhere else - SRP!!!
-	let [
-    mappedDateData,
-    mappedWeightData,
-		minWeight,
-		maxWeight
-  ] = grabDataForUserDayDiff(userDayDiff, dataPoints);
+  //bundle values together to be sent to nested components
+  const graphLayoutProps = { axisOffset, xRange, yRange, height, width };
 
-  //add pressed class to 1W day diff and squat ex disp options on initial page load
-  useEffect(() => {
-    const defaultRange = document.getElementById(userDayDiff);
-    defaultRange.classList.add("user-day-diff__option--pressed");
-    const defaultExercise = document.getElementById(userExDisp[0]);
-    defaultExercise.classList.add("user-day-diff__option--pressed");
-  }, []);
+  //-------------------------------------------------------------
+  //-------------------------------------------------------------
+  //DEFINE FUNCTIONS TO BE USED IN GRAPH CONSTRUCTION
 
-  //grab only data within the user selected userDayDiff range
-  //put data in separate arrays for x and y data
-  //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
-  function grabDataForUserDayDiff(userDayDiff, dataPoints) {
+  //GRAB RELEVANT DATA POINTS BASED ON USER INPUT AND SPLIT------
+  //extract only data relevant to the selected userDayDiff
+  function grabRelevantDataPoints(userDayDiff, dataPoints) {
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
-    // let xDataDate = []; //don't need
-    let xDataIdx = [];
+    //dataPoints array is sorted from oldest to most recent workout.
+    //so, start at end of datapoints array and find index at which dayDiff is greater than userDayDiff
+    //slice dataPoints from there and return that - that is your relevant dataPoints array.
+    const calcDayDiff = (index) => {
+      //so that error not thrown when checking oldest data point
+      if (index >= 0) {
+        return (nowMs - new Date(dataPoints[index][0])) / msPerDay;
+      }
+    };
+    //consider changing from checking based on ms to checking based on day (e.g. so that a lift that happened early in the morning 7 days ago isn't excluded if graph used at night - for now it's fine)
+    let i = dataPoints.length - 1;
+    let dayDiff = calcDayDiff(i);
+    while (dayDiff < userDayDiff && i >= 0) {
+      i--;
+      dayDiff = calcDayDiff(i);
+    }
+    //if i goes down to -1 (all workouts valid) then we end up returning the entire dataPoints array.
+    return dataPoints.slice(i + 1);
+  }
+  //separate date and weight to use in generating data idx arrays
+  function separateDateAndWeight(relevantDataPoints) {
+    let xDataDate = [];
     let yDataWeight = [];
-    let yDataIdx = [];
-    dataPoints.forEach(([sqlDate, weight]) => {
+    relevantDataPoints.forEach(([date, weight]) => {
+      xDataDate.push(date);
+      yDataWeight.push(weight);
+    });
+    return [xDataDate, yDataWeight];
+  }
+
+  //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
+  //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
+  //use relevant date data points to construct xDataIdx
+  function generateXDataIdx(xDataDate, userDayDiff) {
+    const nowMs = Date.now(); //constant used for date range calcs
+    const msPerDay = 8.64e7; //constant used to convert ms to days
+    let xDataIdx = [];
+    xDataDate.forEach((sqlDate) => {
       const dateMs = new Date(sqlDate);
       const dayDiff = (nowMs - dateMs) / msPerDay;
-      if (dayDiff < userDayDiff) {
-        // xDataDate.push(dateMs); //don't need xDataDate
-        xDataIdx.push(1 - dayDiff / userDayDiff); //do this while we're here
-        yDataWeight.push(weight);
-      }
+      xDataIdx.push(1 - dayDiff / userDayDiff);
     });
-    //at this point we have xDataIdx array and yDataWeight array
-    //we need full yDataWeight array in order to construct yDataIdx
-    //we can do that here:
+    return xDataIdx;
+  }
+  //use relevant weight data points to construct xDataIdx
+  function generateYDataIdx(yDataWeight) {
+    let yDataIdx = [];
     const maxWeight = Math.max(...yDataWeight) + 5;
     const minWeight = Math.min(...yDataWeight) - 5;
     yDataWeight.forEach((weight) => {
       //generate weight scalar array
       yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
     });
-    //NEED WEIGHT LABELS AND DATELABELS ARRAY
-    return [
-      mapXIdxToDataPoints(xDataIdx),
-			mapYIdxToDataPoints(yDataIdx),
-			minWeight,
-			maxWeight
-    ];
+    return yDataIdx;
   }
 
-  // generate x axis labels based on current day and userDayDiff input
-  //TODO: add logic that changes dates to months if 3month view selected?
-
-
-
-
+  //MAP IDX ARRAYS TO DATA POINTS-------------------------------
   //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
   function mapXIdxToDataPoints(xDataIdx) {
     return xDataIdx.map((x) => axisOffset + xRange * x);
   }
-
   function mapYIdxToDataPoints(yDataIdx) {
     return yDataIdx.map((y) => (1 - y) * yRange);
   }
 
-  //I think this check is no longer necessary.
-  // if (!mappedDateData) {
-  //   return null;
-  // }
-
-  //build functions that create the axis in html later
+  //-------------------------------------------------------------
+  //-------------------------------------------------------------
+  //USE FUNCTIONS TO CALCULATE VALUES-------------------------
+  const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
+  const [xData, yData] = separateDateAndWeight(relevantDataPoints);
+  const xDataIdx = generateXDataIdx(xData, userDayDiff);
+  const yDataIdx = generateYDataIdx(yData);
+  const mappedDateData = mapXIdxToDataPoints(xDataIdx);
+  const mappedWeightData = mapYIdxToDataPoints(yDataIdx);
 
   // color change based on if first weight value is greater/less than last weight value.
 
+  //-------------------------------------------------------------
+  //-------------------------------------------------------------
+  //PROPS TO PASS TO VARIOUS GRAPH COMPONENTS---------------------
+  //later on you should add these things to the store to avoid unnecessary rerenders of components due to prop threading.
+  const maxWeight = Math.max(...yData) + 5;
+  const minWeight = Math.min(...yData) - 5;
   const graphAxesProps = {
-    graphLayoutProps: { axisOffset, xRange, yRange, height, width },
+    graphLayoutProps,
     userDayDiff,
-		minWeight,
-		maxWeight
+    minWeight,
+    maxWeight,
   };
   const userOptionsProps = {
     userDayDiff,
@@ -113,6 +141,7 @@ export default function Graph({ dataPoints, exerciseName }) {
     userExDisp,
     setUserExDisp,
   };
+
   return (
     <div className="graph-container">
       <div className="graph-info">
@@ -143,6 +172,10 @@ export default function Graph({ dataPoints, exerciseName }) {
   );
 }
 
+//-------------------------------------------------------------
+//-------------------------------------------------------------
+//GARBAGE TO BE DELETED
+//-------------------------------------------------------------
 //CIRCLE ELEMENTS
 // <circle cx='25' cy='75' r='20'/>
 // where cx and cy are position from center of circle and r is radius. All data points should be same size.

@@ -2,6 +2,9 @@ import React from "react";
 import { plotDateFormat } from "../../utils/Formatter";
 
 export default function XAxisLabels({ userDayDiff, graphLayoutProps }) {
+  // generate x axis labels based on current day and userDayDiff input
+  //TODO: add logic that changes dates to months if 3month view selected?
+
   const { axisOffset, xRange, height } = graphLayoutProps;
 
   const makeXLabels = (dateRange) => {
@@ -24,8 +27,8 @@ export default function XAxisLabels({ userDayDiff, graphLayoutProps }) {
     return dateLabels;
   };
 
-	//we call makeXLabels in the return so that the labels are regenerated on each render.
-	//once I put stuff in the store I can do things differently. For now, this works just fine.
+  //we call makeXLabels in the return so that the labels are regenerated on each render.
+  //once I put stuff in the store I can do things differently. For now, this works just fine.
   return makeXLabels(userDayDiff).map((date, index, dateLabels) => {
     return (
       <text

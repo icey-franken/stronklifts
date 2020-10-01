@@ -2,7 +2,7 @@ import React from 'react';
 
 
 export default function GraphPlotArea({mappedDateData, mappedWeightData}) {
-	console.log(mappedDateData);
+	// console.log(mappedDateData);
 
 
   function buildPlotArea(mappedDateData, mappedWeightData) {
