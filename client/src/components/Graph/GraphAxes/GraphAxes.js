@@ -8,7 +8,7 @@ import {
 } from ".";
 
 export default function GraphAxes({ graphAxesProps }) {
-  const { graphLayoutProps, dateRange, minWeight, maxWeight } = graphAxesProps;
+  const { graphLayoutProps, dateRange, weightRange } = graphAxesProps;
   //again - I am doing too much threading. I should add this stuff to the store and grab from there in my next refactor.
   return (
     <>
@@ -22,8 +22,7 @@ export default function GraphAxes({ graphAxesProps }) {
       </g>
       <g className="labels">
         <YAxisLabels
-					minWeight={minWeight}
-					maxWeight={maxWeight}
+					weightRange={weightRange}
           graphLayoutProps={graphLayoutProps}
         />
         <YAxisLabelTitle graphLayoutProps={graphLayoutProps} />

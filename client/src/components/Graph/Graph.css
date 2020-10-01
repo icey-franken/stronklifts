@@ -32,6 +32,9 @@ html, body {
 .graph {
 	/* border: 1px solid black; */
 }
+/* .hidden{
+	display: none;
+} */
 
 /* formatting for graph itself */
 .data-line {

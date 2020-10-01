@@ -4,14 +4,12 @@ import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
 
-export default function Graph({
-  dataPointsArr,
-  exerciseNamesArr
-}) {
-	const dataPoints = dataPointsArr[0];
-	const exerciseName = exerciseNamesArr[0];
+export default function Graph({ workoutData }) {
+  const dataPoints = workoutData.sq.dataPoints;
+	const exerciseName = workoutData.sq.exerciseName;
+	console.log(dataPoints, exerciseName);
 
-	//whenever userDayDiff is changed the entire component rerenders
+  //whenever userDayDiff is changed the entire component rerenders
   // this is how I got the buttons to work properly
   const [userDayDiff, setUserDayDiff] = useState("7");
   const [userExDisp, setUserExDisp] = useState(["sq"]);
@@ -86,70 +84,48 @@ export default function Graph({
   }
 
   function calculateDateRange(userDayDiff, oldestDate) {
-    const nowMs = Date.now(); //constant used for date range calcs
-    const msPerDay = 8.64e7; //constant used to convert ms to days
-    let dateRange = userDayDiff;
-    if (userDayDiff === "ALL") {
-      const dateMs = new Date(oldestDate);
-      dateRange = (nowMs - dateMs) / msPerDay + 1;
+    if (userDayDiff !== "ALL") {
+      return userDayDiff;
     }
-    return dateRange;
-  }
-
-  //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
-  //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
-  //use relevant date data points to construct xDataIdx
-  function generateXDataIdx(xDataDate, dateRange) {
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
-    let xDataIdx = [];
-    xDataDate.forEach((sqlDate) => {
-      const dateMs = new Date(sqlDate);
-      const dayDiff = (nowMs - dateMs) / msPerDay;
-      xDataIdx.push(1 - dayDiff / dateRange);
-    });
-    return xDataIdx;
-  }
-  //use relevant weight data points to construct xDataIdx
-  function generateYDataIdx(yDataWeight, minWeight, maxWeight) {
-    let yDataIdx = [];
-    yDataWeight.forEach((weight) => {
-      //generate weight scalar array
-      yDataIdx.push((weight - minWeight) / (maxWeight - minWeight));
-    });
-    return yDataIdx;
-  }
-
-  //MAP IDX ARRAYS TO DATA POINTS-------------------------------
-  //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
-  function mapXIdxToDataPoints(xDataIdx) {
-    return xDataIdx.map((x) => axisOffset + xRange * x);
-  }
-  function mapYIdxToDataPoints(yDataIdx) {
-    return yDataIdx.map((y) => (1 - y) * yRange);
+    const dateMs = new Date(oldestDate);
+    const dateRange = (nowMs - dateMs) / msPerDay + 1;
+    return dateRange;
   }
 
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //USE FUNCTIONS TO CALCULATE VALUES-------------------------
-	//data points will eventually be an array - we will grab relevant data points for each array.
+  //data points will eventually be an array - we will grab relevant data points for each array.
 	//it might be smarter to separate relevant datapoints in upper component but this will work for now
-	const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
-  const [xData, yData] = separateDateAndWeight(relevantDataPoints);
-	const dateRange = calculateDateRange(userDayDiff, xData[0]);
-	//TODO - update these so that it selects the very max weight based on all selected exercises
 
-	const minWeight = Math.min(...yData) - 5;
-	const maxWeight = Math.max(...yData) + 5;
-  const xDataIdx = generateXDataIdx(xData, dateRange);
-  const yDataIdx = generateYDataIdx(yData, minWeight, maxWeight);
-  const mappedDateData = mapXIdxToDataPoints(xDataIdx);
-  const mappedWeightData = mapYIdxToDataPoints(yDataIdx);
+//
+// const dataObj = {selectedExercises: userExDisp,}
+
+// function constructRelevantDataObj(userExDisp, userDayDiff) {
+// 	console.log(userExDisp);
+// 	const selectedExercises = [...userExDisp];
+// 	const dataObj = {}
+// 	selectedExercises.forEach(exercise=>{
+// 		dataObj[exercise] =
+// 	})
+// }
+
+
+  const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
+  const [xData, yData] = separateDateAndWeight(relevantDataPoints);
+
+  //TODO - update these so that it selects the very max weight based on all selected exercises
+  const minWeight = Math.min(...yData) - 5;
+  const maxWeight = Math.max(...yData) + 5;
+  const weightRange = [minWeight, maxWeight];
+  const dateRange = calculateDateRange(userDayDiff, xData[0]);
 
   // const relevantDataPoints2 = grabRelevantDataPoints(userDayDiff, dataPoints2);
-	// const [xData2, yData2] = separateDateAndWeight(relevantDataPoints2);
-	// const minWeight2 = Math.min(...yData2) - 5;
-	// const maxWeight2 = Math.max(...yData2) + 5;
+  // const [xData2, yData2] = separateDateAndWeight(relevantDataPoints2);
+  // const minWeight2 = Math.min(...yData2) - 5;
+  // const maxWeight2 = Math.max(...yData2) + 5;
   // // const dateRange = calculateDateRange(userDayDiff, xData[0]);
   // const xDataIdx2 = generateXDataIdx(xData2, dateRange);
   // const yDataIdx2 = generateYDataIdx(yData2, minWeight2, maxWeight2);
@@ -175,8 +151,7 @@ export default function Graph({
   const graphAxesProps = {
     graphLayoutProps,
     dateRange,
-    minWeight,
-    maxWeight,
+    weightRange,
   };
   const userOptionsProps = {
     userDayDiff,
@@ -205,10 +180,15 @@ export default function Graph({
       >
         <title id="title">A plot of {exerciseName} weight over time.</title>
         <GraphAxes graphAxesProps={graphAxesProps} />
-        <GraphPlotArea
-          mappedDateData={mappedDateData}
-          mappedWeightData={mappedWeightData}
-        />
+        <g>
+          <GraphPlotArea
+            xData={xData}
+            yData={yData}
+            dateRange={dateRange}
+            weightRange={weightRange}
+            graphLayoutProps={graphLayoutProps}
+          />
+        </g>
         {/* <GraphPlotArea
           mappedDateData={mappedDateData2}
           mappedWeightData={mappedWeightData2}

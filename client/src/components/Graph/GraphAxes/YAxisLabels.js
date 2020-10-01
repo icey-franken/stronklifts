@@ -1,11 +1,11 @@
 import React from "react";
 
-export default function YAxisLabels({ minWeight, maxWeight, graphLayoutProps }) {
+export default function YAxisLabels({ weightRange, graphLayoutProps }) {
 	const {axisOffset, yRange} = graphLayoutProps;
 
 	// generate y axis labels based on min and max weight values
   //TODO: implement a user option to view a zoomed in plot or a plot from 0 to max weight.
-  const makeYLabels = (minWeight, maxWeight) => {
+  const makeYLabels = ([minWeight, maxWeight]) => {
     const numYLabels = Math.floor(yRange / 50);
     let numHiddenLabels = 0;
     let i = 5;
@@ -27,7 +27,7 @@ export default function YAxisLabels({ minWeight, maxWeight, graphLayoutProps }) 
     return weightLabels;
   }
 
-  return makeYLabels(minWeight, maxWeight).map((weight, index, weightLabels) => {
+  return makeYLabels(weightRange).map((weight, index, weightLabels) => {
     return (
       <text
         className="y-label"

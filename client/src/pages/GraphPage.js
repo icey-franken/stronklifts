@@ -30,26 +30,36 @@ export default function GraphPage() {
     }
   });
   //just squat data for now to simplify progress on graph component
-  let dataPointsArr = [
-    squatData,
-    overheadData,
-    deadliftData,
-    benchData,
-    rowData,
-  ];
-  let exerciseNamesArr = [
-    "Squat",
-    "Overhead Press",
-    "Deadlift",
-    "Bench Press",
-    "Pendlay Row",
-  ];
+  // let dataPointsArr = [
+  //   squatData,
+  //   overheadData,
+  //   deadliftData,
+  //   benchData,
+  //   rowData,
+  // ];
+  // let exerciseNamesArr = [
+  //   "Squat",
+  //   "Overhead Press",
+  //   "Deadlift",
+  //   "Bench Press",
+  //   "Pendlay Row",
+  // ];
+
+  const workoutData = {
+    sq: { exerciseName: "Squat", dataPoints: squatData },
+    op: { exerciseName: "Overhead Press", dataPoints: overheadData },
+    dl: { exerciseName: "Deadlift", dataPoints: deadliftData },
+    bp: { exerciseName: "Bench Press", dataPoints: benchData },
+    pr: { exerciseName: "Pendlay Row", dataPoints: rowData },
+  };
+
   return (
     <div className="graph-page-container">
       <div className="graph-page-container">hi from graph page</div>
       <Graph
-        dataPointsArr={dataPointsArr}
-        exerciseNamesArr={exerciseNamesArr}
+        workoutData={workoutData}
+        // dataPointsArr={dataPointsArr}
+        // exerciseNamesArr={exerciseNamesArr}
       />
       {/* {graphData.map((dataPoints, index)=><Graph key={index} dataPointsArr={dataPointsArr} dataPoints2={overheadData} exerciseName={graphNames[index]} exerciseName2={graphNames[index+1]}/>)} */}
     </div>
