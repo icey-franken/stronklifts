@@ -1,0 +1,126 @@
+/* formatting for overall graph page */
+html,
+body {
+  /* height: fit-content; */
+  /* width: 95%; */
+  /* overflow-y: visible !important; */
+  overflow-x: hidden !important;
+}
+
+.graph-page-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 24px !important;
+  height: 100%;
+  width: 100%;
+}
+
+/* formatting for each graph */
+.graph-container {
+  font-family: "Capsule Sans Text", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  margin: 0 auto;
+  /* display: flex;
+	flex-direction: column; */
+  /* padding: 0 6px; */
+}
+
+.graph-info {
+  font-size: 32px;
+}
+.graph {
+  /* border: 1px solid black; */
+}
+/* .hidden{
+	display: none;
+} */
+
+/* formatting for graph itself */
+/* .data-line {
+  stroke: #d22e2e;
+  stroke-width: 1.5;
+}
+
+.data-point, .data-line {
+	fill: #d22e2e;
+  stroke: #d22e2e;
+  stroke-width: 1.5;
+} */
+
+.label-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.y-label-title {
+  transform: rotate(-90deg) translate(0, -0.5em);
+  text-anchor: middle;
+}
+
+.x-label-title {
+  transform: translate(0, 0.8em);
+}
+
+.x-label {
+  text-anchor: middle;
+  /* transform-origin: center; */
+  transform: translate(0.3em, 0.4em) rotate(45deg);
+}
+.y-label {
+  text-anchor: end;
+  transform: translate(0.8em, 0em);
+}
+
+.grid {
+  stroke: black;
+}
+
+.dummy-grid {
+  stroke: #c0c0c0;
+  z-index: -1;
+}
+
+/* formatting for graph view options */
+.user-options-container {
+  font-size: 13px;
+  margin-left: -12px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  display: flex;
+  /* flex-direction: row; */
+  justify-content: space-between;
+  border-bottom: 1px solid #c0c0c0;
+  margin-bottom: 20px;
+}
+
+.user-day-diff__container,
+.user-ex-disp__container {
+  display: flex;
+}
+
+.user-day-diff__container:hover,
+.user-ex-disp__container:hover {
+  cursor: pointer;
+}
+
+.user-day-diff__option-container {
+  /* margin-bottom: 20px; */
+  /* z-index: 1; */
+  line-height: 20px;
+  /* display: inline-block; */
+}
+
+.user-day-diff__option-container:hover {
+  color: #d22e2e;
+}
+
+.user-day-diff__option {
+  margin: 0 12px -2px;
+  padding-bottom: 12px;
+  pointer-events: none;
+}
+
+.user-day-diff__option--pressed > div {
+  color: #f02e2e;
+  border-bottom: 2px solid #f02e2e;
+}

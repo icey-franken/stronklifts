@@ -31,3 +31,11 @@ export function longDateFormat(date) {
 	dateArr.forEach((el) => (dateStr += el.value));
 	return dateStr
 }
+
+export function plotDateFormat(rawDate) {
+	const date = new Date(rawDate)
+	const dd = date.getDate();
+	const mm = date.getMonth()+1;
+	const formattedDate = `${mm}/${dd}`;
+	return formattedDate;
+}
