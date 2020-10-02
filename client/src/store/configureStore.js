@@ -6,15 +6,18 @@ import progress from './progress';
 import exercises from './exercises';
 import sets from './sets';
 import graph from './graph';
-
-
+import rawGraphData from './rawGraphData'
+import relevantGraphData from './relevantGraphData'
+//change graph to be about graph settings and user options?
 const rootReducer = combineReducers({
 	auth,
 	workouts,
 	progress,
 	exercises,
 	sets,
-	graph
+	graph,
+	rawGraphData,
+	relevantGraphData,
 });
 
 let storeEnhancer;
