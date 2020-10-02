@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./Graph.css";
 import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
 
-export default function Graph({ workoutData }) {
-  //whenever userDayDiff is changed the entire component rerenders
-  // this is how I got the buttons to work properly
+export default function Graph() {
+  const workoutData = useSelector((state) => state.graph);
   const [userDayDiff, setUserDayDiff] = useState("7");
   const [userExDisp, setUserExDisp] = useState(["sq"]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  //apparently this is necessary if I'm going to use redux store
+  useEffect(() => {
+    setIsLoaded(true);
+  }, [workoutData]);
 
   //add pressed class to 1W day diff and squat ex disp options on initial page load
   useEffect(() => {
-    const defaultRange = document.getElementById(userDayDiff);
-    defaultRange.classList.add("user-day-diff__option--pressed");
-    const defaultExercise = document.getElementById(userExDisp[0]);
-    defaultExercise.classList.add("user-day-diff__option--pressed");
+    const dayDiffEl = document.getElementById(userDayDiff);
+    const exDispEl = document.getElementById(userExDisp[0]);
+    //check so that no error - dependency array not working like I expect - doesn't seem to matter what I put in it
+    if (dayDiffEl && exDispEl) {
+      dayDiffEl.classList.add("user-day-diff__option--pressed");
+      exDispEl.classList.add("user-day-diff__option--pressed");
+    }
   });
+
+  //without this, everything is fucked
+  if (!isLoaded) {
+    return null;
+  }
 
   //-------------------------------------------------------------
   //-------------------------------------------------------------
@@ -43,9 +57,9 @@ export default function Graph({ workoutData }) {
 
   //GRAB RELEVANT DATA POINTS BASED ON USER INPUT AND SPLIT------
   //FOR SINGLE EXERCISE - extract only data relevant to the selected userDayDifF
-  function grabRelevantDataPoints(userDayDiff, dataPoints) {
+  function grabRelevantDataPoints(userDayDiff, dateData, weightData) {
     if (userDayDiff === "ALL") {
-      return dataPoints;
+      return [dateData, weightData];
     }
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
@@ -55,39 +69,32 @@ export default function Graph({ workoutData }) {
     const calcDayDiff = (index) => {
       //so that error not thrown when checking oldest data point
       if (index >= 0) {
-        return (nowMs - new Date(dataPoints[index][0])) / msPerDay;
+        return (nowMs - new Date(dateData[index])) / msPerDay;
       }
     };
     //consider changing from checking based on ms to checking based on day (e.g. so that a lift that happened early in the morning 7 days ago isn't excluded if graph used at night - for now it's fine)
-    let i = dataPoints.length - 1;
+    let i = dateData.length - 1;
     let dayDiff = calcDayDiff(i);
     while (dayDiff < userDayDiff && i >= 0) {
       i--;
       dayDiff = calcDayDiff(i);
     }
     //if i goes down to -1 (all workouts valid) then we end up returning the entire dataPoints array.
-    return dataPoints.slice(i + 1);
+    return [dateData.slice(i + 1), weightData.slice(i + 1)];
   }
-  //FOR SINGLE EXERCISE - separate date and weight to use in generating data idx arrays
-  function separateDateAndWeight(relevantDataPoints) {
-    let xDataDate = [];
-    let yDataWeight = [];
-    relevantDataPoints.forEach(([date, weight]) => {
-      xDataDate.push(date);
-      yDataWeight.push(weight);
-    });
-    return [xDataDate, yDataWeight];
-  }
+
   //FOR ALL SELECTED EXERCISES - PUT ALL RELEVANT DATA INTO ONE OBJECT WITH KEYS CORRESPONDING TO USEREXDISP SELECTIONS
   function grabAllDataForUserSelection(workoutData, userExDisp) {
     let relevantDataPointsObj = {};
     userExDisp.forEach((userEx) => {
-      const { dataPoints } = workoutData[userEx];
+      const { dateData, weightData } = workoutData[userEx];
       const relevantDataPoints = grabRelevantDataPoints(
         userDayDiff,
-        dataPoints
+        dateData,
+        weightData
       );
-      const [xData, yData] = separateDateAndWeight(relevantDataPoints);
+      const [xData, yData] = relevantDataPoints;
+      // separateDateAndWeight(relevantDataPoints);
       relevantDataPointsObj[userEx] = { xData, yData };
     });
     return relevantDataPointsObj;
@@ -118,7 +125,6 @@ export default function Graph({ workoutData }) {
     let minWeight = null;
     let maxWeight = null;
     for (const exercise in relevantDataPointsObj) {
-      // console.log(relevantDataPointsObj[exercise])
       const { yData } = relevantDataPointsObj[exercise];
       const exerciseMinWeight = Math.min(...yData) - 5;
       const exerciseMaxWeight = Math.max(...yData) + 5;
@@ -135,13 +141,13 @@ export default function Graph({ workoutData }) {
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //USE FUNCTIONS TO CALCULATE VALUES-------------------------
-  const relevantDataPointsObj = grabAllDataForUserSelection(
+  // console.log(workoutData, userExDisp);
+  let relevantDataPointsObj = grabAllDataForUserSelection(
     workoutData,
     userExDisp
   );
-  const weightRange = calculateWeightRange(relevantDataPointsObj);
-  const dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
-
+  let weightRange = calculateWeightRange(relevantDataPointsObj);
+  let dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //PROPS TO PASS TO VARIOUS GRAPH COMPONENTS---------------------
@@ -162,9 +168,7 @@ export default function Graph({ workoutData }) {
     <div className="graph-container">
       <div className="graph-info">
         <div className="graph-info__title">graph page dood</div>
-        <div className="graph-info__weight">
-          max weight - dep on overlay
-        </div>
+        <div className="graph-info__weight">max weight - dep on overlay</div>
       </div>
       <svg
         // version="1.2"

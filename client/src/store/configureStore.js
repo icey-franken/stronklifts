@@ -5,6 +5,7 @@ import workouts from './workouts'
 import progress from './progress';
 import exercises from './exercises';
 import sets from './sets';
+import graph from './graph';
 
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
 	progress,
 	exercises,
 	sets,
+	graph
 });
 
 let storeEnhancer;
