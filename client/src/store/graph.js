@@ -20,7 +20,7 @@ const setUserExDisp = (userExDisp) => ({
 export const graphActions = { setRawGraphData, setUserDayDiff, setUserExDisp };
 
 export default function graphReducer(
-  state = { rawData: {}, userOptions: { userDayDiff: "7", userExDisp: ["sq"] } },
+  state = { rawData: {}, userOptions: { userDayDiff: "ALL", userExDisp: ["sq", "op", "dl", "bp", "pr"] } },
   action
 ) {
   Object.freeze(state);

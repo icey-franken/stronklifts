@@ -9,8 +9,8 @@ export default function ExDispOptions() {
     dispatch(graphActions.setUserExDisp(userExDisp));
   };
 
-	//NOTE: I think it makes more sense for the exDispOptions to live in this component as a part of state - there is no reason for this stuff to be in the redux store afaik.
-	//NOTE NOTE: NO! THE REASON I WANT THIS IN THE STORE IS BECAUSE OTHER COMPONENTS NEED TO KNOW ABOUT IT - NAMELY, THE GRAPH COMPONENT SO IT KNOWS TO RERENDER THE GRAPHPLOTAREA COMPONENT.
+  //NOTE: I think it makes more sense for the exDispOptions to live in this component as a part of state - there is no reason for this stuff to be in the redux store afaik.
+  //NOTE NOTE: NO! THE REASON I WANT THIS IN THE STORE IS BECAUSE OTHER COMPONENTS NEED TO KNOW ABOUT IT - NAMELY, THE GRAPH COMPONENT SO IT KNOWS TO RERENDER THE GRAPHPLOTAREA COMPONENT.
 
   const userExDispOptions = [
     ["SQUAT", "sq"],
@@ -78,7 +78,7 @@ export default function ExDispOptions() {
             <div
               id={exerciseId}
               key={index}
-              className="user-day-diff__option-container"
+              className="user-day-diff__option-container user-day-diff__option--pressed"
             >
               <div className="user-day-diff__option">{exerciseName}</div>
             </div>

@@ -1,42 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Graph.css";
 import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
-import {graphActions }from '../../store/graph';
 
 export default function Graph() {
-	const dispatch = useDispatch();
   const workoutData = useSelector((state) => state.graph.rawData);
-  // const [userDayDiff, setUserDayDiff] = useState("7");
-  // const [userExDisp, setUserExDisp] = useState(["sq"]);
   const [isLoaded, setIsLoaded] = useState(false);
-	const {userDayDiff} = useSelector(state=>state.graph.userOptions);
-	const {userExDisp} = useSelector(state=>state.graph.userOptions);
-	console.log(userDayDiff);
-
-	//use this for now - in the future we will be importing the action creator function for whoever needs it
-	const setUserDayDiff = (userDayDiff) => {
-		dispatch(graphActions.setUserDayDiff(userDayDiff));
-	}
-  //apparently this is necessary if I'm going to use redux store
-  useEffect(() => {
-    setIsLoaded(true);
-  }, [workoutData]);
+  const { userDayDiff } = useSelector((state) => state.graph.userOptions);
+  const { userExDisp } = useSelector((state) => state.graph.userOptions);
 
   //add pressed class to 1W day diff and squat ex disp options on initial page load
   useEffect(() => {
     const dayDiffEl = document.getElementById(userDayDiff);
-    const exDispEl = document.getElementById(userExDisp[0]);
     //check so that no error - dependency array not working like I expect - doesn't seem to matter what I put in it
-    if (dayDiffEl && exDispEl) {
+    if (dayDiffEl) {
       dayDiffEl.classList.add("user-day-diff__option--pressed");
-      exDispEl.classList.add("user-day-diff__option--pressed");
     }
   });
 
-  //without this, everything is fucked
+  //apparently this is necessary if I'm going to use redux store
+  useEffect(() => {
+    setIsLoaded(true);
+  }, [workoutData]);
+  // //without this, everything is fucked
   if (!isLoaded) {
     return null;
   }
@@ -166,7 +154,7 @@ export default function Graph() {
     dateRange,
     weightRange,
   };
-console.log(relevantDataPointsObj);
+  console.log(relevantDataPointsObj);
   return (
     <div className="graph-container">
       <div className="graph-info">
