@@ -7,7 +7,8 @@ export default function GraphPlotArea({
   // weightRange,
   userExDispId,
 }) {
-  const { dateRange, weightRange } = useSelector((state) => state.graph.range);
+	const { dateRange, weightRange } = useSelector((state) => state.graph.range);
+	console.log(dateRange);
 
 	const { axisOffset, xMargin, width, height } = useSelector(
     (state) => state.graph.layout
@@ -30,7 +31,8 @@ export default function GraphPlotArea({
       const dateMs = new Date(sqlDate);
       const dayDiff = (nowMs - dateMs) / msPerDay;
       xDataIdx.push(1 - dayDiff / dateRange);
-    });
+		});
+		console.log(dateRange, xDataIdx);
     return xDataIdx;
   }
   //use relevant raw weight data points to construct xDataIdx

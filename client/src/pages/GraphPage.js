@@ -96,6 +96,7 @@ export default function GraphPage() {
 
   //CALCULATE OLDEST WORKOUT IF SELECTED USERDAYDIFF IS ALL----
   function calculateDateRange(userDayDiff, relevantDataPointsObj) {
+		console.log(userDayDiff);
     if (userDayDiff !== "ALL") {
       return userDayDiff;
     }
@@ -147,7 +148,7 @@ export default function GraphPage() {
     const dateRange = calculateDateRange(userDayDiff, relDPO);
     dispatch(graphActions.setDateRange(dateRange));
     dispatch(graphActions.setWeightRange(weightRange));
-  }, []);
+  }, [userDayDiff]);
 
   if (!relevantDataPointsObj) {
 		console.log('hits true')

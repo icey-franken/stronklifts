@@ -82,15 +82,18 @@ export default function graphDataReducer(
     case graphActionTypes.SET_USER_DAY_DIFF:
       for (let id in newState) {
         console.log("hits graph data reducer");
-        const newStateSlice = Object.assign({}, newState[id]);
+				const newStateSlice = Object.assign({}, newState[id]);
+				console.log(newStateSlice);
         const relevantIndex = findRelevantDateIndex(
           action.userDayDiff,
           newStateSlice.rawDateData
-        );
+				);
+				console.log(relevantIndex);
         const relevantDateData = newStateSlice.rawDateData.slice(relevantIndex);
         const relevantWeightData = newStateSlice.rawWeightData.slice(
           relevantIndex
-        );
+				);
+				console.log(relevantDateData);
         newStateSlice.relevantDateData = relevantDateData;
         newStateSlice.relevantWeightData = relevantWeightData;
         newState[id] = newStateSlice;
