@@ -10,9 +10,10 @@ export default function Graph() {
 	const dispatch = useDispatch();
   const workoutData = useSelector((state) => state.graph.rawData);
   // const [userDayDiff, setUserDayDiff] = useState("7");
-  const [userExDisp, setUserExDisp] = useState(["sq"]);
+  // const [userExDisp, setUserExDisp] = useState(["sq"]);
   const [isLoaded, setIsLoaded] = useState(false);
-	const userDayDiff = useSelector(state=>state.graph.userOptions.userDayDiff);
+	const {userDayDiff} = useSelector(state=>state.graph.userOptions);
+	const {userExDisp} = useSelector(state=>state.graph.userOptions);
 	console.log(userDayDiff);
 
 	//use this for now - in the future we will be importing the action creator function for whoever needs it
@@ -165,13 +166,7 @@ export default function Graph() {
     dateRange,
     weightRange,
   };
-  const userOptionsProps = {
-    userDayDiff,
-    setUserDayDiff,
-    userExDisp,
-    setUserExDisp,
-  };
-
+console.log(relevantDataPointsObj);
   return (
     <div className="graph-container">
       <div className="graph-info">
@@ -208,7 +203,7 @@ export default function Graph() {
           )}
         </g>
       </svg>
-      <UserOptions userOptionsProps={userOptionsProps} />
+      <UserOptions />
     </div>
   );
 }
