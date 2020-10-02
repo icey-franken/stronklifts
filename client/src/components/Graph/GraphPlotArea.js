@@ -1,4 +1,5 @@
 import React from "react";
+import "./GraphPlotArea.css";
 
 export default function GraphPlotArea({
   xData,
@@ -6,13 +7,13 @@ export default function GraphPlotArea({
   dateRange,
   weightRange,
   graphLayoutProps,
+  name,
 }) {
   const { axisOffset, xRange, yRange } = graphLayoutProps;
-  // console.log(mappedDateData);
-  console.log(xData, yData);
+
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
-  //use relevant date data points to construct xDataIdx
+  //use relevant raw date data points to construct xDataIdx
   function generateXDataIdx(xDataDate, dateRange) {
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
@@ -24,7 +25,7 @@ export default function GraphPlotArea({
     });
     return xDataIdx;
   }
-  //use relevant weight data points to construct xDataIdx
+  //use relevant raw weight data points to construct xDataIdx
   function generateYDataIdx(yDataWeight, [minWeight, maxWeight]) {
     let yDataIdx = [];
     yDataWeight.forEach((weight) => {
@@ -36,29 +37,26 @@ export default function GraphPlotArea({
 
   //MAP IDX ARRAYS TO DATA POINTS-------------------------------
   //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
-  function mapXIdxToDataPoints(xDataIdx) {
+  function mapXIdxToDataPoints(xDataIdx, xRange, axisOffset) {
     return xDataIdx.map((x) => axisOffset + xRange * x);
   }
-  function mapYIdxToDataPoints(yDataIdx) {
+  function mapYIdxToDataPoints(yDataIdx, yRange) {
     return yDataIdx.map((y) => (1 - y) * yRange);
   }
 
+  //BUILD PLOT BASED ON MAPPED DATA POINTS-----------------------
   function buildPlotArea(mappedDateData, mappedWeightData) {
-    // console.log(mappedDateData, mappedWeightData);
-
     let graphArr = [];
     for (let i = 0; i < mappedDateData.length - 1; i++) {
       graphArr.push(
         <g key={i}>
           <circle
             key={i}
-            className="data-point"
             cx={mappedDateData[i]}
             cy={mappedWeightData[i]}
-            r="5"
+            r="4"
           />
           <line
-            className="data-line"
             x1={mappedDateData[i]}
             y1={mappedWeightData[i]}
             x2={mappedDateData[i + 1]}
@@ -70,25 +68,21 @@ export default function GraphPlotArea({
     graphArr.push(
       <circle
         key={mappedDateData.length - 1}
-        className="data-point"
         cx={mappedDateData[mappedDateData.length - 1]}
         cy={mappedWeightData[mappedDateData.length - 1]}
-        r="5"
+        r="4"
       />
     );
     return graphArr;
   }
 
+	//CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
   const xDataIdx = generateXDataIdx(xData, dateRange);
   const yDataIdx = generateYDataIdx(yData, weightRange);
-  const mappedDateData = mapXIdxToDataPoints(xDataIdx);
-  const mappedWeightData = mapYIdxToDataPoints(yDataIdx);
-  // const plotArea = buildPlotArea(mappedDateData, mappedWeightData)
-  // console.log(plotArea);
+  const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
+  const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
+  const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
+  const className = `${name}-plot-area plot-area`;
 
-  return (
-    <g className="data-points">
-      {buildPlotArea(mappedDateData, mappedWeightData)}
-    </g>
-  );
+  return <g className={className}>{plotArea}</g>;
 }

@@ -1,0 +1,29 @@
+.plot-area {
+  stroke-width: 1.5;
+  opacity: 0.9;
+}
+
+.sq-plot-area {
+  fill: #d22e2e;
+  stroke: #d22e2e;
+}
+
+.op-plot-area {
+  fill: orange;
+  stroke: orange;
+}
+
+.dl-plot-area {
+  fill: green;
+  stroke: green;
+}
+
+.bp-plot-area {
+  fill: blue;
+  stroke: blue;
+}
+
+.pr-plot-area {
+  fill: purple;
+  stroke: purple;
+}

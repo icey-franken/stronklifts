@@ -5,10 +5,6 @@ import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
 
 export default function Graph({ workoutData }) {
-  const dataPoints = workoutData.sq.dataPoints;
-	const exerciseName = workoutData.sq.exerciseName;
-	console.log(dataPoints, exerciseName);
-
   //whenever userDayDiff is changed the entire component rerenders
   // this is how I got the buttons to work properly
   const [userDayDiff, setUserDayDiff] = useState("7");
@@ -46,7 +42,7 @@ export default function Graph({ workoutData }) {
   //DEFINE FUNCTIONS TO BE USED IN GRAPH CONSTRUCTION
 
   //GRAB RELEVANT DATA POINTS BASED ON USER INPUT AND SPLIT------
-  //extract only data relevant to the selected userDayDiff
+  //FOR SINGLE EXERCISE - extract only data relevant to the selected userDayDifF
   function grabRelevantDataPoints(userDayDiff, dataPoints) {
     if (userDayDiff === "ALL") {
       return dataPoints;
@@ -72,7 +68,7 @@ export default function Graph({ workoutData }) {
     //if i goes down to -1 (all workouts valid) then we end up returning the entire dataPoints array.
     return dataPoints.slice(i + 1);
   }
-  //separate date and weight to use in generating data idx arrays
+  //FOR SINGLE EXERCISE - separate date and weight to use in generating data idx arrays
   function separateDateAndWeight(relevantDataPoints) {
     let xDataDate = [];
     let yDataWeight = [];
@@ -82,72 +78,74 @@ export default function Graph({ workoutData }) {
     });
     return [xDataDate, yDataWeight];
   }
+  //FOR ALL SELECTED EXERCISES - PUT ALL RELEVANT DATA INTO ONE OBJECT WITH KEYS CORRESPONDING TO USEREXDISP SELECTIONS
+  function grabAllDataForUserSelection(workoutData, userExDisp) {
+    let relevantDataPointsObj = {};
+    userExDisp.forEach((userEx) => {
+      const { dataPoints } = workoutData[userEx];
+      const relevantDataPoints = grabRelevantDataPoints(
+        userDayDiff,
+        dataPoints
+      );
+      const [xData, yData] = separateDateAndWeight(relevantDataPoints);
+      relevantDataPointsObj[userEx] = { xData, yData };
+    });
+    return relevantDataPointsObj;
+  }
 
-  function calculateDateRange(userDayDiff, oldestDate) {
+  //CALCULATE OLDEST WORKOUT IF SELECTED USERDAYDIFF IS ALL----
+  function calculateDateRange(userDayDiff, relevantDataPointsObj) {
     if (userDayDiff !== "ALL") {
       return userDayDiff;
     }
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
+    let oldestDate = null;
+    for (let exercise in relevantDataPointsObj) {
+      const { xData } = relevantDataPointsObj[exercise];
+      const exerciseOldestDate = xData[0];
+      if (oldestDate === null || oldestDate > exerciseOldestDate) {
+        oldestDate = exerciseOldestDate;
+      }
+    }
     const dateMs = new Date(oldestDate);
     const dateRange = (nowMs - dateMs) / msPerDay + 1;
     return dateRange;
   }
 
+  //CALCULATE MAX AND MIN WEIGHTS FOR ALL SELECTED EXERCISES----
+  function calculateWeightRange(relevantDataPointsObj) {
+    let minWeight = null;
+    let maxWeight = null;
+    for (const exercise in relevantDataPointsObj) {
+      // console.log(relevantDataPointsObj[exercise])
+      const { yData } = relevantDataPointsObj[exercise];
+      const exerciseMinWeight = Math.min(...yData) - 5;
+      const exerciseMaxWeight = Math.max(...yData) + 5;
+      if (minWeight === null || exerciseMinWeight < minWeight) {
+        minWeight = exerciseMinWeight;
+      }
+      if (maxWeight === null || exerciseMaxWeight > maxWeight) {
+        maxWeight = exerciseMaxWeight;
+      }
+    }
+    return [minWeight, maxWeight];
+  }
+
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //USE FUNCTIONS TO CALCULATE VALUES-------------------------
-  //data points will eventually be an array - we will grab relevant data points for each array.
-	//it might be smarter to separate relevant datapoints in upper component but this will work for now
-
-//
-// const dataObj = {selectedExercises: userExDisp,}
-
-// function constructRelevantDataObj(userExDisp, userDayDiff) {
-// 	console.log(userExDisp);
-// 	const selectedExercises = [...userExDisp];
-// 	const dataObj = {}
-// 	selectedExercises.forEach(exercise=>{
-// 		dataObj[exercise] =
-// 	})
-// }
-
-
-  const relevantDataPoints = grabRelevantDataPoints(userDayDiff, dataPoints);
-  const [xData, yData] = separateDateAndWeight(relevantDataPoints);
-
-  //TODO - update these so that it selects the very max weight based on all selected exercises
-  const minWeight = Math.min(...yData) - 5;
-  const maxWeight = Math.max(...yData) + 5;
-  const weightRange = [minWeight, maxWeight];
-  const dateRange = calculateDateRange(userDayDiff, xData[0]);
-
-  // const relevantDataPoints2 = grabRelevantDataPoints(userDayDiff, dataPoints2);
-  // const [xData2, yData2] = separateDateAndWeight(relevantDataPoints2);
-  // const minWeight2 = Math.min(...yData2) - 5;
-  // const maxWeight2 = Math.max(...yData2) + 5;
-  // // const dateRange = calculateDateRange(userDayDiff, xData[0]);
-  // const xDataIdx2 = generateXDataIdx(xData2, dateRange);
-  // const yDataIdx2 = generateYDataIdx(yData2, minWeight2, maxWeight2);
-  // const mappedDateData2 = mapXIdxToDataPoints(xDataIdx2);
-  // const mappedWeightData2 = mapYIdxToDataPoints(yDataIdx2);
-
-  //from that, generate multiple GraphPlotArea components
-  //each graph plot area component should have a check that determines exercise name or something and based on that the color of the plot is altered
-  //the kicker now is determining the axes to use based on dayDiff and min/max weight.
-  //THE POINT: multiple GraphPlotArea components stack perfectly well.
-
-  //create a GraphOverlay component that renders multiple GraphPlotArea components based on the input
-  //the input to graph overlay will be:
-  //an array with [[mappedDateData, mappedWeightData], [mappedDateData2, mappedWeightData2]] for each set of data passed in.
-
-  // color change based on if first weight value is greater/less than last weight value.
+  const relevantDataPointsObj = grabAllDataForUserSelection(
+    workoutData,
+    userExDisp
+  );
+  const weightRange = calculateWeightRange(relevantDataPointsObj);
+  const dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
 
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //PROPS TO PASS TO VARIOUS GRAPH COMPONENTS---------------------
   //later on you should add these things to the store to avoid unnecessary rerenders of components due to prop threading.
-
   const graphAxesProps = {
     graphLayoutProps,
     dateRange,
@@ -163,9 +161,9 @@ export default function Graph({ workoutData }) {
   return (
     <div className="graph-container">
       <div className="graph-info">
-        <div className="graph-info__title">{exerciseName}</div>
+        <div className="graph-info__title">graph page dood</div>
         <div className="graph-info__weight">
-          {dataPoints[dataPoints.length - 1][1]} lbs
+          max weight - dep on overlay
         </div>
       </div>
       <svg
@@ -178,21 +176,25 @@ export default function Graph({ workoutData }) {
         height={height}
         role="img"
       >
-        <title id="title">A plot of {exerciseName} weight over time.</title>
+        <title id="title">this shit doesn't show up anyways</title>
         <GraphAxes graphAxesProps={graphAxesProps} />
         <g>
-          <GraphPlotArea
-            xData={xData}
-            yData={yData}
-            dateRange={dateRange}
-            weightRange={weightRange}
-            graphLayoutProps={graphLayoutProps}
-          />
+          {Object.entries(relevantDataPointsObj).map(
+            ([name, { xData, yData }], index) => {
+              return (
+                <GraphPlotArea
+                  key={index}
+                  name={name}
+                  xData={xData}
+                  yData={yData}
+                  dateRange={dateRange}
+                  weightRange={weightRange}
+                  graphLayoutProps={graphLayoutProps}
+                />
+              );
+            }
+          )}
         </g>
-        {/* <GraphPlotArea
-          mappedDateData={mappedDateData2}
-          mappedWeightData={mappedWeightData2}
-        /> */}
       </svg>
       <UserOptions userOptionsProps={userOptionsProps} />
     </div>
@@ -243,4 +245,3 @@ export default function Graph({ workoutData }) {
 // 			<line x1={0} x2={1000} y1={yCoord} y2={yCoord} />
 // 		</g>
 // 	);
-// })}

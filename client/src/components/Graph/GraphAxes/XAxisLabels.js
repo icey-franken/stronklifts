@@ -13,7 +13,7 @@ export default function XAxisLabels({ dateRange, graphLayoutProps }) {
     const nowMs = Date.now(); //constant used for date range calcs
     const msPerDay = 8.64e7; //constant used to convert ms to days
     let numXLabels = 7;
-    console.log(dateRange);
+    // console.log(dateRange);
     if (dateRange <= numXLabels) {
       numXLabels = dateRange;
     }
