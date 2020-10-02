@@ -16,7 +16,7 @@ export default function Graph({ workoutData }) {
     defaultRange.classList.add("user-day-diff__option--pressed");
     const defaultExercise = document.getElementById(userExDisp[0]);
     defaultExercise.classList.add("user-day-diff__option--pressed");
-  }, []);
+  });
 
   //-------------------------------------------------------------
   //-------------------------------------------------------------

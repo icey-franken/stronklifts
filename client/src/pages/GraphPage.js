@@ -29,21 +29,6 @@ export default function GraphPage() {
       rowData.push([workoutDate, workingWeight]);
     }
   });
-  //just squat data for now to simplify progress on graph component
-  // let dataPointsArr = [
-  //   squatData,
-  //   overheadData,
-  //   deadliftData,
-  //   benchData,
-  //   rowData,
-  // ];
-  // let exerciseNamesArr = [
-  //   "Squat",
-  //   "Overhead Press",
-  //   "Deadlift",
-  //   "Bench Press",
-  //   "Pendlay Row",
-  // ];
 
   const workoutData = {
     sq: { exerciseName: "Squat", dataPoints: squatData },
@@ -55,13 +40,7 @@ export default function GraphPage() {
 
   return (
     <div className="graph-page-container">
-      <div className="graph-page-container">hi from graph page</div>
-      <Graph
-        workoutData={workoutData}
-        // dataPointsArr={dataPointsArr}
-        // exerciseNamesArr={exerciseNamesArr}
-      />
-      {/* {graphData.map((dataPoints, index)=><Graph key={index} dataPointsArr={dataPointsArr} dataPoints2={overheadData} exerciseName={graphNames[index]} exerciseName2={graphNames[index+1]}/>)} */}
+      <Graph workoutData={workoutData} />
     </div>
   );
 }
