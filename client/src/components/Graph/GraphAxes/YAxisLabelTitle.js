@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-export default function YAxisLabelTitle({ graphLayoutProps }) {
-  const { axisOffset, yRange } = graphLayoutProps;
+export default function YAxisLabelTitle() {
+  const { axisOffset, height } = useSelector((state) => state.graph.layout);
+  const yRange = height - axisOffset;
   return (
     <text
       x={(2 * axisOffset) / 5}

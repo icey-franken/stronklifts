@@ -1,16 +1,24 @@
 import React from "react";
 import "./GraphPlotArea.css";
+import { useSelector } from "react-redux";
 
 export default function GraphPlotArea({
-  relevantDateData,
-  relevantWeightData,
-  dateRange,
-  weightRange,
-  graphLayoutProps,
-  name,
+  // dateRange,
+  // weightRange,
+  userExDispId,
 }) {
-  const { axisOffset, xRange, yRange } = graphLayoutProps;
+  const { dateRange, weightRange } = useSelector((state) => state.graph.range);
 
+	const { axisOffset, xMargin, width, height } = useSelector(
+    (state) => state.graph.layout
+  );
+
+  const yRange = height - axisOffset;
+  const xRange = width - axisOffset - xMargin;
+
+  const { relevantDateData, relevantWeightData } = useSelector(
+    (state) => state.graphData[userExDispId]
+  );
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
   //use relevant raw date data points to construct xDataIdx
@@ -76,13 +84,13 @@ export default function GraphPlotArea({
     return graphArr;
   }
 
-	//CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
+  //CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
   const xDataIdx = generateXDataIdx(relevantDateData, dateRange);
   const yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
   const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
   const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
   const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
-  const className = `${name}-plot-area plot-area`;
+  const className = `${userExDispId}-plot-area plot-area`;
 
   return <g className={className}>{plotArea}</g>;
 }

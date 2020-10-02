@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Graph from "../components/Graph/Graph";
 import { graphDataActions } from "../store/graphData";
+import { graphActions } from "../store/graph";
 
 export default function GraphPage() {
   const exercises = useSelector((state) => state.exercises);
   const exercisesArr = Object.values(exercises);
   exercisesArr.sort((a, b) => (a.workoutDate > b.workoutDate ? 1 : -1));
-
+  const { userDayDiff, userExDisp } = useSelector(
+    (state) => state.graph.userOptions
+  );
   const dispatch = useDispatch();
   //consider adding a selector to redux store that separates by exercise name.
   //for now I will do it caveman style
@@ -21,6 +24,7 @@ export default function GraphPage() {
   let benchWeight = [];
   let rowDate = [];
   let rowWeight = [];
+  //alllllll this stuff should be happening in the store
 
   //turn this into an action - put this stuff in the redux store
   //then based on the graph view selected we can grab that set of data and render a graph page quickly.
@@ -47,43 +51,112 @@ export default function GraphPage() {
   const workoutData = {
     sq: {
       id: "sq",
-      exerciseName: "Squat",
-      dateData: squatDate,
-      weightData: squatWeight,
+      rawDateData: squatDate,
+      rawWeightData: squatWeight,
+      relevantDateData: squatDate,
+      relevantWeightData: squatWeight,
     },
     op: {
       id: "op",
-      exerciseName: "Overhead Press",
-      dateData: overheadDate,
-      weightData: overheadWeight,
+      rawDateData: overheadDate,
+      rawWeightData: overheadWeight,
+      relevantDateData: overheadDate,
+      relevantWeightData: overheadWeight,
     },
     dl: {
       id: "dl",
-      exerciseName: "Deadlift",
-      dateData: deadliftDate,
-      weightData: deadliftWeight,
+      rawDateData: deadliftDate,
+      rawWeightData: deadliftWeight,
+      relevantDateData: deadliftDate,
+      relevantWeightData: deadliftWeight,
     },
     bp: {
       id: "bp",
-      exerciseName: "Bench Press",
-      dateData: benchDate,
-      weightData: benchWeight,
+      rawDateData: benchDate,
+      rawWeightData: benchWeight,
+      relevantDateData: benchDate,
+      relevantWeightData: benchWeight,
     },
     pr: {
       id: "pr",
-      exerciseName: "Pendlay Row",
-      dateData: rowDate,
-      weightData: rowWeight,
+      rawDateData: rowDate,
+      rawWeightData: rowWeight,
+      relevantDateData: rowDate,
+      relevantWeightData: rowWeight,
     },
   };
+  function grabAllDataForUserSelection(workoutData, userExDisp) {
+    let relevantDataPointsObj = {};
+    userExDisp.forEach((userEx) => {
+      const { relevantDateData, relevantWeightData } = workoutData[userEx];
+      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
+    });
+    return relevantDataPointsObj;
+  }
 
-  useEffect(() => {
+  //CALCULATE OLDEST WORKOUT IF SELECTED USERDAYDIFF IS ALL----
+  function calculateDateRange(userDayDiff, relevantDataPointsObj) {
+    if (userDayDiff !== "ALL") {
+      return userDayDiff;
+    }
+    const nowMs = Date.now(); //constant used for date range calcs
+    const msPerDay = 8.64e7; //constant used to convert ms to days
+    let oldestDate = null;
+    for (let exercise in relevantDataPointsObj) {
+      const { relevantDateData } = relevantDataPointsObj[exercise];
+      const exerciseOldestDate = relevantDateData[0];
+      if (oldestDate === null || oldestDate > exerciseOldestDate) {
+        oldestDate = exerciseOldestDate;
+      }
+    }
+    const dateMs = new Date(oldestDate);
+    const dateRange = Math.ceil((nowMs - dateMs) / msPerDay);
+    return dateRange;
+  }
+
+  //CALCULATE MAX AND MIN WEIGHTS FOR ALL SELECTED EXERCISES----
+  function calculateWeightRange(relevantDataPointsObj) {
+    let minWeight = null;
+    let maxWeight = null;
+    for (const exercise in relevantDataPointsObj) {
+      const { relevantWeightData } = relevantDataPointsObj[exercise];
+      const exerciseMinWeight = Math.min(...relevantWeightData) - 5;
+      const exerciseMaxWeight = Math.max(...relevantWeightData) + 5;
+      if (minWeight === null || exerciseMinWeight < minWeight) {
+        minWeight = exerciseMinWeight;
+      }
+      if (maxWeight === null || exerciseMaxWeight > maxWeight) {
+        maxWeight = exerciseMaxWeight;
+      }
+    }
+    return [minWeight, maxWeight];
+  }
+	// let relevantDataPointsObj;
+	const [relevantDataPointsObj, setRelevantDataPointsObj] = useState(null);
+	let relDPO;
+	useEffect(() => {
     dispatch(graphDataActions.setGraphData(workoutData));
+    console.log("hits");
+		//store is fucked
+		relDPO = grabAllDataForUserSelection(
+      workoutData,
+      userExDisp
+    );
+    setRelevantDataPointsObj(relDPO);
+    const weightRange = calculateWeightRange(relDPO);
+    const dateRange = calculateDateRange(userDayDiff, relDPO);
+    dispatch(graphActions.setDateRange(dateRange));
+    dispatch(graphActions.setWeightRange(weightRange));
   }, []);
+
+  if (!relevantDataPointsObj) {
+		console.log('hits true')
+    return null;
+	}
 
   return (
     <div className="graph-page-container">
-      <Graph />
+      <Graph relevantDataPointsObj={relDPO} />
     </div>
   );
 }

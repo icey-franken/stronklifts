@@ -1,8 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-export default function XAxisLabelTitle({ graphLayoutProps }) {
-  const { axisOffset, width, height } = graphLayoutProps;
-
+export default function XAxisLabelTitle() {
+  const { axisOffset, width, height } = useSelector(
+    (state) => state.graph.layout
+  );
   return (
     <text
       x={width / 2}

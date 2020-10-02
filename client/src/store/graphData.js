@@ -19,46 +19,41 @@ export const graphDataActions = {
 //then, when day diff is changed an action will be dispatched that will hit this reducer and we will update relevant data accordingly.
 export default function graphDataReducer(
   state = {
-    sq: {
-      id: "sq",
-      exerciseName: "Squat",
-      rawDateData: [],
-      rawWeightData: [],
-      relevantDateData: [],
-      relevantWeightData: [],
-    },
-    op: {
-      id: "op",
-      exerciseName: "Overhead Press",
-      rawDateData: [],
-      rawWeightData: [],
-      relevantDateData: [],
-      relevantWeightData: [],
-    },
-    dl: {
-      id: "dl",
-      exerciseName: "Deadlift",
-      rawDateData: [],
-      rawWeightData: [],
-      relevantDateData: [],
-      relevantWeightData: [],
-    },
-    bp: {
-      id: "bp",
-      exerciseName: "Bench Press",
-      rawDateData: [],
-      rawWeightData: [],
-      relevantDateData: [],
-      relevantWeightData: [],
-    },
-    pr: {
-      id: "pr",
-      exerciseName: "Pendlay Row",
-      rawDateData: [],
-      rawWeightData: [],
-      relevantDateData: [],
-      relevantWeightData: [],
-    },
+    // sq: {
+    //   id: "sq",
+    //   rawDateData: [],
+    //   rawWeightData: [],
+    //   relevantDateData: [],
+    //   relevantWeightData: [],
+    // },
+    // op: {
+    //   id: "op",
+    //   rawDateData: [],
+    //   rawWeightData: [],
+    //   relevantDateData: [],
+    //   relevantWeightData: [],
+    // },
+    // dl: {
+    //   id: "dl",
+    //   rawDateData: [],
+    //   rawWeightData: [],
+    //   relevantDateData: [],
+    //   relevantWeightData: [],
+    // },
+    // bp: {
+    //   id: "bp",
+    //   rawDateData: [],
+    //   rawWeightData: [],
+    //   relevantDateData: [],
+    //   relevantWeightData: [],
+    // },
+    // pr: {
+    //   id: "pr",
+    //   rawDateData: [],
+    //   rawWeightData: [],
+    //   relevantDateData: [],
+    //   relevantWeightData: [],
+    // },
   },
   action
 ) {
@@ -68,30 +63,30 @@ export default function graphDataReducer(
     case SET_GRAPH_DATA:
       // const actionWorkoutDataIds = Object.keys(action.graphData);
       // actionWorkoutDataIds.forEach((id) => {
-      for (let id in newState) {
-        const newStateSlice = Object.assign({}, newState[id]);
+      for (let id in action.graphData) {
+				const newStateSlice = Object.assign({}, newState[id]);
+				newStateSlice.id = id;
         const actionRawDataSlice = action.graphData[id];
         const {
-          dateData: actionRawDateData,
-          weightData: actionRawWeightData,
+          rawDateData: actionRawDateData,
+          rawWeightData: actionRawWeightData,
         } = actionRawDataSlice;
         newStateSlice.rawDateData = actionRawDateData;
         newStateSlice.rawWeightData = actionRawWeightData;
         //default userDayDiff is 'ALL' so relevant and raw are the same
         newStateSlice.relevantDateData = actionRawDateData;
         newStateSlice.relevantWeightData = actionRawWeightData;
-        newState[id] = newStateSlice;
+				newState[id] = newStateSlice;
       }
       return newState;
     case graphActionTypes.SET_USER_DAY_DIFF:
       for (let id in newState) {
         console.log("hits graph data reducer");
         const newStateSlice = Object.assign({}, newState[id]);
-        const relevantIndex = findRelevantIndex(
+        const relevantIndex = findRelevantDateIndex(
           action.userDayDiff,
           newStateSlice.rawDateData
         );
-        console.log(newStateSlice, relevantIndex);
         const relevantDateData = newStateSlice.rawDateData.slice(relevantIndex);
         const relevantWeightData = newStateSlice.rawWeightData.slice(
           relevantIndex
@@ -99,7 +94,9 @@ export default function graphDataReducer(
         newStateSlice.relevantDateData = relevantDateData;
         newStateSlice.relevantWeightData = relevantWeightData;
         newState[id] = newStateSlice;
-      }
+			}
+		// case graphActionTypes.SET_USER_EX_DISP:
+
     default:
       return newState;
   }
@@ -110,7 +107,7 @@ export default function graphDataReducer(
 // relevantWeightData = actionRawWeightData.slice(relevantIndex);
 
 //NECESSARY FOR REDUCER!
-function findRelevantIndex(userDayDiff, rawDateData) {
+function findRelevantDateIndex(userDayDiff, rawDateData) {
   if (userDayDiff === "ALL") {
     return 0;
   }

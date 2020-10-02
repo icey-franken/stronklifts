@@ -13,7 +13,8 @@ export default function relevantGraphDataReducer(state = {
   const newState = Object.assign({}, state);
   switch (action.type) {
     case graphActionTypes.SET_RAW_GRAPH_DATA:
-      //do a thing
+			//do a thing
+
       return newState;
     case graphActionTypes.SET_USER_DAY_DIFF:
       //do a thing

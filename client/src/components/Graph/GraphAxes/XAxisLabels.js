@@ -1,11 +1,16 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { plotDateFormat } from "../../utils/Formatter";
 
-export default function XAxisLabels({ dateRange, graphLayoutProps }) {
+export default function XAxisLabels() {
   // generate x axis labels based on current day and userDayDiff input
   //TODO: add logic that changes dates to months if 3month view selected?
+  const { dateRange } = useSelector((state) => state.graph.range);
+  const { axisOffset, xMargin, width, height } = useSelector(
+    (state) => state.graph.layout
+  );
 
-  const { axisOffset, xRange, height } = graphLayoutProps;
+  const xRange = width - axisOffset - xMargin;
 
   const makeXLabels = (dateRange) => {
     // const startDateMs = nowMs - msPerDay * dateRange;
@@ -18,8 +23,8 @@ export default function XAxisLabels({ dateRange, graphLayoutProps }) {
       numXLabels = dateRange;
     }
     // let xLabelSpacing = msPerDay;
-		const xLabelSpacing = (dateRange/numXLabels * msPerDay)
-		// let i = 7;
+    const xLabelSpacing = (dateRange / numXLabels) * msPerDay;
+    // let i = 7;
     // while (dateRange > i) {
     //   xLabelSpacing += msPerDay;
     //   i += 7;
