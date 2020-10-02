@@ -1,8 +1,13 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { graphActions } from "../../../store/graph";
 
-export default function ExDispOptions({ userExDisp, setUserExDisp }) {
-  //for now we thread in userExDisp and setUserExDisp
-  //I may be able to have that state stored in here, although I think the plot area component has to know about it and be triggered on change
+export default function ExDispOptions() {
+  const { userExDisp } = useSelector((state) => state.graph.userOptions);
+  const dispatch = useDispatch();
+  const setUserExDisp = (userExDisp) => {
+    dispatch(graphActions.setUserExDisp(userExDisp));
+	};
 
   const userExDispOptions = [
     ["SQUAT", "sq"],
@@ -11,6 +16,8 @@ export default function ExDispOptions({ userExDisp, setUserExDisp }) {
     ["BENCH PRESS", "bp"],
     ["PENDLAY ROW", "pr"],
   ];
+
+	//QUESTION: is it best practice to have this logic in the component or in the redux store? I am leaving it here for now but it's something to thing about.
 
   //helper function for handleExDispChange - same operation twice
   const __handleExDisp = (newEl) => {

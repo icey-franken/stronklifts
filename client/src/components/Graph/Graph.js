@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./Graph.css";
 import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
+import {graphActions }from '../../store/graph';
 
 export default function Graph() {
-  const workoutData = useSelector((state) => state.graph);
-  const [userDayDiff, setUserDayDiff] = useState("7");
+	const dispatch = useDispatch();
+  const workoutData = useSelector((state) => state.graph.rawData);
+  // const [userDayDiff, setUserDayDiff] = useState("7");
   const [userExDisp, setUserExDisp] = useState(["sq"]);
   const [isLoaded, setIsLoaded] = useState(false);
+	const userDayDiff = useSelector(state=>state.graph.userOptions.userDayDiff);
+	console.log(userDayDiff);
 
+	//use this for now - in the future we will be importing the action creator function for whoever needs it
+	const setUserDayDiff = (userDayDiff) => {
+		dispatch(graphActions.setUserDayDiff(userDayDiff));
+	}
   //apparently this is necessary if I'm going to use redux store
   useEffect(() => {
     setIsLoaded(true);

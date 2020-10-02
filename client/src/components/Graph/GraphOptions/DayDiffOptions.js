@@ -1,9 +1,15 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { graphActions } from "../../../store/graph";
 
-export default function DayDiffOptions({ userDayDiff, setUserDayDiff }) {
-  //copied from ExDispOptions: //for now we thread in userExDisp and setUserExDisp
-  //I may be able to have that state stored in here, although I think the plot area component has to know about it and be triggered on change
+export default function DayDiffOptions() {
+  const { userDayDiff } = useSelector((state) => state.graph.userOptions);
+  const dispatch = useDispatch();
+  const setUserDayDiff = (userDayDiff) => {
+    dispatch(graphActions.setUserDayDiff(userDayDiff));
+  };
 
+  //QUESTION: same as in userExDisp - is it appropriate to have these "brains" in the component, or do they belong in the redux store?
   const userDayDiffOptions = [
     ["1W", 7],
     ["2W", 14],
@@ -25,9 +31,6 @@ export default function DayDiffOptions({ userDayDiff, setUserDayDiff }) {
       : newEl.parentElement.id
       ? (newEl = newEl.parentElement && setUserDayDiff(newEl.id))
       : (newEl = oldEl);
-
-    // (newEl = newEl.parentElement);
-    // newEl.id ? setUserDayDiff(newEl.id) : (newEl = oldEl);
     if (newEl !== oldEl) {
       oldEl.classList.remove("user-day-diff__option--pressed");
       newEl.classList.add("user-day-diff__option--pressed");
