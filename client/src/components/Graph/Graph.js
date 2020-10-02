@@ -29,6 +29,13 @@ export default function Graph() {
     return null;
   }
 
+  // //relevant data points object is basically slices of workoutData based on userExDisp with relevantDateData and relevantWeightData extracted.
+  // userExDisp.forEach((exId) => {
+  //   // console.log(workoutData);
+  //   const { relevantDateData, relevantWeightData } = workoutData[exId];
+  //   console.log(relevantDateData, relevantWeightData);
+  // });
+
   //-------------------------------------------------------------
   //-------------------------------------------------------------
   //SET GRAPH LAYOUT PROPS
@@ -54,38 +61,38 @@ export default function Graph() {
 
   //GRAB RELEVANT DATA POINTS BASED ON USER INPUT AND SPLIT------
   //FOR SINGLE EXERCISE - extract only data relevant to the selected userDayDifF
-  function grabRelevantDataPoints(userDayDiff, dateData, weightData) {
-    if (userDayDiff === "ALL") {
-      return [dateData, weightData];
-    }
-    const nowMs = Date.now(); //constant used for date range calcs
-    const msPerDay = 8.64e7; //constant used to convert ms to days
-    //dataPoints array is sorted from oldest to most recent workout.
-    //so, start at end of datapoints array and find index at which dayDiff is greater than userDayDiff
-    //slice dataPoints from there and return that - that is your relevant dataPoints array.
-    const calcDayDiff = (index) => {
-      //so that error not thrown when checking oldest data point
-      if (index >= 0) {
-        return (nowMs - new Date(dateData[index])) / msPerDay;
-      }
-    };
-    //consider changing from checking based on ms to checking based on day (e.g. so that a lift that happened early in the morning 7 days ago isn't excluded if graph used at night - for now it's fine)
-    let i = dateData.length - 1;
-    let dayDiff = calcDayDiff(i);
-    while (dayDiff < userDayDiff && i >= 0) {
-      i--;
-      dayDiff = calcDayDiff(i);
-    }
-    //if i goes down to -1 (all workouts valid) then we end up returning the entire dataPoints array.
-    return [dateData.slice(i + 1), weightData.slice(i + 1)];
-  }
+  // function grabRelevantDataPoints(userDayDiff, dateData, weightData) {
+  //   if (userDayDiff === "ALL") {
+  //     return [dateData, weightData];
+  //   }
+  //   const nowMs = Date.now(); //constant used for date range calcs
+  //   const msPerDay = 8.64e7; //constant used to convert ms to days
+  //   //dataPoints array is sorted from oldest to most recent workout.
+  //   //so, start at end of datapoints array and find index at which dayDiff is greater than userDayDiff
+  //   //slice dataPoints from there and return that - that is your relevant dataPoints array.
+  //   const calcDayDiff = (index) => {
+  //     //so that error not thrown when checking oldest data point
+  //     if (index >= 0) {
+  //       return (nowMs - new Date(dateData[index])) / msPerDay;
+  //     }
+  //   };
+  //   //consider changing from checking based on ms to checking based on day (e.g. so that a lift that happened early in the morning 7 days ago isn't excluded if graph used at night - for now it's fine)
+  //   let i = dateData.length - 1;
+  //   let dayDiff = calcDayDiff(i);
+  //   while (dayDiff < userDayDiff && i >= 0) {
+  //     i--;
+  //     dayDiff = calcDayDiff(i);
+  //   }
+  //   //if i goes down to -1 (all workouts valid) then we end up returning the entire dataPoints array.
+  //   return [dateData.slice(i + 1), weightData.slice(i + 1)];
+  // }
 
   //FOR ALL SELECTED EXERCISES - PUT ALL RELEVANT DATA INTO ONE OBJECT WITH KEYS CORRESPONDING TO USEREXDISP SELECTIONS
   function grabAllDataForUserSelection(workoutData, userExDisp) {
     let relevantDataPointsObj = {};
     userExDisp.forEach((userEx) => {
-			const {relevantDateData, relevantWeightData} = workoutData[userEx];
-			// const { rawDateData, rawWeightData } = workoutData[userEx];
+      const { relevantDateData, relevantWeightData } = workoutData[userEx];
+      // const { rawDateData, rawWeightData } = workoutData[userEx];
       // const relevantDataPoints = grabRelevantDataPoints(
       //   userDayDiff,
       //   rawDateData,
@@ -134,7 +141,9 @@ export default function Graph() {
       }
     }
     return [minWeight, maxWeight];
-  }
+	}
+
+	//WEIGHT RANGE AND DATE RANGE SHOULD GO IN STORE NEAR USER OPTIONS - ON DISPATCH OF (EG) USEREXDISP, WE SHOULD UPDATE WEIGHT RANGE AND DATE RANGE AND THUS ALSO THE RELEVANT DATA POINTS
 
   //-------------------------------------------------------------
   //-------------------------------------------------------------
@@ -155,8 +164,8 @@ export default function Graph() {
     dateRange,
     weightRange,
   };
-	console.log(relevantDataPointsObj);
-	console.log(workoutData);
+  console.log(relevantDataPointsObj);
+  console.log(workoutData);
   return (
     <div className="graph-container">
       <div className="graph-info">
