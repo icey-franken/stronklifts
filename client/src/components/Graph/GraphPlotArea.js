@@ -2,24 +2,19 @@ import React from "react";
 import "./GraphPlotArea.css";
 import { useSelector } from "react-redux";
 
-export default function GraphPlotArea({
-  // dateRange,
-  // weightRange,
-  userExDispId,
-}) {
-	const { dateRange, weightRange } = useSelector((state) => state.graph.range);
-	console.log(dateRange);
+export default function GraphPlotArea({ userExDispId }) {
+  const { dateRange, weightRange } = useSelector((state) => state.graph.range);
 
-	const { axisOffset, xMargin, width, height } = useSelector(
+  const { axisOffset, xMargin, width, height } = useSelector(
     (state) => state.graph.layout
   );
-
   const yRange = height - axisOffset;
   const xRange = width - axisOffset - xMargin;
 
   const { relevantDateData, relevantWeightData } = useSelector(
     (state) => state.graphData[userExDispId]
   );
+
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
   //use relevant raw date data points to construct xDataIdx
@@ -31,8 +26,8 @@ export default function GraphPlotArea({
       const dateMs = new Date(sqlDate);
       const dayDiff = (nowMs - dateMs) / msPerDay;
       xDataIdx.push(1 - dayDiff / dateRange);
-		});
-		console.log(dateRange, xDataIdx);
+    });
+    // console.log(dateRange, xDataIdx);
     return xDataIdx;
   }
   //use relevant raw weight data points to construct xDataIdx

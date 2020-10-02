@@ -1,147 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import "./Graph.css";
 import GraphPlotArea from "./GraphPlotArea";
 import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
-import { graphActions } from "../../store/graph";
 
-export default function Graph({ relevantDataPointsObj }) {
-  const workoutData = useSelector((state) => state.graphData);
-  const [isLoaded, setIsLoaded] = useState(false);
+export default function Graph() {
   const { userDayDiff, userExDisp } = useSelector(
     (state) => state.graph.userOptions
   );
-  // const { userExDisp } = useSelector((state) => state.graph.userOptions);
-  console.log(workoutData);
 
-  const { axisOffset, xMargin, width, height } = useSelector(
-    (state) => state.graph.layout
-  );
+  const { width, height } = useSelector((state) => state.graph.layout);
 
-  const dispatch = useDispatch();
-
-  // let relevantDataPointsObj = null;
-  let weightRange = null;
-  let dateRange = null;
-
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //USE FUNCTIONS TO CALCULATE VALUES-------------------------
-  // console.log(workoutData, userExDisp);
-
-  //add pressed class to 1W day diff and squat ex disp options on initial page load
-  useEffect(() => {
-    const dayDiffEl = document.getElementById(userDayDiff);
-    //check so that no error - dependency array not working like I expect - doesn't seem to matter what I put in it
-    if (dayDiffEl) {
-      dayDiffEl.classList.add("user-day-diff__option--pressed");
-    }
-  });
-  // if (!relevantDataPointsObj) {
-  //   return null;
-  // }
-  // if (Object.keys(relevantDataPointsObj).length === 0) {
-  //   return null;
-  // }
-
+  //add pressed class to 1W day diff on initial page load
   // useEffect(() => {
-  // 	if(Object.keys(workoutData).length !== 0) {
-  // 		dispatch(graphActions.setDateRange(dateRange));
-  // 		dispatch(graphActions.setWeightRange(weightRange));
-
-  // 	}
-  // },[relevantDataPointsObj]);
-
-  //was trying to do this with use effect - shit is not working. Fuck it
-  // if (Object.keys(workoutData).length !== 0) {
-  //   relevantDataPointsObj = grabAllDataForUserSelection(
-  //     workoutData,
-  //     userExDisp
-  //   );
-  //   weightRange = calculateWeightRange(relevantDataPointsObj);
-  //   dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
-  // }
-  // //   useEffect(() => {
-  // // 		// relevantDataPointsObj = grabAllDataForUserSelection(workoutData, userExDisp);
-  // // 		console.log('hits use effect',relevantDataPointsObj)
-  // // console.log(workoutData);
-
-  // //     if (weightRange) {
-  // //       dispatch(graphActions.setWeightRange(weightRange));
-  // //     }
-  // //     if (dateRange) {
-  // //       dispatch(graphActions.setDateRange(dateRange));
-  // //     }
-  // //   }, [workoutData]);
-
-  // //apparently this is necessary if I'm going to use redux store
-  // console.log(workoutData);
-
-  // // useEffect(() => {
-  // //   setIsLoaded(true);
-  // //   console.log("hits is loaded effect", workoutData);
-  // // }, [workoutData]);
-  // console.log(workoutData);
-
-  // // //without this, everything is fucked
-  // if (!isLoaded) {
-  //   return null;
-  // }
-  // console.log(workoutData);
-
-  // // relevantDataPointsObj = grabAllDataForUserSelection(workoutData, userExDisp);
-  // // weightRange = calculateWeightRange(relevantDataPointsObj);
-  // // dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
-  // // dispatch(graphActions.setWeightRange(weightRange));
-  // // dispatch(graphActions.setDateRange(dateRange));
-  // // weightRange = calculateWeightRange(relevantDataPointsObj);
-  // // dateRange = calculateDateRange(userDayDiff, relevantDataPointsObj);
-  // console.log(weightRange, dateRange);
-  // console.log(workoutData);
-
-  // // //relevant data points object is basically slices of workoutData based on userExDisp with relevantDateData and relevantWeightData extracted.
-  // userExDisp.forEach((exId) => {
-  //   // console.log(workoutData);
-  //   const { relevantDateData, relevantWeightData } = workoutData[exId];
-  //   console.log(relevantDateData, relevantWeightData);
+  //   const dayDiffEl = document.getElementById(userDayDiff);
+  //   //check so that no error - dependency array not working like I expect - doesn't seem to matter what I put in it
+  //   if (dayDiffEl) {
+  //     dayDiffEl.classList.add("user-day-diff__option--pressed");
+  //   }
   // });
 
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
   //SET GRAPH LAYOUT PROPS
   //goal is to build dynamic svgs that adjust with page size. For now we will use fixed...dynamic values. Later on the "fixed" width and height values will be based on screen size.
   //TODO: make these values dynamic
-
-  //FOR ALL SELECTED EXERCISES - PUT ALL RELEVANT DATA INTO ONE OBJECT WITH KEYS CORRESPONDING TO USEREXDISP SELECTIONS
-  function grabAllDataForUserSelection(workoutData, userExDisp) {
-    let relevantDataPointsObj = {};
-    userExDisp.forEach((userEx) => {
-      const { relevantDateData, relevantWeightData } = workoutData[userEx];
-      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
-    });
-    return relevantDataPointsObj;
-  }
-
-
-
-  //WEIGHT RANGE AND DATE RANGE SHOULD GO IN STORE NEAR USER OPTIONS - ON DISPATCH OF (EG) USEREXDISP, WE SHOULD UPDATE WEIGHT RANGE AND DATE RANGE AND THUS ALSO THE RELEVANT DATA POINTS
-
-  //-------------------------------------------------------------
-  //-------------------------------------------------------------
-  //PROPS TO PASS TO VARIOUS GRAPH COMPONENTS---------------------
-  //later on you should add these things to the store to avoid unnecessary rerenders of components due to prop threading.
-
-	function grabAllDataForUserSelection(workoutData, userExDisp) {
-    let relevantDataPointsObj = {};
-    userExDisp.forEach((userEx) => {
-      const { relevantDateData, relevantWeightData } = workoutData[userEx];
-      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
-    });
-    return relevantDataPointsObj;
-	}
-
-	const relDPO = grabAllDataForUserSelection(workoutData, userExDisp)
 
   return (
     <div className="graph-container">
@@ -162,18 +44,9 @@ export default function Graph({ relevantDataPointsObj }) {
         <title id="title">this shit doesn't show up anyways</title>
         <GraphAxes />
         <g>
-          {Object.entries(relDPO).map(
-            ([name, { relevantDateData, relevantWeightData }], index) => {
-              return (
-                <GraphPlotArea
-                  key={index}
-                  dateRange={dateRange}
-                  weightRange={weightRange}
-                  userExDispId={name}
-                />
-              );
-            }
-          )}
+          {userExDisp.map((userExDispId, index) => (
+            <GraphPlotArea key={index} userExDispId={userExDispId} />
+          ))}
         </g>
       </svg>
       <UserOptions />

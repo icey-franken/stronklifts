@@ -22,10 +22,10 @@ export default function DayDiffOptions() {
 
   //event handler that changes highlighted date range and updates userDayDiff, forcing Graph component to rerender
   const handleDayDiffChange = (e) => {
-    let newEl = e.target;
+		let newEl = e.target;
     const oldEl = document.getElementById(userDayDiff);
     //can't figure how to avoid error where nested div is clicked - tried z-index. Instead we do this check.
-    //TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
+		//TODO: if I want to display multiple graphs, I need to make ids unique to each plot. getElementById only grabs the first element it finds.
     newEl.id
       ? setUserDayDiff(newEl.id)
       : newEl.parentElement.id
@@ -37,20 +37,39 @@ export default function DayDiffOptions() {
     }
   };
 
+  function buildDayDiffOptions(userDayDiffOptions) {
+    let optionsArr = [];
+    for (let i = 0; i < userDayDiffOptions.length - 2; i++) {
+      optionsArr.push(
+        <div
+          id={userDayDiffOptions[i][1]}
+          key={i}
+          className="user-day-diff__option-container"
+        >
+          <div className="user-day-diff__option">
+            {userDayDiffOptions[i][0]}
+          </div>
+        </div>
+      );
+		}
+		optionsArr.push(
+      <div
+        id={userDayDiffOptions[userDayDiffOptions.length - 1][1]}
+        key={userDayDiffOptions.length - 1}
+        className="user-day-diff__option-container user-day-diff__option--pressed"
+      >
+        <div className="user-day-diff__option">{userDayDiffOptions[userDayDiffOptions.length - 1][0]}</div>
+      </div>
+    );
+    return optionsArr;
+	}
+
+  const optionsArr = buildDayDiffOptions(userDayDiffOptions);
+
   return (
     <>
       <div className="user-day-diff__container" onClick={handleDayDiffChange}>
-        {userDayDiffOptions.map(([optionText, optionId], index) => {
-          return (
-            <div
-              id={optionId}
-              key={index}
-              className="user-day-diff__option-container"
-            >
-              <div className="user-day-diff__option">{optionText}</div>
-            </div>
-          );
-        })}
+        {optionsArr}
       </div>
       <div className="user-options-container__placeholder"> </div>
     </>
