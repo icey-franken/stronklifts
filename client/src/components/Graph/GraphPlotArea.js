@@ -2,8 +2,8 @@ import React from "react";
 import "./GraphPlotArea.css";
 
 export default function GraphPlotArea({
-  xData,
-  yData,
+  relevantDateData,
+  relevantWeightData,
   dateRange,
   weightRange,
   graphLayoutProps,
@@ -77,8 +77,8 @@ export default function GraphPlotArea({
   }
 
 	//CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
-  const xDataIdx = generateXDataIdx(xData, dateRange);
-  const yDataIdx = generateYDataIdx(yData, weightRange);
+  const xDataIdx = generateXDataIdx(relevantDateData, dateRange);
+  const yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
   const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
   const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
   const plotArea = buildPlotArea(mappedDateData, mappedWeightData);

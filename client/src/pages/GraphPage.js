@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Graph from "../components/Graph/Graph";
-import { graphActions } from "../store/graph";
+import { graphDataActions } from "../store/graphData";
 
 export default function GraphPage() {
   const exercises = useSelector((state) => state.exercises);
@@ -78,7 +78,7 @@ export default function GraphPage() {
   };
 
   useEffect(() => {
-    dispatch(graphActions.setRawGraphData(workoutData));
+    dispatch(graphDataActions.setGraphData(workoutData));
   }, []);
 
   return (

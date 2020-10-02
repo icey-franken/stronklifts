@@ -6,7 +6,7 @@ import { GraphAxes } from "./GraphAxes";
 import { UserOptions } from "./GraphOptions";
 
 export default function Graph() {
-  const workoutData = useSelector((state) => state.graph.rawData);
+  const workoutData = useSelector((state) => state.graphData);
   const [isLoaded, setIsLoaded] = useState(false);
   const { userDayDiff } = useSelector((state) => state.graph.userOptions);
   const { userExDisp } = useSelector((state) => state.graph.userOptions);
@@ -84,15 +84,16 @@ export default function Graph() {
   function grabAllDataForUserSelection(workoutData, userExDisp) {
     let relevantDataPointsObj = {};
     userExDisp.forEach((userEx) => {
-      const { dateData, weightData } = workoutData[userEx];
-      const relevantDataPoints = grabRelevantDataPoints(
-        userDayDiff,
-        dateData,
-        weightData
-      );
-      const [xData, yData] = relevantDataPoints;
+			const {relevantDateData, relevantWeightData} = workoutData[userEx];
+			// const { rawDateData, rawWeightData } = workoutData[userEx];
+      // const relevantDataPoints = grabRelevantDataPoints(
+      //   userDayDiff,
+      //   rawDateData,
+      //   rawWeightData
+      // );
+      // const [xData, yData] = relevantDataPoints;
       // separateDateAndWeight(relevantDataPoints);
-      relevantDataPointsObj[userEx] = { xData, yData };
+      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
     });
     return relevantDataPointsObj;
   }
@@ -106,8 +107,8 @@ export default function Graph() {
     const msPerDay = 8.64e7; //constant used to convert ms to days
     let oldestDate = null;
     for (let exercise in relevantDataPointsObj) {
-      const { xData } = relevantDataPointsObj[exercise];
-      const exerciseOldestDate = xData[0];
+      const { relevantDateData } = relevantDataPointsObj[exercise];
+      const exerciseOldestDate = relevantDateData[0];
       if (oldestDate === null || oldestDate > exerciseOldestDate) {
         oldestDate = exerciseOldestDate;
       }
@@ -122,9 +123,9 @@ export default function Graph() {
     let minWeight = null;
     let maxWeight = null;
     for (const exercise in relevantDataPointsObj) {
-      const { yData } = relevantDataPointsObj[exercise];
-      const exerciseMinWeight = Math.min(...yData) - 5;
-      const exerciseMaxWeight = Math.max(...yData) + 5;
+      const { relevantWeightData } = relevantDataPointsObj[exercise];
+      const exerciseMinWeight = Math.min(...relevantWeightData) - 5;
+      const exerciseMaxWeight = Math.max(...relevantWeightData) + 5;
       if (minWeight === null || exerciseMinWeight < minWeight) {
         minWeight = exerciseMinWeight;
       }
@@ -154,7 +155,8 @@ export default function Graph() {
     dateRange,
     weightRange,
   };
-  console.log(relevantDataPointsObj);
+	console.log(relevantDataPointsObj);
+	console.log(workoutData);
   return (
     <div className="graph-container">
       <div className="graph-info">
@@ -175,13 +177,13 @@ export default function Graph() {
         <GraphAxes graphAxesProps={graphAxesProps} />
         <g>
           {Object.entries(relevantDataPointsObj).map(
-            ([name, { xData, yData }], index) => {
+            ([name, { relevantDateData, relevantWeightData }], index) => {
               return (
                 <GraphPlotArea
                   key={index}
                   name={name}
-                  xData={xData}
-                  yData={yData}
+                  relevantDateData={relevantDateData}
+                  relevantWeightData={relevantWeightData}
                   dateRange={dateRange}
                   weightRange={weightRange}
                   graphLayoutProps={graphLayoutProps}
