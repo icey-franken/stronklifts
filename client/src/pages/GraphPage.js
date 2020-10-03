@@ -144,7 +144,7 @@ export default function GraphPage() {
     dispatch(graphActions.setDateRange(dateRange));
     dispatch(graphActions.setWeightRange(weightRange));
     setIsLoaded(true);
-  }, [userDayDiff]);
+  }, [userDayDiff, userExDisp]);
 
   if (!isLoaded) {
     return null;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./GraphPlotArea.css";
 import { useSelector } from "react-redux";
 
@@ -14,6 +14,20 @@ export default function GraphPlotArea({ userExDispId }) {
   const { relevantDateData, relevantWeightData } = useSelector(
     (state) => state.graphData[userExDispId]
   );
+
+  const { userExDisp, userDayDiff } = useSelector(
+    (state) => state.graph.userOptions
+  );
+
+  useEffect(() => {
+    xDataIdx = generateXDataIdx(relevantDateData, dateRange);
+    yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
+    mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
+    mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
+    plotArea = buildPlotArea(mappedDateData, mappedWeightData);
+		className = `${userExDispId}-plot-area plot-area`;
+		console.log('hits');
+  }, [userExDisp, userDayDiff, dateRange, weightRange]);
 
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
@@ -81,12 +95,12 @@ export default function GraphPlotArea({ userExDispId }) {
   }
 
   //CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
-  const xDataIdx = generateXDataIdx(relevantDateData, dateRange);
-  const yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
-  const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
-  const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
-  const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
-  const className = `${userExDispId}-plot-area plot-area`;
+  let xDataIdx = generateXDataIdx(relevantDateData, dateRange);
+  let yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
+  let mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
+  let mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
+  let plotArea = buildPlotArea(mappedDateData, mappedWeightData);
+  let className = `${userExDispId}-plot-area plot-area`;
 
   return <g className={className}>{plotArea}</g>;
 }
