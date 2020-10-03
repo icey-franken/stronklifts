@@ -7,7 +7,6 @@ import exercises from "./exercises";
 import sets from "./sets";
 import graph from "./graph";
 import graphData from "./graphData";
-// import relevantGraphData from "./relevantGraphData";
 
 //change graph to be about graph settings and user options?
 const rootReducer = combineReducers({
@@ -18,7 +17,6 @@ const rootReducer = combineReducers({
   sets,
   graph,
   graphData,
-  // relevantGraphData,
 });
 
 let storeEnhancer;

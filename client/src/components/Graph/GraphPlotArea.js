@@ -27,7 +27,6 @@ export default function GraphPlotArea({ userExDispId }) {
       const dayDiff = (nowMs - dateMs) / msPerDay;
       xDataIdx.push(1 - dayDiff / dateRange);
     });
-    // console.log(dateRange, xDataIdx);
     return xDataIdx;
   }
   //use relevant raw weight data points to construct xDataIdx

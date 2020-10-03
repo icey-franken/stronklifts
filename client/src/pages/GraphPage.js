@@ -11,7 +11,11 @@ export default function GraphPage() {
   const { userDayDiff, userExDisp } = useSelector(
     (state) => state.graph.userOptions
   );
+  const [isLoaded, setIsLoaded] = useState(false);
   const dispatch = useDispatch();
+
+  //alllllll this stuff should be happening in the store
+
   //consider adding a selector to redux store that separates by exercise name.
   //for now I will do it caveman style
   let squatDate = [];
@@ -24,7 +28,6 @@ export default function GraphPage() {
   let benchWeight = [];
   let rowDate = [];
   let rowWeight = [];
-  //alllllll this stuff should be happening in the store
 
   //turn this into an action - put this stuff in the redux store
   //then based on the graph view selected we can grab that set of data and render a graph page quickly.
@@ -85,18 +88,9 @@ export default function GraphPage() {
       relevantWeightData: rowWeight,
     },
   };
-  function grabAllDataForUserSelection(workoutData, userExDisp) {
-    let relevantDataPointsObj = {};
-    userExDisp.forEach((userEx) => {
-      const { relevantDateData, relevantWeightData } = workoutData[userEx];
-      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
-    });
-    return relevantDataPointsObj;
-  }
 
   //CALCULATE OLDEST WORKOUT IF SELECTED USERDAYDIFF IS ALL----
   function calculateDateRange(userDayDiff, relevantDataPointsObj) {
-		console.log(userDayDiff);
     if (userDayDiff !== "ALL") {
       return userDayDiff;
     }
@@ -132,32 +126,33 @@ export default function GraphPage() {
     }
     return [minWeight, maxWeight];
   }
-	// let relevantDataPointsObj;
-	const [relevantDataPointsObj, setRelevantDataPointsObj] = useState(null);
-	let relDPO;
-	useEffect(() => {
+
+  function grabAllDataForUserSelection(workoutData, userExDisp) {
+    let relevantDataPointsObj = {};
+    userExDisp.forEach((userEx) => {
+      const { relevantDateData, relevantWeightData } = workoutData[userEx];
+      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
+    });
+    return relevantDataPointsObj;
+  }
+
+  useEffect(() => {
     dispatch(graphDataActions.setGraphData(workoutData));
-    console.log("hits");
-		//store is fucked
-		relDPO = grabAllDataForUserSelection(
-      workoutData,
-      userExDisp
-    );
-    setRelevantDataPointsObj(relDPO);
+    const relDPO = grabAllDataForUserSelection(workoutData, userExDisp);
     const weightRange = calculateWeightRange(relDPO);
     const dateRange = calculateDateRange(userDayDiff, relDPO);
     dispatch(graphActions.setDateRange(dateRange));
     dispatch(graphActions.setWeightRange(weightRange));
+    setIsLoaded(true);
   }, [userDayDiff]);
 
-  if (!relevantDataPointsObj) {
-		console.log('hits true')
+  if (!isLoaded) {
     return null;
-	}
+  }
 
   return (
     <div className="graph-page-container">
-      <Graph relevantDataPointsObj={relDPO} />
+      <Graph />
     </div>
   );
 }

@@ -12,7 +12,7 @@ export default function WorkoutPage({ workoutId }) {
   const handleClick = (e) => {
     e.preventDefault();
     dispatch(workoutThunks.updateWorkoutComplete(workoutId, true));
-		history.push("/history");
+    history.push("/history");
   };
 
   return (
