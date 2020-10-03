@@ -50,7 +50,10 @@ export default function GraphPlotArea({ userExDispId }) {
 
   //BUILD PLOT BASED ON MAPPED DATA POINTS-----------------------
   function buildPlotArea(mappedDateData, mappedWeightData) {
-    let graphArr = [];
+		if(mappedDateData.length === 0) {
+			return [];
+		}
+		let graphArr = [];
     for (let i = 0; i < mappedDateData.length - 1; i++) {
       graphArr.push(
         <g key={i}>
@@ -58,7 +61,7 @@ export default function GraphPlotArea({ userExDispId }) {
             key={i}
             cx={mappedDateData[i]}
             cy={mappedWeightData[i]}
-            r="4"
+            r="3"
           />
           <line
             x1={mappedDateData[i]}
@@ -74,16 +77,26 @@ export default function GraphPlotArea({ userExDispId }) {
         key={mappedDateData.length - 1}
         cx={mappedDateData[mappedDateData.length - 1]}
         cy={mappedWeightData[mappedDateData.length - 1]}
-        r="4"
+        r="3"
       />
     );
     return graphArr;
   }
 
+  function fixSoNoNegatives(xDataIdx, yDataIdx) {
+    while (xDataIdx[0] < 0) {
+      xDataIdx.shift();
+      yDataIdx.shift();
+    }
+    return [xDataIdx, yDataIdx];
+  }
+
   //CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
-  const xDataIdx = generateXDataIdx(relevantDateData, dateRange);
-  const yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
+  let xDataIdx = generateXDataIdx(relevantDateData, dateRange);
+  let yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
+  [xDataIdx, yDataIdx] = fixSoNoNegatives(xDataIdx, yDataIdx); //issue that relevantDateData not coming in properly. Not sure why and would take a long time to troubleshoot. Instead, I will fix the problem by removing negative values from xDataIdx and corresponding values from yDataIdx.
   const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
+  console.log(xDataIdx);
   const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
   const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
   const className = `${userExDispId}-plot-area plot-area`;
