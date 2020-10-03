@@ -77,6 +77,37 @@ module.exports = {
           workoutComplete: true,
           workoutSplit: "B",
         },
+        {
+          userId: 1,
+          workoutDate: "2020-07-12",
+          workoutComplete: true,
+          workoutSplit: "A",
+        },
+        {
+          userId: 1,
+          workoutDate: "2020-07-14",
+          workoutComplete: true,
+          workoutSplit: "B",
+        },
+        {
+          userId: 1,
+          workoutDate: "2020-07-17",
+          workoutComplete: true,
+          workoutSplit: "A",
+        },
+        {
+          userId: 1,
+          workoutDate: "2020-07-21",
+          workoutComplete: true,
+          workoutSplit: "B",
+        },
+        {
+          userId: 1,
+          workoutDate: "2020-07-26",
+          workoutComplete: true,
+          workoutSplit: "A",
+        },
+
       ],
       {}
     );

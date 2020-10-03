@@ -1,3 +1,4 @@
+//num workouts needs to be even
 function makeSets(startExId, numWorkouts) {
   // end = startExId + numWorkouts*3
   const end = startExId + (6 / 2) * numWorkouts;
@@ -140,4 +141,4 @@ function makeSets(startExId, numWorkouts) {
   }
   return setsArr;
 }
-console.log(makeSets(25,4))
+console.log(makeSets(37,5))

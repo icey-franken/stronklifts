@@ -328,7 +328,142 @@ module.exports = {
           numRepsGoal: 5,
           workingWeightId: 25,
           wasSuccessful: true,
-        },
+				},
+				{
+					workoutId: 13,
+					exerciseNameId: 1,
+					exerciseOrder: 1,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 32,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 13,
+					exerciseNameId: 2,
+					exerciseOrder: 2,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 16,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 13,
+					exerciseNameId: 3,
+					exerciseOrder: 3,
+					numSets: 1,
+					numRepsGoal: 5,
+					workingWeightId: 46,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 14,
+					exerciseNameId: 1,
+					exerciseOrder: 1,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 33,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 14,
+					exerciseNameId: 4,
+					exerciseOrder: 2,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 26,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 14,
+					exerciseNameId: 5,
+					exerciseOrder: 3,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 26,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 15,
+					exerciseNameId: 1,
+					exerciseOrder: 1,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 34,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 15,
+					exerciseNameId: 2,
+					exerciseOrder: 2,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 17,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 15,
+					exerciseNameId: 3,
+					exerciseOrder: 3,
+					numSets: 1,
+					numRepsGoal: 5,
+					workingWeightId: 47,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 16,
+					exerciseNameId: 1,
+					exerciseOrder: 1,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 35,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 16,
+					exerciseNameId: 4,
+					exerciseOrder: 2,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 27,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 16,
+					exerciseNameId: 5,
+					exerciseOrder: 3,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 27,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 17,
+					exerciseNameId: 1,
+					exerciseOrder: 1,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 36,
+					wasSuccessful: true
+				},
+				{
+					workoutId: 17,
+					exerciseNameId: 2,
+					exerciseOrder: 2,
+					numSets: 5,
+					numRepsGoal: 5,
+					workingWeightId: 20,
+					wasSuccessful: false
+				},
+				{
+					workoutId: 17,
+					exerciseNameId: 3,
+					exerciseOrder: 3,
+					numSets: 1,
+					numRepsGoal: 5,
+					workingWeightId: 48,
+					wasSuccessful: true
+				},
       ],
       {}
     );
