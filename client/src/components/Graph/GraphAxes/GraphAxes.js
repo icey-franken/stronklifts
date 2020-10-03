@@ -7,25 +7,19 @@ import {
   YAxisLabelTitle,
 } from ".";
 
-export default function GraphAxes({ graphAxesProps }) {
-  const { graphLayoutProps, dateRange, weightRange } = graphAxesProps;
+export default function GraphAxes() {
+
   //again - I am doing too much threading. I should add this stuff to the store and grab from there in my next refactor.
   return (
     <>
-      <AxisLines graphLayoutProps={graphLayoutProps} />
+      <AxisLines />
       <g className="labels">
-        <XAxisLabels
-          dateRange={dateRange}
-          graphLayoutProps={graphLayoutProps}
-        />
-        <XAxisLabelTitle graphLayoutProps={graphLayoutProps} />
+        <XAxisLabels />
+        <XAxisLabelTitle />
       </g>
       <g className="labels">
-        <YAxisLabels
-					weightRange={weightRange}
-          graphLayoutProps={graphLayoutProps}
-        />
-        <YAxisLabelTitle graphLayoutProps={graphLayoutProps} />
+        <YAxisLabels  />
+        <YAxisLabelTitle />
       </g>
     </>
   );

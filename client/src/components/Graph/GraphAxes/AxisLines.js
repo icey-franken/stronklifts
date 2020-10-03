@@ -1,7 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-export default function AxisLines({ graphLayoutProps }) {
-  const { axisOffset, yRange, width } = graphLayoutProps;
+export default function AxisLines() {
+  const { axisOffset, width, height } = useSelector(
+    (state) => state.graph.layout
+  );
+  const yRange = height - axisOffset;
 
   return (
     <>

@@ -35,7 +35,7 @@ export const ProtectedRouteNew = ({
       render={() => needLogin ? (
 				<Redirect to="/login" />
 			) : hasWorkouts ? (
-				<Redirect to="/history" />
+				<Redirect to="/graph" />
 			) : (
 				<Component />
 			)}
