@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useRouteMatch, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useRouteMatch } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,10 +18,8 @@ const useStyles = makeStyles({
 
 //remove material ui AS A BONUS - I like it how it is now so if it doesn't mess other things up, LEAVE IT
 export default function AuthPage() {
-  const needLogin = useSelector((state) => !state.auth.id);
   const classes = useStyles();
   const match = useRouteMatch();
-  const history = useHistory();
 
   const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -31,13 +28,7 @@ export default function AuthPage() {
       setImageLoaded(true);
     }
   };
-
-  // if (!needLogin) {
-  //   console.log("hits");
-  //   history.replace("/history");
-  //   return null;
-  // }
-
+  //render loginform or signup form based on path params
   let form =
     match.path === "/signup" ? (
       <SignupForm imageLoaded={imageLoaded} />
@@ -56,5 +47,5 @@ export default function AuthPage() {
       />
       {form}
     </Container>
-  ); //render loginform or signup form based on path params
+  );
 }

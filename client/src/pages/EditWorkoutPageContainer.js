@@ -7,7 +7,6 @@ import WorkoutPage from "./WorkoutPage";
 
 export default function EditWorkoutPageContainer() {
 	const { workoutId } = useParams();
-	console.log(workoutId);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(workoutThunks.updateWorkoutComplete(workoutId, false));

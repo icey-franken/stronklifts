@@ -87,7 +87,7 @@ const createWorkoutThunk = (userId, wwValues) => {
       dispatch(createWorkout(workout));
       return workout.id;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
   };
@@ -100,7 +100,6 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
-      console.log("line91workout.js", workoutId, workoutComplete);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -119,7 +118,7 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
       // }
       // return res;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     dispatch(updateWorkoutComplete(workoutId, workoutComplete));
   };
@@ -139,7 +138,7 @@ const deleteWorkoutThunk = (workoutId) => {
       dispatch(deleteWorkout(workoutId, exerciseIds, setIds));
       return res;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 };
@@ -264,7 +263,7 @@ export default function workoutReducer(
       return newState;
     case DELETE_WORKOUT:
       delete newState[action.workoutId];
-      if (Object.keys(newState.workouts).length === 0) {
+      if (Object.keys(newState).length === 0) {
         newState.hasWorkouts = false;
       }
       return newState;

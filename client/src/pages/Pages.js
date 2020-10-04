@@ -1,38 +1,33 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch } from "react-router-dom";
+
+import { ProtectedRoute, AuthRoute } from "../utils/routeUtils";
+import { workoutThunks } from "../store/workouts";
+
 import AuthPage from "./AuthPage";
-import { ProtectedRoute } from "../utils/routeUtils";
-import { useSelector } from "react-redux";
-import EditWorkoutPage from "./EditWorkoutPageContainer";
+import WorkoutHistoryPage from "./WorkoutHistoryPage";
+import CalendarPage from "./CalendarPage";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
 import DemosPage from "./DemosPage";
-import CalendarPage from "./CalendarPage";
-import NewLifterForm from "../components/NewLifterForm";
-import WorkoutHistoryPage from "./WorkoutHistoryPage";
 import GraphPage from "./GraphPage";
-
-import { useDispatch } from "react-redux";
-import { workoutThunks } from "../store/workouts";
-import { useEffect } from "react";
+import EditWorkoutPage from "./EditWorkoutPageContainer";
+import NewLifterForm from "../components/NewLifterForm";
 
 export default function Pages() {
   const userId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
-  console.log(userId);
+  const { workoutsLoaded } = useSelector((state) => state.workouts);
+
   useEffect(() => {
     if (userId) {
       dispatch(workoutThunks.getWorkouts(userId));
     }
   }, [dispatch, userId]);
 
-  const { workoutsLoaded } = useSelector((state) => state.workouts);
-  if (userId && !workoutsLoaded) {
-    return null;
-  }
-
-  return (
+  return userId && !workoutsLoaded ? null : (
     <Switch>
-      <Route path={["/login", "/signup"]} component={AuthPage} />
+      <AuthRoute path={["/login", "/signup"]} component={AuthPage} />
       <ProtectedRoute
         path="/history"
         exact={true}
