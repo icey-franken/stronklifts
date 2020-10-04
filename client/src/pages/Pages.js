@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import AuthPage from "./AuthPage";
-import { ProtectedRoute, ProtectedRouteNew } from "../utils/routeUtils";
+import { ProtectedRoute } from "../utils/routeUtils";
 import { useSelector } from "react-redux";
 import EditWorkoutPage from "./EditWorkoutPageContainer";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
@@ -18,14 +18,17 @@ import { useEffect } from "react";
 export default function Pages() {
   const userId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
+  console.log(userId);
   useEffect(() => {
-    dispatch(workoutThunks.getWorkouts(userId));
+    if (userId) {
+      dispatch(workoutThunks.getWorkouts(userId));
+    }
   }, [dispatch, userId]);
 
-	// const { workoutsLoaded } = useSelector((state) => state.workouts);
-  // if (!workoutsLoaded) {
-  //   return null;
-  // }
+  const { workoutsLoaded } = useSelector((state) => state.workouts);
+  if (userId && !workoutsLoaded) {
+    return null;
+  }
 
   return (
     <Switch>
@@ -35,32 +38,20 @@ export default function Pages() {
         exact={true}
         component={WorkoutHistoryPage}
       />
-      <ProtectedRoute
-        path="/calendar"
-        exact={true}
-        component={CalendarPage}
-      />
+      <ProtectedRoute path="/calendar" exact={true} component={CalendarPage} />
       <ProtectedRoute
         path="/workout/new"
         exact={true}
         component={NewWorkoutPage}
       />
-      <ProtectedRoute
-        path="/demos"
-        exact={true}
-        component={DemosPage}
-      />
-      <ProtectedRoute
-        path="/graph"
-        exact={true}
-        component={GraphPage}
-      />
+      <ProtectedRoute path="/demos" exact={true} component={DemosPage} />
+      <ProtectedRoute path="/graph" exact={true} component={GraphPage} />
       <ProtectedRoute
         path="/workout/edit/:workoutId"
         exact={true}
         component={EditWorkoutPage}
       />
-      <ProtectedRouteNew
+      <ProtectedRoute
         path="/newLifterForm"
         exact={true}
         component={NewLifterForm}

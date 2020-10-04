@@ -1,12 +1,14 @@
 import Cookies from "js-cookie"; //this module allows us to grab cookies
 
 //action types
+// export const NEW_USER = "workout/NEW_USER";
 export const GET_WORKOUTS = "workout/GET_WORKOUTS";
 export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
 export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
 export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
 
 //action pojo creator function
+// const newUser = () => ({ type: NEW_USER }); //sets workout loaded to true
 const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
 
 const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
@@ -34,10 +36,20 @@ export const workoutActions = {
 //thunk action creator
 const getWorkoutsThunk = (userId) => {
   return async (dispatch) => {
-    const res = await fetch(`/api/workouts/${userId}`);
-    res.data = await res.json();
-    if (res.ok) dispatch(getWorkouts(res.data.workouts));
-    return res;
+		if(!userId) {
+			return;
+		}
+    try {
+      const res = await fetch(`/api/workouts/${userId}`);
+      if (!res.ok) {
+        throw res;
+      }
+      res.data = await res.json();
+      dispatch(getWorkouts(res.data.workouts));
+      return res;
+    } catch (e) {
+      console.error(e);
+    }
   };
 };
 
@@ -147,6 +159,9 @@ export default function workoutReducer(
   Object.freeze(state);
   let newState = Object.assign({}, state);
   switch (action.type) {
+    // case NEW_USER:
+    //   newState.workoutsLoaded = true;
+    //   return newState;
     case GET_WORKOUTS:
       action.workouts.length > 0
         ? (newState.hasWorkouts = true)

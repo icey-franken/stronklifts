@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
-import SLLogo from "../components/auth/SLLogo";
 import { makeStyles } from "@material-ui/core/styles";
 import LoginForm from "../components/auth/LoginForm";
 import SignupForm from "../components/auth/SignupForm";
@@ -24,17 +23,27 @@ export default function AuthPage() {
   const classes = useStyles();
   const match = useRouteMatch();
   const history = useHistory();
-  if (!needLogin) {
-    history.replace("/history");
-  }
 
   const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleLoaded = () => {
+    if (!imageLoaded) {
+      setImageLoaded(true);
+    }
+  };
+
+  // if (!needLogin) {
+  //   console.log("hits");
+  //   history.replace("/history");
+  //   return null;
+  // }
+
   let form =
     match.path === "/signup" ? (
       <SignupForm imageLoaded={imageLoaded} />
     ) : (
       <LoginForm imageLoaded={imageLoaded} />
-		);
+    );
 
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
@@ -43,7 +52,7 @@ export default function AuthPage() {
         src={logo}
         alt="Stronklifts Logo"
         style={imageLoaded ? { height: "100px" } : null}
-        onLoad={imageLoaded ? null : setImageLoaded(true)}
+        onLoad={handleLoaded}
       />
       {form}
     </Container>

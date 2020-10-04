@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { signup } from "../../store/auth";
 import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "./AuthSubmitButton";
 import Errors from "./Errors";
 
 export default function SignupForm({ imageLoaded }) {
+  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,7 +28,8 @@ export default function SignupForm({ imageLoaded }) {
       setErrors(res.data.error.errors);
       setPassword("");
       setConfirmPassword("");
-    }
+		}
+		history.push('/history');
   };
   //make separate errors component?
 
