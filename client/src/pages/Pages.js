@@ -1,84 +1,56 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import AuthPage from "./AuthPage";
-import { ProtectedRoute, ProtectedRouteNew } from "../utils/routeUtils";
-import { useSelector } from "react-redux";
-import EditWorkoutPage from "./EditWorkoutPageContainer";
-import NewWorkoutPage from "./NewWorkoutPageContainer";
-import DemosPage from './DemosPage'
-import CalendarPage from './CalendarPage'
-import NewLifterForm from '../components/NewLifterForm';
-import WorkoutHistoryPage from './WorkoutHistoryPage';
-import GraphPage from './GraphPage';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { ProtectedRoute, AuthRoute } from "../utils/routeUtils";
 import { workoutThunks } from "../store/workouts";
-import { useEffect } from "react";
+
+import AuthPage from "./AuthPage";
+import WorkoutHistoryPage from "./WorkoutHistoryPage";
+import CalendarPage from "./CalendarPage";
+import NewWorkoutPage from "./NewWorkoutPageContainer";
+import DemosPage from "./DemosPage";
+import GraphPage from "./GraphPage";
+import EditWorkoutPage from "./EditWorkoutPageContainer";
+import NewLifterForm from "../components/NewLifterForm";
 
 export default function Pages() {
+  const userId = useSelector((state) => state.auth.id);
+  const dispatch = useDispatch();
+  const { workoutsLoaded } = useSelector((state) => state.workouts);
 
-	const userId = useSelector((state) => state.auth.id);
-	const needLogin = useSelector((state) => !state.auth.id);
-	// const needLogin = !userId;
-  const workouts = useSelector((state) => state.workouts);
-	const hasWorkouts = Object.keys(workouts).length > 0;
-	const dispatch = useDispatch();
   useEffect(() => {
-		dispatch(workoutThunks.getWorkouts(userId))
-	}, [dispatch, userId]);
+    if (userId) {
+      dispatch(workoutThunks.getWorkouts(userId));
+    }
+  }, [dispatch, userId]);
 
-  return (
-      <Switch>
-        <Route path={["/login", "/signup"]} component={AuthPage} />
-        <ProtectedRoute
-          path="/history"
-          exact={true}
-          needLogin={needLogin}
-					component={WorkoutHistoryPage}
-					hasWorkouts={hasWorkouts}
-        />
-				<ProtectedRoute
-          path="/calendar"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-					component={CalendarPage}
-        />
-				<ProtectedRoute
-          path="/workout/new"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-          component={NewWorkoutPage}
-        />
-				<ProtectedRoute
-          path="/demos"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-          component={DemosPage}
-        />
-				<ProtectedRoute
-          path="/graph"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-          component={GraphPage}
-        />
-				<ProtectedRoute
-          path="/workout/edit/:workoutId"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-          component={EditWorkoutPage}
-        />
-				<ProtectedRouteNew
-          path="/newLifterForm"
-          exact={true}
-          needLogin={needLogin}
-					hasWorkouts={hasWorkouts}
-          component={NewLifterForm}
-        />
-      </Switch>
+  return userId && !workoutsLoaded ? null : (
+    <Switch>
+      <AuthRoute path={["/login", "/signup"]} component={AuthPage} />
+      <ProtectedRoute
+        path="/history"
+        exact={true}
+        component={WorkoutHistoryPage}
+      />
+      <ProtectedRoute path="/calendar" exact={true} component={CalendarPage} />
+      <ProtectedRoute
+        path="/workout/new"
+        exact={true}
+        component={NewWorkoutPage}
+      />
+      <ProtectedRoute path="/demos" exact={true} component={DemosPage} />
+      <ProtectedRoute path="/graph" exact={true} component={GraphPage} />
+      <ProtectedRoute
+        path="/workout/edit/:workoutId"
+        exact={true}
+        component={EditWorkoutPage}
+      />
+      <ProtectedRoute
+        path="/newLifterForm"
+        exact={true}
+        component={NewLifterForm}
+      />
+    </Switch>
   );
 }

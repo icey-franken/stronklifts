@@ -1,5 +1,9 @@
-import React from 'react';
+import React from "react";
+import { useSelector } from "react-redux";
 
 export default function CalendarPage() {
-	return (<div>calendar</div>)
+  const workouts = useSelector((state) => state.workouts);
+  console.log('workouts',workouts);
+
+  return <div>calendar</div>;
 }

@@ -1,12 +1,14 @@
 import Cookies from "js-cookie"; //this module allows us to grab cookies
 
 //action types
+// export const NEW_USER = "workout/NEW_USER";
 export const GET_WORKOUTS = "workout/GET_WORKOUTS";
 export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
 export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
 export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
 
 //action pojo creator function
+// const newUser = () => ({ type: NEW_USER }); //sets workout loaded to true
 const getWorkouts = (workouts) => ({ type: GET_WORKOUTS, workouts });
 
 const createWorkout = (workout) => ({ type: CREATE_WORKOUT, workout });
@@ -34,10 +36,20 @@ export const workoutActions = {
 //thunk action creator
 const getWorkoutsThunk = (userId) => {
   return async (dispatch) => {
-    const res = await fetch(`/api/workouts/${userId}`);
-    res.data = await res.json();
-    if (res.ok) dispatch(getWorkouts(res.data.workouts));
-    return res;
+		if(!userId) {
+			return;
+		}
+    try {
+      const res = await fetch(`/api/workouts/${userId}`);
+      if (!res.ok) {
+        throw res;
+      }
+      res.data = await res.json();
+      dispatch(getWorkouts(res.data.workouts));
+      return res;
+    } catch (e) {
+      console.error(e);
+    }
   };
 };
 
@@ -75,7 +87,7 @@ const createWorkoutThunk = (userId, wwValues) => {
       dispatch(createWorkout(workout));
       return workout.id;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
   };
@@ -88,7 +100,6 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
   return async (dispatch) => {
     try {
       const body = JSON.stringify({ workoutComplete });
-      console.log("line91workout.js", workoutId, workoutComplete);
       const res = await fetch(`/api/workouts/${workoutId}`, {
         method: "put",
         headers: {
@@ -107,7 +118,7 @@ const updateWorkoutCompleteThunk = (workoutId, workoutComplete) => {
       // }
       // return res;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
     dispatch(updateWorkoutComplete(workoutId, workoutComplete));
   };
@@ -127,7 +138,7 @@ const deleteWorkoutThunk = (workoutId) => {
       dispatch(deleteWorkout(workoutId, exerciseIds, setIds));
       return res;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 };
@@ -140,15 +151,24 @@ export const workoutThunks = {
 };
 
 //workout reducer
-export default function workoutReducer(state = {}, action) {
+export default function workoutReducer(
+  state = { workoutsLoaded: false, hasWorkouts: false },
+  action
+) {
   Object.freeze(state);
   let newState = Object.assign({}, state);
   switch (action.type) {
+    // case NEW_USER:
+    //   newState.workoutsLoaded = true;
+    //   return newState;
     case GET_WORKOUTS:
+      action.workouts.length > 0
+        ? (newState.hasWorkouts = true)
+        : (newState.hasWorkouts = false);
       action.exercises = {};
       action.workouts.forEach((workout) => {
-				const workoutId = workout.id;
-				const {workoutDate} = workout;
+        const workoutId = workout.id;
+        const { workoutDate } = workout;
         newState[workoutId] = {
           id: workoutId,
           workoutDate,
@@ -167,8 +187,8 @@ export default function workoutReducer(state = {}, action) {
         //get exercise ids from exercises object
         const workoutSetIds = [];
         exercises.forEach((exercise) => {
-					exercise.workoutId = workoutId;
-					exercise.workoutDate = workoutDate
+          exercise.workoutId = workoutId;
+          exercise.workoutDate = workoutDate;
           exerciseIds.push(exercise.id);
           const exerciseSetIds = [];
           exercise.Sets.forEach((set) => {
@@ -185,6 +205,7 @@ export default function workoutReducer(state = {}, action) {
         });
       });
       delete action.workouts;
+      newState.workoutsLoaded = true;
       return newState;
     case CREATE_WORKOUT:
       //if workout already exists, just return state as is
@@ -194,8 +215,8 @@ export default function workoutReducer(state = {}, action) {
       } else {
         action.exercises = {};
         const workout = action.workout;
-				const workoutId = workout.id;
-				const {workoutDate} = workout;
+        const workoutId = workout.id;
+        const { workoutDate } = workout;
         newState[workoutId] = {
           id: workoutId,
           workoutDate,
@@ -216,8 +237,8 @@ export default function workoutReducer(state = {}, action) {
         const workoutSetIds = [];
         if (exercises) {
           exercises.forEach((exercise) => {
-						exercise.workoutId = workoutId;
-						exercise.workoutDate = workoutDate;
+            exercise.workoutId = workoutId;
+            exercise.workoutDate = workoutDate;
             exerciseIds.push(exercise.id);
             const exerciseSetIds = [];
             exercise.Sets.forEach((set) => {
@@ -235,12 +256,16 @@ export default function workoutReducer(state = {}, action) {
         }
         delete action.workout;
       }
+      newState.hasWorkouts = true;
       return newState;
     case COMPLETE_WORKOUT:
       newState[action.workoutId].workoutComplete = action.workoutComplete;
       return newState;
     case DELETE_WORKOUT:
       delete newState[action.workoutId];
+      if (Object.keys(newState).length === 0) {
+        newState.hasWorkouts = false;
+      }
       return newState;
     default:
       return state;

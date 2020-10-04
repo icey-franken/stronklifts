@@ -52,7 +52,8 @@ export default function graphDataReducer(state = {}, action) {
         newStateSlice.relevantDateData = relevantDateData;
         newStateSlice.relevantWeightData = relevantWeightData;
         newState[id] = newStateSlice;
-      }
+			}
+			return newState;
     // case graphActionTypes.SET_USER_EX_DISP:
 
     default:

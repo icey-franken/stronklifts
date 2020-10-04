@@ -169,7 +169,6 @@ export default function GraphPage() {
   useEffect(() => {
     dispatch(graphDataActions.setGraphData(workoutData));
     const relDPO = grabAllDataForUserSelection(workoutData, userExDisp);
-    console.log(relDPO);
     const weightRange = calculateWeightRange(relDPO);
     const dateRange = calculateDateRange(userDayDiff, relDPO);
     dispatch(graphActions.setDateRange(dateRange));
@@ -177,11 +176,7 @@ export default function GraphPage() {
     setIsLoaded(true);
   }, [userDayDiff, userExDisp]);
 
-  if (!isLoaded) {
-    return null;
-  }
-
-  return (
+  return !isLoaded ? null : (
     <div className="graph-page-container">
       <Graph />
     </div>
