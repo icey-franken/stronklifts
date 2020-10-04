@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./GraphPlotArea.css";
 import { useSelector } from "react-redux";
 
@@ -14,6 +14,23 @@ export default function GraphPlotArea({ userExDispId }) {
   const { relevantDateData, relevantWeightData } = useSelector(
     (state) => state.graphData[userExDispId]
   );
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const [plotArea, setPlotArea] = useState(null);
+
+  let className = `${userExDispId}-plot-area plot-area`;
+  useEffect(() => {
+    let xDataIdx = generateXDataIdx(relevantDateData, dateRange);
+    let yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
+    [xDataIdx, yDataIdx] = fixSoNoNegatives(xDataIdx, yDataIdx); //issue that relevantDateData not coming in properly. Not sure why and would take a long time to troubleshoot. Instead, I will fix the problem by removing negative values from xDataIdx and corresponding values from yDataIdx.
+
+    const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
+    const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
+    const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
+    setPlotArea(plotArea);
+    setIsLoaded(true);
+  }, [dateRange, weightRange]);
 
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
   //Idx arrays are scalar values that will be used later on to generate Num arrays based on SVG size parameters.
@@ -39,6 +56,20 @@ export default function GraphPlotArea({ userExDispId }) {
     return yDataIdx;
   }
 
+  function fixSoNoNegatives(xDataIdx, yDataIdx) {
+    let [posXDataIdx, posYDataIdx] = [[...xDataIdx], [...yDataIdx]];
+    let i = 0;
+    while (i < posXDataIdx.length) {
+      if (posYDataIdx[i] < 0 || posXDataIdx[i] < 0) {
+        posXDataIdx.splice(i, 1);
+        posYDataIdx.splice(i, 1);
+      } else {
+        i++;
+      }
+    }
+    return [posXDataIdx, posYDataIdx];
+  }
+
   //MAP IDX ARRAYS TO DATA POINTS-------------------------------
   //map xDataIdx and yDataIdx scalar arrays to actual data points based on SVG size
   function mapXIdxToDataPoints(xDataIdx, xRange, axisOffset) {
@@ -50,10 +81,10 @@ export default function GraphPlotArea({ userExDispId }) {
 
   //BUILD PLOT BASED ON MAPPED DATA POINTS-----------------------
   function buildPlotArea(mappedDateData, mappedWeightData) {
-		if(mappedDateData.length === 0) {
-			return [];
-		}
-		let graphArr = [];
+    if (mappedDateData.length === 0) {
+      return [];
+    }
+    let graphArr = [];
     for (let i = 0; i < mappedDateData.length - 1; i++) {
       graphArr.push(
         <g key={i}>
@@ -83,23 +114,9 @@ export default function GraphPlotArea({ userExDispId }) {
     return graphArr;
   }
 
-  function fixSoNoNegatives(xDataIdx, yDataIdx) {
-    while (xDataIdx[0] < 0) {
-      xDataIdx.shift();
-      yDataIdx.shift();
-    }
-    return [xDataIdx, yDataIdx];
+  if (!isLoaded) {
+    return null;
   }
-
-  //CALCULATE NECESSARY VALUES USING ABOVE FUNCTIONS------------
-  let xDataIdx = generateXDataIdx(relevantDateData, dateRange);
-  let yDataIdx = generateYDataIdx(relevantWeightData, weightRange);
-  [xDataIdx, yDataIdx] = fixSoNoNegatives(xDataIdx, yDataIdx); //issue that relevantDateData not coming in properly. Not sure why and would take a long time to troubleshoot. Instead, I will fix the problem by removing negative values from xDataIdx and corresponding values from yDataIdx.
-  const mappedDateData = mapXIdxToDataPoints(xDataIdx, xRange, axisOffset);
-  console.log(xDataIdx);
-  const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
-  const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
-  const className = `${userExDispId}-plot-area plot-area`;
 
   return <g className={className}>{plotArea}</g>;
 }
