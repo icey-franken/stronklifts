@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { login } from "../../store/auth";
+import { AuthActions } from "../../store/auth";
 import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "./AuthSubmitButton";
 import Errors from "./Errors";
@@ -37,7 +37,7 @@ export default function LoginForm({ imageLoaded }) {
 
 	const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await dispatch(login(username, password));
+    const res = await dispatch(AuthActions.login(username, password));
     if (res.data.message) {
       setErrors([res.data.message]);
       setPassword("");

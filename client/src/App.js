@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CssBaseline } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
-import { setUser } from "./store/auth";
+import { AuthActions } from "./store/auth";
 import { useDispatch } from "react-redux";
 import { AuthNavBar, RandoNavBar } from "./components/utils/NavBar";
 import Footer from "./components/utils/Footer";
@@ -42,7 +42,7 @@ function App() {
           throw res;
         }
         res.data = await res.json(); // current user info
-        dispatch(setUser(res.data.user)); //creates set user action so that user info added to redux store upon page load if user already logged in.
+        dispatch(AuthActions.setUser(res.data.user)); //creates set user action so that user info added to redux store upon page load if user already logged in.
 
         setLoading(false);
       } catch (e) {

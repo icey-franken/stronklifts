@@ -1,10 +1,8 @@
 import Cookies from "js-cookie"; //this module allows us to grab cookies
+import { authActionTypes } from "./auth";
+import { workoutActionTypes } from "./workouts";
 
 //action types
-import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
-import { SET_USER, REMOVE_USER } from "./auth";
-import { DELETE_WORKOUT } from "./workouts";
-
 const UPDATE_REPS = "sets/UPDATE_REPS";
 
 export const updateReps = (setId, numRepsActual) => ({
@@ -39,24 +37,24 @@ export default function setReducer(state = {}, action) {
   let newState = Object.assign({}, state);
   let setIds = Object.keys(newState);
   switch (action.type) {
-    case SET_USER:
+    case authActionTypes.SET_USER:
       const userId = action.user.id;
       setIds.forEach((setId) => {
         newState[setId].userId = userId;
       });
       return newState;
-    case REMOVE_USER:
+    case authActionTypes.REMOVE_USER:
       setIds.forEach((setId) => {
         delete newState[setId].userId;
       });
       return newState;
-    case GET_WORKOUTS:
+    case workoutActionTypes.GET_WORKOUTS:
       const actionSetIds = Object.keys(action.sets);
       actionSetIds.forEach((id) => {
         newState[id] = action.sets[id];
       });
       return newState;
-    case CREATE_WORKOUT:
+    case workoutActionTypes.CREATE_WORKOUT:
       if (action.workout === "duplicate") {
         return newState;
       }
@@ -68,7 +66,7 @@ export default function setReducer(state = {}, action) {
     case UPDATE_REPS:
 			newState[action.setId].numRepsActual = action.numRepsActual;
 			return newState;
-    case DELETE_WORKOUT:
+    case workoutActionTypes.DELETE_WORKOUT:
       const setIds2 = action.setIds;
       setIds2.forEach((id) => {
         delete newState[id];

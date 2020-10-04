@@ -2,10 +2,17 @@ import Cookies from "js-cookie"; //this module allows us to grab cookies
 
 //action types
 // export const NEW_USER = "workout/NEW_USER";
-export const GET_WORKOUTS = "workout/GET_WORKOUTS";
-export const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
-export const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
-export const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
+const GET_WORKOUTS = "workout/GET_WORKOUTS";
+const CREATE_WORKOUT = "workout/CREATE_WORKOUT";
+const COMPLETE_WORKOUT = "workout/COMPLETE_WORKOUT";
+const DELETE_WORKOUT = "workout/DELETE_WORKOUT";
+
+export const workoutActionTypes = {
+  GET_WORKOUTS,
+  CREATE_WORKOUT,
+  COMPLETE_WORKOUT,
+  DELETE_WORKOUT,
+};
 
 //action pojo creator function
 // const newUser = () => ({ type: NEW_USER }); //sets workout loaded to true
@@ -36,9 +43,9 @@ export const workoutActions = {
 //thunk action creator
 const getWorkoutsThunk = (userId) => {
   return async (dispatch) => {
-		if(!userId) {
-			return;
-		}
+    if (!userId) {
+      return;
+    }
     try {
       const res = await fetch(`/api/workouts/${userId}`);
       if (!res.ok) {
@@ -92,7 +99,6 @@ const createWorkoutThunk = (userId, wwValues) => {
     }
   };
 };
-window.createWorkoutThunk = createWorkoutThunk;
 
 //I think it can dispatch a createWorkout action all the same - it does the same stuff?
 //Actually the workout should already be created, and as it is changed by user it should be updated in the store. So what we send to the database doesn't need to be seen by the store at all because it'll already be there.
