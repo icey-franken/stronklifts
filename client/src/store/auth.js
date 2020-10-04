@@ -2,17 +2,27 @@ import Cookies from 'js-cookie';//this module allows us to grab cookies
 // create all actions and reducer related to auth in this file
 
 //action type
-export const SET_USER = 'auth/SET_USER';
-export const REMOVE_USER = 'auth/REMOVE_USER';
+const SET_USER = 'auth/SET_USER';
+const REMOVE_USER = 'auth/REMOVE_USER';
 // const CREATE_USER = 'auth/CREATE_USER';//uses set user action creator - difference is thunk action creator called
 
+export const authActionTypes = {
+	SET_USER,
+	REMOVE_USER
+}
+
 // action pojo creator function
-export const setUser = (user) => ({type:SET_USER,user});
-export const removeUser = () => ({type: REMOVE_USER});
+const setUser = (user) => ({type:SET_USER,user});
+const removeUser = () => ({type: REMOVE_USER});
 // export const createUser = (user) => ({type:CREATE_USER,user});
 
+export const AuthActions = {
+	setUser,
+	removeUser
+}
+
 //thunk action creator
-export const login = (username, password) => {
+const login = (username, password) => {
 	//logging in is a put request to /api/session/
 	//fetch requests that are not GET must have a XSRF-TOKEN header pointing to that cookie
 	return async dispatch => {
@@ -34,7 +44,7 @@ export const login = (username, password) => {
 	};
 };
 
-export const logout = () => async (dispatch) => {
+const logout = () => async (dispatch) => {
 	const res = await fetch(`/api/session`, {method: 'delete', headers: {'XSRF-TOKEN': Cookies.get('XSRF-TOKEN')}});//do I need xsrf token here?
 	res.data = await res.json();
 	if(res.ok) {
@@ -47,7 +57,7 @@ export const logout = () => async (dispatch) => {
 // window.login = login;
 
 //NEED TO ALTER THIS THUNK FOR SIGNUP!!!
-export const signup = (username, email, password, confirmPassword) => {
+const signup = (username, email, password, confirmPassword) => {
 	return async dispatch => {
 		const body = JSON.stringify({username,email,password, confirmPassword});
 		const res = await fetch('/api/users', {
@@ -66,6 +76,12 @@ export const signup = (username, email, password, confirmPassword) => {
 		return res;
 	};
 };
+
+export const AuthThunks = {
+	login,
+	logout,
+	signup
+}
 
 export default function authReducer(state={}, action) {
 	Object.freeze(state);//possibly unnecessary

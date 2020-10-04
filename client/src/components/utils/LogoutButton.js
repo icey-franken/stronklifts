@@ -2,7 +2,7 @@ import React from "react";
 // import {Button} from '@material-ui/core';
 import { useDispatch } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
-import * as AuthActions from "../../store/auth";
+import { AuthActions } from "../../store/auth";
 
 export default function LogoutButton() {
   const dispatch = useDispatch();

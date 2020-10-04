@@ -1,56 +1,56 @@
 import Cookies from "js-cookie"; //this module allows us to grab cookies
+import { authActionTypes } from "./auth";
+import { workoutActionTypes } from "./workouts";
 
 //action types
-import { GET_WORKOUTS, CREATE_WORKOUT } from "./workouts";
-import { SET_USER, REMOVE_USER } from "./auth";
-import {DELETE_WORKOUT} from './workouts';
+export const UPDATE_SUCCESS = "exercise/UPDATE_SUCCESS";
 
-export const UPDATE_SUCCESS = 'exercise/UPDATE_SUCCESS';
-
-export const updateExerciseSuccess= (exerciseId, wasSuccessful) =>({
-	type: UPDATE_SUCCESS,
-	exerciseId,
-	wasSuccessful
-})
+export const updateExerciseSuccess = (exerciseId, wasSuccessful) => ({
+  type: UPDATE_SUCCESS,
+  exerciseId,
+  wasSuccessful,
+});
 
 export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
-	return async (dispatch) => {
-		try{
-			const body = JSON.stringify({wasSuccessful});
-			const res = await fetch(`/api/exercises/${exerciseId}`, {
-				method: "put",
+  return async (dispatch) => {
+    try {
+      const body = JSON.stringify({ wasSuccessful });
+      const res = await fetch(`/api/exercises/${exerciseId}`, {
+        method: "put",
         headers: {
           "Content-Type": "application/json",
           "XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
         },
         body,
-			});
-			if(!res.ok) throw res;
-			dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
-			return res;
-		} catch(err) {console.log(err)}
-	}
-}
+      });
+      if (!res.ok) throw res;
+      dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 export default function exerciseReducer(state = {}, action) {
   Object.freeze(state);
   let newState = Object.assign({}, state);
   switch (action.type) {
-    case SET_USER:
+    case authActionTypes.SET_USER:
       const exerciseIds = Object.keys(newState);
       const userId = action.user.id;
       exerciseIds.forEach((exerciseId) => {
         newState[exerciseId].userId = userId;
       });
       return newState;
-    case REMOVE_USER:
+    case authActionTypes.REMOVE_USER:
       const exerciseIds2 = Object.keys(newState);
 
       exerciseIds2.forEach((exerciseId) => {
         delete newState[exerciseId].userId;
       });
       return newState;
-    case GET_WORKOUTS:
+    case workoutActionTypes.GET_WORKOUTS:
       const exerciseIds3 = Object.keys(action.exercises);
       action.sets = {};
       exerciseIds3.forEach((id) => {
@@ -64,11 +64,11 @@ export default function exerciseReducer(state = {}, action) {
           "numRepsGoal",
           "numSets",
           "setIds",
-					"workoutId",
-					'wasSuccessful',
-					'numFails',
-					'didDeload',
-					'workoutDate'
+          "workoutId",
+          "wasSuccessful",
+          "numFails",
+          "didDeload",
+          "workoutDate",
         ];
         relevantExerciseKeys.forEach((relevantExerciseKey) => {
           newState[id][relevantExerciseKey] = exercise[relevantExerciseKey];
@@ -83,7 +83,7 @@ export default function exerciseReducer(state = {}, action) {
       });
       delete action.exercises;
       return newState;
-    case CREATE_WORKOUT:
+    case workoutActionTypes.CREATE_WORKOUT:
       if (action.workout === "duplicate") {
         return newState;
       }
@@ -100,11 +100,11 @@ export default function exerciseReducer(state = {}, action) {
           "numRepsGoal",
           "numSets",
           "setIds",
-					"workoutId",
-					'wasSuccessful',
-					'numFails',
-					'didDeload',
-					'workoutDate'
+          "workoutId",
+          "wasSuccessful",
+          "numFails",
+          "didDeload",
+          "workoutDate",
         ];
         relevantExerciseKeys.forEach((relevantExerciseKey) => {
           newState[id][relevantExerciseKey] = exercise[relevantExerciseKey];
@@ -118,16 +118,16 @@ export default function exerciseReducer(state = {}, action) {
         });
       });
       delete action.exercises;
-			return newState;
-		case UPDATE_SUCCESS:
-			newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
-			return newState;
-		case DELETE_WORKOUT:
-			const exerciseIds5 = action.exerciseIds;
-			exerciseIds5.forEach(id=>{
-				delete newState[id]
-			})
-			return newState;
+      return newState;
+    case workoutActionTypes.UPDATE_SUCCESS:
+      newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
+      return newState;
+    case workoutActionTypes.DELETE_WORKOUT:
+      const exerciseIds5 = action.exerciseIds;
+      exerciseIds5.forEach((id) => {
+        delete newState[id];
+      });
+      return newState;
     default:
       return state;
   }
