@@ -51,7 +51,7 @@ router.get(
     const grabWorkoutSpecs = {
       where: { userId },
       attributes: ["id", "workoutDate", "workoutComplete", "workoutSplit"],
-      limit: 10,
+      // limit: 10, I want them ALLLLLL
       order: [
         ["workoutDate", "desc"],
         [Exercise, "exerciseOrder", "asc"], //can probably remove these because of new defaults, but we'll leave it in for now

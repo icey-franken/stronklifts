@@ -92,7 +92,7 @@ export default function GraphPlotArea({ userExDispId }) {
             key={i}
             cx={mappedDateData[i]}
             cy={mappedWeightData[i]}
-            r="4"
+            r="3"
           />
           <line
             x1={mappedDateData[i]}
@@ -108,7 +108,7 @@ export default function GraphPlotArea({ userExDispId }) {
         key={mappedDateData.length - 1}
         cx={mappedDateData[mappedDateData.length - 1]}
         cy={mappedWeightData[mappedDateData.length - 1]}
-        r="4"
+        r="3"
       />
     );
     return graphArr;
