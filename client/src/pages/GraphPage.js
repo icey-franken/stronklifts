@@ -130,8 +130,38 @@ export default function GraphPage() {
   function grabAllDataForUserSelection(workoutData, userExDisp) {
     let relevantDataPointsObj = {};
     userExDisp.forEach((userEx) => {
-      const { relevantDateData, relevantWeightData } = workoutData[userEx];
-      relevantDataPointsObj[userEx] = { relevantDateData, relevantWeightData };
+      // let { relevantDateData, relevantWeightData } = workoutData[userEx];
+      let allRelevantDateData = workoutData[userEx].relevantDateData;
+      let allRelevantWeightData = workoutData[userEx].relevantWeightData;
+
+      if (userDayDiff === "ALL") {
+        relevantDataPointsObj[userEx] = {
+          relevantDateData: allRelevantDateData,
+          relevantWeightData: allRelevantWeightData,
+        };
+      } else {
+        let relevantDateData = [];
+        let relevantWeightData = [];
+        //logic below taken from graphplotarea component. Not very dry.
+        //separate out data that is out of date range - should fix improper y axis scale rendering because weightRange calculated in this component will be accurate.
+        //may slow down rendering - can improve in the future.
+        const nowMs = Date.now(); //constant used for date range calcs
+        const msPerDay = 8.64e7; //constant used to convert ms to days
+        allRelevantDateData.forEach((sqlDate, i) => {
+          const dateMs = new Date(sqlDate);
+          const dayDiff = (nowMs - dateMs) / msPerDay;
+          if (1 - dayDiff / userDayDiff > 0) {
+            relevantDateData.push(sqlDate);
+            relevantWeightData.push(allRelevantWeightData[i]);
+          }
+        });
+
+        relevantDataPointsObj[userEx] = {
+          relevantDateData,
+          relevantWeightData,
+        };
+      }
+      // console.log(relevantDataPointsObj);
     });
     return relevantDataPointsObj;
   }
@@ -139,6 +169,7 @@ export default function GraphPage() {
   useEffect(() => {
     dispatch(graphDataActions.setGraphData(workoutData));
     const relDPO = grabAllDataForUserSelection(workoutData, userExDisp);
+    console.log(relDPO);
     const weightRange = calculateWeightRange(relDPO);
     const dateRange = calculateDateRange(userDayDiff, relDPO);
     dispatch(graphActions.setDateRange(dateRange));
