@@ -1,5 +1,5 @@
 import React from "react";
-import logo from '../../icons/lg-sl-icon.png'
+import logo from "../../icons/lg-sl-icon.png";
 
 // import smLogo from '../../icons/sm-sl-icon.png'
 // export function SLLogoLg() {
@@ -7,5 +7,11 @@ import logo from '../../icons/lg-sl-icon.png'
 // }
 
 export default function SLLogo() {
-	return (<img className='lg-logo' src={logo} alt='Stronklifts Logo'/>);
-};
+  return (
+    <img
+      className="lg-logo"
+      src={logo}
+      alt="Stronklifts Logo"
+    />
+  );
+}

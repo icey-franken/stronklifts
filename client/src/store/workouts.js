@@ -140,15 +140,21 @@ export const workoutThunks = {
 };
 
 //workout reducer
-export default function workoutReducer(state = {}, action) {
+export default function workoutReducer(
+  state = { workoutsLoaded: false, hasWorkouts: false },
+  action
+) {
   Object.freeze(state);
   let newState = Object.assign({}, state);
   switch (action.type) {
     case GET_WORKOUTS:
+      action.workouts.length > 0
+        ? (newState.hasWorkouts = true)
+        : (newState.hasWorkouts = false);
       action.exercises = {};
       action.workouts.forEach((workout) => {
-				const workoutId = workout.id;
-				const {workoutDate} = workout;
+        const workoutId = workout.id;
+        const { workoutDate } = workout;
         newState[workoutId] = {
           id: workoutId,
           workoutDate,
@@ -167,8 +173,8 @@ export default function workoutReducer(state = {}, action) {
         //get exercise ids from exercises object
         const workoutSetIds = [];
         exercises.forEach((exercise) => {
-					exercise.workoutId = workoutId;
-					exercise.workoutDate = workoutDate
+          exercise.workoutId = workoutId;
+          exercise.workoutDate = workoutDate;
           exerciseIds.push(exercise.id);
           const exerciseSetIds = [];
           exercise.Sets.forEach((set) => {
@@ -185,6 +191,7 @@ export default function workoutReducer(state = {}, action) {
         });
       });
       delete action.workouts;
+      newState.workoutsLoaded = true;
       return newState;
     case CREATE_WORKOUT:
       //if workout already exists, just return state as is
@@ -194,8 +201,8 @@ export default function workoutReducer(state = {}, action) {
       } else {
         action.exercises = {};
         const workout = action.workout;
-				const workoutId = workout.id;
-				const {workoutDate} = workout;
+        const workoutId = workout.id;
+        const { workoutDate } = workout;
         newState[workoutId] = {
           id: workoutId,
           workoutDate,
@@ -216,8 +223,8 @@ export default function workoutReducer(state = {}, action) {
         const workoutSetIds = [];
         if (exercises) {
           exercises.forEach((exercise) => {
-						exercise.workoutId = workoutId;
-						exercise.workoutDate = workoutDate;
+            exercise.workoutId = workoutId;
+            exercise.workoutDate = workoutDate;
             exerciseIds.push(exercise.id);
             const exerciseSetIds = [];
             exercise.Sets.forEach((set) => {
@@ -235,12 +242,16 @@ export default function workoutReducer(state = {}, action) {
         }
         delete action.workout;
       }
+      newState.hasWorkouts = true;
       return newState;
     case COMPLETE_WORKOUT:
       newState[action.workoutId].workoutComplete = action.workoutComplete;
       return newState;
     case DELETE_WORKOUT:
       delete newState[action.workoutId];
+      if (Object.keys(newState.workouts).length === 0) {
+        newState.hasWorkouts = false;
+      }
       return newState;
     default:
       return state;

@@ -1,33 +1,39 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signup } from "../store/auth";
+import { signup } from "../../store/auth";
 import { TextField } from "@material-ui/core";
-import AuthSubmitButton from "../components/auth/AuthSubmitButton";
-import Errors from '../components/auth/Errors';
+import AuthSubmitButton from "./AuthSubmitButton";
+import Errors from "./Errors";
 
-export default function SignupForm() {
+export default function SignupForm({ imageLoaded }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-	const [email, setEmail] = useState("");
-	const [errors, setErrors] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState("");
   const dispatch = useDispatch();
+
+  if (!imageLoaded) {
+    return null;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-		const res = await dispatch(signup(username, email, password, confirmPassword));
-		if (res.data.error) {
-			setErrors(res.data.error.errors);
-			setPassword('');
-			setConfirmPassword('');
+    const res = await dispatch(
+      signup(username, email, password, confirmPassword)
+    );
+    if (res.data.error) {
+      setErrors(res.data.error.errors);
+      setPassword("");
+      setConfirmPassword("");
     }
   };
-//make separate errors component?
+  //make separate errors component?
+
   return (
     <>
       <h1>Sign up for Stronklifts</h1>
-			{errors ? <Errors errors={errors}/> : null}
+      {errors ? <Errors errors={errors} /> : null}
       <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
           variant="outlined"

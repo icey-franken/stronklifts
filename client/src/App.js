@@ -35,13 +35,19 @@ function App() {
 
   useEffect(() => {
     const loadUser = async () => {
-      // enter your back end route to get the current user
-      const res = await fetch("/api/session");
-      if (res.ok) {
+      try {
+        // enter your back end route to get the current user
+        const res = await fetch("/api/session");
+        if (!res.ok) {
+          throw res;
+        }
         res.data = await res.json(); // current user info
         dispatch(setUser(res.data.user)); //creates set user action so that user info added to redux store upon page load if user already logged in.
+
+        setLoading(false);
+      } catch (e) {
+        console.error(e);
       }
-      setLoading(false);
     };
     loadUser();
   }, [dispatch]);
