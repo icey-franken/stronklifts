@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Select, InputLabel, MenuItem } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
-import SLLogo from "../components/auth/SLLogo";
 import AuthSubmitButton from "./auth/AuthSubmitButton";
 import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
 import { useHistory } from "react-router-dom";
+import logo from "../icons/lg-sl-icon.png";
 
 //lifted from auth page - in the future you should integrate this as an option
 const useStyles = makeStyles({
@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 });
 
 export default function NewLifterForm() {
+	console.log('hits')
   const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
   // const [WW, setWW] = useState(false);
@@ -143,9 +144,15 @@ export default function NewLifterForm() {
   };
 
   const classes = useStyles();
-  return (
+	console.log('hits')
+	return (
     <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
-      <SLLogo />
+      <img
+        className="lg-logo"
+        src={logo}
+        alt="Stronklifts Logo"
+        style={{height: "100px"}}
+      />
 
       <h1>Welcome to Stronklifts</h1>
       <div className="form__intro">

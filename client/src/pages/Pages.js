@@ -27,7 +27,7 @@ export default function Pages() {
 
   return userId && !workoutsLoaded ? null : (
     <Switch>
-      <AuthRoute path={["/login", "/signup", '/demoUser', '/']} component={AuthPage} />
+      <AuthRoute path={["/login", "/signup", '/demoUser']} component={AuthPage} />
       <ProtectedRoute
         path="/history"
         exact={true}

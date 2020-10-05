@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { AuthActions } from "../../store/auth";
+import { AuthThunks } from "../../store/auth";
 import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "./AuthSubmitButton";
 import Errors from "./Errors";
@@ -22,7 +22,7 @@ export default function SignupForm({ imageLoaded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await dispatch(
-      AuthActions.signup(username, email, password, confirmPassword)
+      AuthThunks.signup(username, email, password, confirmPassword)
     );
     if (res.data.error) {
       setErrors(res.data.error.errors);

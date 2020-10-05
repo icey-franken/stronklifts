@@ -31,22 +31,22 @@ export default function LoginForm({ imageLoaded }) {
   const [errors, setErrors] = useState("");
   const dispatch = useDispatch();
 
-	useEffect(()=>{
-		handleDemoSubmit();
-	},[])
-
-  if (!imageLoaded) {
-    return null;
-	}
-
-	const handleDemoSubmit = async () => {
+  const handleDemoSubmit = async () => {
     const res = await dispatch(AuthThunks.login(username, password));
     if (res.data.message) {
       setErrors([res.data.message]);
       setPassword("");
-		}
-		history.push('/history');
+    }
+    history.push("/history");
   };
+
+  useEffect(() => {
+    handleDemoSubmit();
+  }, []);
+
+  if (!imageLoaded) {
+    return null;
+  }
 
   return (
     <>
