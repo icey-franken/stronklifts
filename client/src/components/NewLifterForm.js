@@ -6,7 +6,7 @@ import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import logo from "../icons/lg-sl-icon.png";
 
 //lifted from auth page - in the future you should integrate this as an option
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 export default function NewLifterForm() {
-	console.log('hits')
+  console.log("hits");
   const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
   // const [WW, setWW] = useState(false);
@@ -131,7 +131,6 @@ export default function NewLifterForm() {
   ];
   const recommendedStartingWeight = [45, 45, 95, 45, 45];
   const dispatch = useDispatch();
-  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
     const wwValues = [];
@@ -139,19 +138,16 @@ export default function NewLifterForm() {
     dispatch(workoutThunks.createWorkout(userId, wwValues)).then(() =>
       dispatch(workoutThunks.getWorkouts(userId))
     );
-    // setWW(true);
-    history.push("/workout/new");
   };
 
   const classes = useStyles();
-	console.log('hits')
-	return (
+  return (
     <Container fixed maxWidth="sm" classes={{ root: classes.container }}>
       <img
         className="lg-logo"
         src={logo}
         alt="Stronklifts Logo"
-        style={{height: "100px"}}
+        style={{ height: "100px" }}
       />
 
       <h1>Welcome to Stronklifts</h1>

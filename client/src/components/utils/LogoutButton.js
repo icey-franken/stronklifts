@@ -8,8 +8,9 @@ export default function LogoutButton() {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(AuthThunks.logout());
-    return <Redirect to="/login" />;
+    dispatch(AuthThunks.logout()).then(()=>{
+			return <Redirect to="/login" />;
+		});
   };
 
   return (

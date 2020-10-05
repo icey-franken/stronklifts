@@ -49,6 +49,9 @@ export default function setReducer(state = {}, action) {
       });
       return newState;
     case workoutActionTypes.GET_WORKOUTS:
+			if (action.hasWorkouts === false) {
+        return {};
+      }
       const actionSetIds = Object.keys(action.sets);
       actionSetIds.forEach((id) => {
         newState[id] = action.sets[id];

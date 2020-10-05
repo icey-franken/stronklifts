@@ -1,24 +1,21 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import NewLifterForm from "../components/NewLifterForm";
-
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
   const needLogin = useSelector((state) => !state.auth.id);
   const { hasWorkouts } = useSelector((state) => state.workouts);
-
-  //same logic for protected route and protected route new:
-  // if user isn't logged in, send to login page
-  // else if workouts aren't loaded, wait
-  // else if user has no workouts, send to new lifter form
-  // else (if user logged in, workouts loaded, and user has workouts) send to desired component
-  console.log(needLogin, !hasWorkouts, Component, rest);
   return needLogin ? (
+		//not logged in? send to login
     <Redirect to="/login" />
-  ) : !hasWorkouts ? (
-    <Redirect to="/newLifterForm" component={NewLifterForm} />
+		//no workouts and trying to go anywhere but new lifter form? send to new lifter form
+  ) : !hasWorkouts && Component.name !== "NewLifterForm" ? (
+    <Redirect to="/newLifterForm" />
+		//have workouts and trying to go to new lifter form (usually the case is a new user just filled out new lifter form) ? Send to new workout page
+  ) : hasWorkouts && Component.name === "NewLifterForm" ? (
+    <Redirect to="/workout/new" />
   ) : (
+		//otherwise, send to where you were trying to go
     <Route {...rest} component={Component} />
   );
 };
@@ -29,6 +26,7 @@ export const AuthRoute = ({ component: Component, ...rest }) => {
   return needLogin ? (
     <Route {...rest} component={Component} />
   ) : (
-    <Redirect to="/history" />
+		//send to graph page after logging in - if new user, protected route will automatically redirect to new lifter form.
+    <Redirect to="/graph" />
   );
 };

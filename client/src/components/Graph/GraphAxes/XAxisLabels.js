@@ -38,17 +38,21 @@ export default function XAxisLabels() {
 
   //we call makeXLabels in the return so that the labels are regenerated on each render.
   //once I put stuff in the store I can do things differently. For now, this works just fine.
-  return makeXLabels(dateRange).map((date, index, dateLabels) => {
+
+  const xLabels = Number.isNaN(dateRange) ? [] : makeXLabels(dateRange);
+	const len = xLabels.length === 1 ? 1 : xLabels.length - 1;
+
+  return xLabels.map((date, index) => {
     return (
       <text
         className="x-label"
         key={index}
-        x={axisOffset + (xRange / (dateLabels.length - 1)) * index}
+        x={axisOffset + (xRange / len) * index}
         y={height - (3 * axisOffset) / 4}
         style={{
-          transformOrigin: `${
-            axisOffset + (xRange / (dateLabels.length - 1)) * index
-          }px ${height - (3 * axisOffset) / 4}px`,
+          transformOrigin: `${axisOffset + (xRange / len) * index}px ${
+            height - (3 * axisOffset) / 4
+          }px`,
         }}
       >
         {date}

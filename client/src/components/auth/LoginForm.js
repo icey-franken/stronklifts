@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { AuthThunks } from "../../store/auth";
 import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "./AuthSubmitButton";
@@ -25,7 +25,6 @@ import Errors from "./Errors";
 // 	// input:-webkit-autofill:active
 
 export default function LoginForm({ imageLoaded }) {
-  const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
@@ -33,16 +32,17 @@ export default function LoginForm({ imageLoaded }) {
 
   if (!imageLoaded) {
     return null;
-	}
+  }
 
-	const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await dispatch(AuthThunks.login(username, password));
     if (res.data.message) {
       setErrors([res.data.message]);
       setPassword("");
-		}
-		history.push('/history');
+    } else {
+      return <Redirect to="/graph" />;
+    }
   };
 
   return (
