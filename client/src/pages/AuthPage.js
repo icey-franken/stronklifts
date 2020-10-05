@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Redirect } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,7 +22,6 @@ const useStyles = makeStyles({
 export default function AuthPage() {
   const classes = useStyles();
   const match = useRouteMatch();
-
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleLoaded = () => {
@@ -34,9 +33,13 @@ export default function AuthPage() {
   let form =
     match.path === "/signup" ? (
       <SignupForm imageLoaded={imageLoaded} />
-    ) : match.path==='/login' ? (
+    ) : match.path === "/demoUser" ? (
+      <DemoUserForm imageLoaded={imageLoaded} />
+    ) : match.path === "/login" ? (
       <LoginForm imageLoaded={imageLoaded} />
-    ) : <DemoUserForm imageLoaded={imageLoaded} />
+    ) : (
+      <Redirect to="/login" />
+    );
 
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
