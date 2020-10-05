@@ -168,9 +168,14 @@ export default function workoutReducer(
     //   newState.workoutsLoaded = true;
     //   return newState;
     case GET_WORKOUTS:
-      action.workouts.length > 0
-        ? (newState.hasWorkouts = true)
-        : (newState.hasWorkouts = false);
+      if (action.workouts.length === 0) {
+        action.hasWorkouts = false;
+        newState = {};
+        newState.workoutsLoaded = true;
+        newState.hasWorkouts = false;
+        return newState;
+      }
+      newState.hasWorkouts = true;
       action.exercises = {};
       action.workouts.forEach((workout) => {
         const workoutId = workout.id;
@@ -269,7 +274,7 @@ export default function workoutReducer(
       return newState;
     case DELETE_WORKOUT:
       delete newState[action.workoutId];
-      if (Object.keys(newState).length === 0) {
+      if (Object.keys(newState).length < 3) {
         newState.hasWorkouts = false;
       }
       return newState;
