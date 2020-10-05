@@ -13,16 +13,16 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 	/* rbg(210,46,46); */
 	box-shadow: 0px 0.01vw 0.5vw black;
 	/* border: 5px solid black; */
+	justify-content: space-around;
+
 }
 
-.randoNav {
+/* /* .randoNav {
 	justify-content: flex-end;
 	/* margin-left: 2vw; */
-}
 
-.userNav {
-	justify-content: space-around;
-}
+/* .userNav {
+*/
 
 .nav{
 	box-sizing: border-box;

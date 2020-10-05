@@ -7,14 +7,14 @@ import "./NavBar.css";
 
 export function AuthNavBar() {
   return (
-    <nav className='userNav navbar'>
+    <nav className="userNav navbar">
       <NavLink className="nav" activeClassName="navActive" exact to="/history">
         History
       </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/graph">
         Graph
       </NavLink>
-			<NavLink className="nav" activeClassName="navActive" to="/calendar">
+      <NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar
       </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/workout/new">
@@ -30,15 +30,15 @@ export function AuthNavBar() {
 
 export function RandoNavBar() {
   return (
-    <nav className='randoNav navbar'>
-			<NavLink className="nav" activeClassName="navActive" to="/demoUser">
+    <nav className="userNav navbar">
+      <NavLink className="nav" activeClassName="navActive" to="/login">
+        Log In
+      </NavLink>
+      <NavLink className="nav" activeClassName="navActive" to="/demoUser">
         Demo User
       </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/signup">
         Sign Up
-      </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/login">
-        Log In
       </NavLink>
     </nav>
   );
