@@ -5,6 +5,8 @@ import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import LoginForm from "../components/auth/LoginForm";
 import SignupForm from "../components/auth/SignupForm";
+import DemoUserForm from "../components/auth/DemoUserForm";
+
 import logo from "../icons/lg-sl-icon.png";
 
 const useStyles = makeStyles({
@@ -32,9 +34,9 @@ export default function AuthPage() {
   let form =
     match.path === "/signup" ? (
       <SignupForm imageLoaded={imageLoaded} />
-    ) : (
+    ) : match.path==='/login' ? (
       <LoginForm imageLoaded={imageLoaded} />
-    );
+    ) : <DemoUserForm imageLoaded={imageLoaded} />
 
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>

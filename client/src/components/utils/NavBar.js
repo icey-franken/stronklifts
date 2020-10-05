@@ -31,6 +31,9 @@ export function AuthNavBar() {
 export function RandoNavBar() {
   return (
     <nav className='randoNav navbar'>
+			<NavLink className="nav" activeClassName="navActive" to="/demoUser">
+        Demo User
+      </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/signup">
         Sign Up
       </NavLink>
