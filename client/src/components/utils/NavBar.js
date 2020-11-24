@@ -12,17 +12,17 @@ export function AuthNavBar() {
         History
       </NavLink>
       <NavLink className="nav" activeClassName="navActive" to="/graph">
-        Graph
+        Progress
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/calendar">
+      {/* <NavLink className="nav" activeClassName="navActive" to="/calendar">
         Calendar
-      </NavLink>
+      </NavLink> */}
       <NavLink className="nav" activeClassName="navActive" to="/workout/new">
         Workout
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/demos">
+      {/* <NavLink className="nav" activeClassName="navActive" to="/demos">
         Demos
-      </NavLink>
+      </NavLink> */}
       <LogoutButton />
     </nav>
   );

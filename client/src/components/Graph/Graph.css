@@ -24,7 +24,12 @@ body {
 	flex-direction: column; */
   /* padding: 0 6px; */
 }
+.graph__header{
+	/* border-bottom: 1px solid black; */
+	/* padding-bottom: 30px; */
+	margin-bottom: 18.76px;
 
+}
 .graph-info {
   font-size: 32px;
 }

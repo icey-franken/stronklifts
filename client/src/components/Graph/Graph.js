@@ -12,9 +12,11 @@ export default function Graph() {
 
   return (
     <div className="graph-container">
+      <h1 className='graph__header'>Workout Progress</h1>
+
       <div className="graph-info">
-        <div className="graph-info__title">graph page dood</div>
-        <div className="graph-info__weight">max weight - dep on overlay</div>
+        {/* <div className="graph-info__title">graph page dood</div> */}
+        {/* <div className="graph-info__weight">max weight - dep on overlay</div> */}
       </div>
       <svg
         // version="1.2"
