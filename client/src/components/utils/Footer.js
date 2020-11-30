@@ -6,11 +6,19 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 library.add(fab);
-console.log(fab);
 
 export default function Footer() {
   return (
-    <div>
+    <div className='footer'>
+			<a
+        href="https://www.isaacfinken.dev/"
+        title="About Me"
+        target="_blank"
+				className="footer-icon"
+				style={{"fontSize":"3vw"}}
+      >
+        About Me
+      </a>
       <a
         href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
         title="LinkedIn"

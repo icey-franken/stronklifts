@@ -23,10 +23,10 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
 export const AuthRoute = ({ component: Component, ...rest }) => {
   const needLogin = useSelector((state) => !state.auth.id);
 
-  return needLogin ? (
+	return needLogin ? (
     <Route {...rest} component={Component} />
   ) : (
 		//send to graph page after logging in - if new user, protected route will automatically redirect to new lifter form.
-    <Redirect to="/graph" />
+    <Redirect to="/progress" />
   );
 };

@@ -37,7 +37,7 @@ export default function LoginForm({ imageLoaded }) {
       setErrors([res.data.message]);
       setPassword("");
     }
-    history.push("/history");
+    // history.push("/history");
   };
 
   useEffect(() => {

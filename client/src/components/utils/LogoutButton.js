@@ -9,7 +9,7 @@ export default function LogoutButton() {
 
   const handleClick = () => {
     dispatch(AuthThunks.logout()).then(()=>{
-			return <Redirect to="/login" />;
+			// return <Redirect to="/login" />;
 		});
   };
 

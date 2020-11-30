@@ -43,6 +43,8 @@ backgroundDisabled: "rgba(210,46,46,0.5)", */
 	/* margin: 0 6px; */
 	margin-left: 2vw;
 	margin-right:2vw;
+  transition: border-bottom 0.2s ease-out;
+
 }
 
 .nav:hover {
