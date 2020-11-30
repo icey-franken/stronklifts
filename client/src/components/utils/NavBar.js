@@ -11,7 +11,7 @@ export function AuthNavBar() {
       <NavLink className="nav" activeClassName="navActive" exact to="/history">
         History
       </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/graph">
+      <NavLink className="nav" activeClassName="navActive" to="/progress">
         Progress
       </NavLink>
       {/* <NavLink className="nav" activeClassName="navActive" to="/calendar">

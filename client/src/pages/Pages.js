@@ -40,7 +40,7 @@ export default function Pages() {
         component={NewWorkoutPage}
       />
       <ProtectedRoute path="/demos" exact={true} component={DemosPage} />
-      <ProtectedRoute path="/graph" exact={true} component={GraphPage} />
+      <ProtectedRoute path="/progress" exact={true} component={GraphPage} />
       <ProtectedRoute
         path="/workout/edit/:workoutId"
         exact={true}
