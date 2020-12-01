@@ -6,7 +6,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Pages from "./pages/Pages";
 import { AuthActions } from "./store/auth";
 import { useDispatch } from "react-redux";
-import { AuthNavBar, RandoNavBar } from "./components/utils/NavBar";
+import NavBar from "./components/utils/NavBar";
 import Footer from "./components/utils/Footer";
 import "./App.css";
 
@@ -60,7 +60,7 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <div className="pageContainer">
-            {needLogin ? <RandoNavBar /> : <AuthNavBar />}
+            <NavBar needLogin={needLogin}/>
             <div className="content">
               <Pages />
             </div>
