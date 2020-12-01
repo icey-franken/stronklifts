@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouteMatch, Redirect } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
@@ -24,22 +24,29 @@ export default function AuthPage() {
   const match = useRouteMatch();
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleLoaded = () => {
+  const handleLoad = () => {
     if (!imageLoaded) {
       setImageLoaded(true);
     }
   };
-  //render loginform or signup form based on path params
-  let form =
-    match.path === "/signup" ? (
-      <SignupForm imageLoaded={imageLoaded} />
-    ) : match.path === "/demoUser" ? (
-      <DemoUserForm imageLoaded={imageLoaded} />
-    ) : match.path === "/login" ? (
-      <LoginForm imageLoaded={imageLoaded} />
-    ) : (
-      <Redirect to="/login" />
-    );
+
+  // //render loginform or signup form based on path params
+  // let form =
+  //   match.path === "/signup" ? (
+  //     <SignupForm imageLoaded={imageLoaded} />
+  //   ) : match.path === "/demoUser" ? (
+  //     <DemoUserForm imageLoaded={imageLoaded} />
+  //   ) : match.path === "/login" ? (
+  //     <LoginForm imageLoaded={imageLoaded} />
+  //   ) : (
+  //     <LoginForm imageLoaded={imageLoaded} />
+  //   );
+
+  // // console.log(form)
+  // console.log(match);
+  // console.log(match.path);
+  // // console.log(imageLoaded)
+  // // console.log(<LoginForm/>)
 
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
@@ -48,9 +55,15 @@ export default function AuthPage() {
         src={logo}
         alt="Stronklifts Logo"
         style={imageLoaded ? { height: "100px" } : null}
-        onLoad={handleLoaded}
+        onLoad={handleLoad}
       />
-      {form}
+      {match.path === "/signup" ? (
+        <SignupForm imageLoaded={imageLoaded} />
+      ) : (
+        <LoginForm imageLoaded={imageLoaded} />
+      )}
+      {/* {form} */}
+      {/* <LoginForm imageLoaded={imageLoaded}/> */}
     </Container>
   );
 }

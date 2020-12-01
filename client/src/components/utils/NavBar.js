@@ -36,19 +36,3 @@ export default function NavBar({ needLogin }) {
     </nav>
   );
 }
-
-export function RandoNavBar() {
-  return (
-    <nav className="navbar">
-      <NavLink className="nav" activeClassName="navActive" to="/login">
-        Log In
-      </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/demoUser">
-        Demo User
-      </NavLink>
-      <NavLink className="nav" activeClassName="navActive" to="/signup">
-        Sign Up
-      </NavLink>
-    </nav>
-  );
-}
