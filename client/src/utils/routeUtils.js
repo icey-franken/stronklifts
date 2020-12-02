@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
@@ -22,7 +22,10 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
 
 export const AuthRoute = ({ component: Component, ...rest }) => {
   const needLogin = useSelector((state) => !state.auth.id);
-
+	const history = useHistory();
+	if(history.location.pathname==='/'){
+		history.replace('/login')
+	}
 	return needLogin ? (
     <Route {...rest} component={Component} />
   ) : (

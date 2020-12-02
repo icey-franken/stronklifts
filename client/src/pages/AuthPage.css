@@ -3,8 +3,17 @@
   width: 100px;
 }
 
-h1 {
+.auth__head{
+	font-size: 28px;
+	font-weight: bold;
   text-align: center;
+	margin-top: 16px;
+}
+.auth__subhead{
+  text-align: center;
+	font-size: 28px;
+	margin-top: 16px;
+	margin-bottom: 8px;
 }
 
 form,
@@ -12,7 +21,7 @@ TextField:-webkit-autofill
  {
   display: flex;
   flex-direction: column;
-  width: 100%;
+	width: 100%;
 }
 
 div.MuiInputBase-root {

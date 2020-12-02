@@ -13,7 +13,8 @@ export default function Footer() {
 			<a
         href="https://www.isaacfinken.dev/"
         title="About Me"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
 				className="footer-icon"
 				style={{"fontSize":"3vw"}}
       >
@@ -22,7 +23,8 @@ export default function Footer() {
       <a
         href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
         title="LinkedIn"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
         className="footer-icon"
       >
         <FontAwesomeIcon icon={["fab", "linkedin-in"]} />
@@ -30,7 +32,8 @@ export default function Footer() {
       <a
         href="https://angel.co/u/isaac-finken"
         title="AngelList"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
         className="footer-icon"
       >
         <FontAwesomeIcon icon={["fab", "angellist"]} />
@@ -38,7 +41,8 @@ export default function Footer() {
       <a
         href="https://github.com/icey-franken/stronklifts"
         title="GitHub"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
         className="footer-icon"
       >
         <FontAwesomeIcon icon={["fab", "github"]} />
@@ -46,7 +50,8 @@ export default function Footer() {
       <a
         href="https://www.facebook.com/isaac.finken/"
         title="Facebook"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
         className="footer-icon"
       >
         <FontAwesomeIcon icon={["fab", "facebook-f"]} />
@@ -54,7 +59,8 @@ export default function Footer() {
       <a
         href="https://www.instagram.com/icey_franken/"
         title="Instagram"
-        target="_blank"
+				target="_blank"
+				rel="noopener noreferrer"
         className="footer-icon"
       >
         <FontAwesomeIcon icon={["fab", "instagram"]} />

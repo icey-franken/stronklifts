@@ -6,7 +6,6 @@ import "./NewLifterForm.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import { workoutThunks } from "../store/workouts";
-import { Redirect } from "react-router-dom";
 import logo from "../icons/lg-sl-icon.png";
 
 //lifted from auth page - in the future you should integrate this as an option
@@ -191,7 +190,7 @@ export default function NewLifterForm() {
               </div>
             );
           })}
-          <AuthSubmitButton>Get Started</AuthSubmitButton>
+          <AuthSubmitButton type={'submit'}>Get Started</AuthSubmitButton>
         </form>
       </Container>
     </Container>
