@@ -141,4 +141,4 @@ function makeSets(startExId, numWorkouts) {
   }
   return setsArr;
 }
-console.log(makeSets(37,5))
+// console.log(makeSets(37,5))

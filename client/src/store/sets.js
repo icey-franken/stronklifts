@@ -27,7 +27,7 @@ export const updateRepsThunk = (setId, numRepsActual) => {
       dispatch(updateReps(setId, numRepsActual));
       return res;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 };
