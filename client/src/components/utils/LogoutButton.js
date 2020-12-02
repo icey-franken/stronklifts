@@ -8,19 +8,19 @@ export default function LogoutButton() {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(AuthThunks.logout()).then(()=>{
+		dispatch(AuthThunks.logout())
+		// .then(()=>{
 			// return <Redirect to="/login" />;
-		});
+		// });
   };
 
   return (
-    <NavLink
+    <div
       className="nav"
-      activeClassName="navActive"
-      to="/login"
+			style={{'cursor':'pointer'}}
       onClick={handleClick}
     >
       Logout
-    </NavLink>
+    </div>
   );
 }

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useRouteMatch, Redirect } from "react-router-dom";
+import React, { useState } from "react";
+import { useRouteMatch } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import LoginForm from "../components/auth/LoginForm";
 import SignupForm from "../components/auth/SignupForm";
-import DemoUserForm from "../components/auth/DemoUserForm";
 
 import logo from "../icons/lg-sl-icon.png";
 
@@ -30,24 +29,6 @@ export default function AuthPage() {
     }
   };
 
-  // //render loginform or signup form based on path params
-  // let form =
-  //   match.path === "/signup" ? (
-  //     <SignupForm imageLoaded={imageLoaded} />
-  //   ) : match.path === "/demoUser" ? (
-  //     <DemoUserForm imageLoaded={imageLoaded} />
-  //   ) : match.path === "/login" ? (
-  //     <LoginForm imageLoaded={imageLoaded} />
-  //   ) : (
-  //     <LoginForm imageLoaded={imageLoaded} />
-  //   );
-
-  // // console.log(form)
-  // console.log(match);
-  // console.log(match.path);
-  // // console.log(imageLoaded)
-  // // console.log(<LoginForm/>)
-
   return (
     <Container fixed maxWidth="xs" classes={{ root: classes.container }}>
       <img
@@ -62,8 +43,6 @@ export default function AuthPage() {
       ) : (
         <LoginForm imageLoaded={imageLoaded} />
       )}
-      {/* {form} */}
-      {/* <LoginForm imageLoaded={imageLoaded}/> */}
     </Container>
   );
 }

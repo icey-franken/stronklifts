@@ -1,35 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { AuthThunks } from "../../store/auth";
 import { TextField } from "@material-ui/core";
 import AuthSubmitButton from "./AuthSubmitButton";
 import Errors from "./Errors";
-
-//changing textfield formatting
-// import { makeStyles } from "@material-ui/core/styles";
-// const useStyles = makeStyles({
-//   textfield: {
-//     display: "flex",
-//     flexDirection: "column",
-// 		alignItems: "center",
-// 	},
-// });
-
-//need to remove autofill formatting from textfield boxes for login and signup
-// TextField: {
-// 	color: "orange",
-// 	"-webkit-autofill": "none",
-// 	"-webkit-autofill:hover": "none",
-// 	// input:-webkit-autofill:focus,
-// 	// input:-webkit-autofill:active
 
 export default function LoginForm({ imageLoaded }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
   const dispatch = useDispatch();
-
+  const history = useHistory();
   if (!imageLoaded) {
     return null;
   }
@@ -45,9 +27,19 @@ export default function LoginForm({ imageLoaded }) {
     }
   };
 
+  const handleDemoLogin = async () => {
+    const res = await dispatch(AuthThunks.login("demo@user.com", "password"));
+    if (res.data.message) {
+      setErrors([res.data.message]);
+      setPassword("");
+    } else {
+      return <Redirect to="/graph" />;
+    }
+  };
+
   return (
     <>
-      <h1>Log in to Stronklifts</h1>
+      <div className="auth__head">Log in to Stronklifts</div>
       {errors ? <Errors errors={errors} /> : null}
       <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
@@ -58,6 +50,7 @@ export default function LoginForm({ imageLoaded }) {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
+          style={{ marginBottom: "8px" }}
         />
         <TextField
           variant="outlined"
@@ -68,7 +61,18 @@ export default function LoginForm({ imageLoaded }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <AuthSubmitButton>Get Yoked</AuthSubmitButton>
+        <AuthSubmitButton type={"submit"}>Get Yoked</AuthSubmitButton>
+        <div className="auth__subhead">Don't have an account?</div>
+
+        <AuthSubmitButton type={"button"} onClick={handleDemoLogin}>
+          Demo Login
+        </AuthSubmitButton>
+        <AuthSubmitButton
+          type={"button"}
+          onClick={() => history.push("/signup")}
+        >
+          Sign Up
+        </AuthSubmitButton>
       </form>
     </>
   );

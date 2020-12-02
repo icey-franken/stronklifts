@@ -191,7 +191,7 @@ export default function NewLifterForm() {
               </div>
             );
           })}
-          <AuthSubmitButton>Get Started</AuthSubmitButton>
+          <AuthSubmitButton type={'submit'}>Get Started</AuthSubmitButton>
         </form>
       </Container>
     </Container>

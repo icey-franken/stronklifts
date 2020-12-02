@@ -28,14 +28,14 @@ export default function SignupForm({ imageLoaded }) {
       setErrors(res.data.error.errors);
       setPassword("");
       setConfirmPassword("");
+    } else {
+			history.push("/newLifterForm");
 		}
-		history.push('/history');
   };
-  //make separate errors component?
 
   return (
     <>
-      <h1>Sign up for Stronklifts</h1>
+      <div className='auth__head'>Sign up for Stronklifts</div>
       {errors ? <Errors errors={errors} /> : null}
       <form onSubmit={handleSubmit} autoComplete="off">
         <TextField
@@ -45,7 +45,8 @@ export default function SignupForm({ imageLoaded }) {
           name="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          required
+					required
+          style={{ "marginBottom": "8px" }}
         />
         <TextField
           variant="outlined"
@@ -55,6 +56,7 @@ export default function SignupForm({ imageLoaded }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          style={{ "marginBottom": "8px" }}
         />
         <TextField
           variant="outlined"
@@ -63,7 +65,8 @@ export default function SignupForm({ imageLoaded }) {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+					required
+          style={{ "marginBottom": "8px" }}
         />
         <TextField
           variant="outlined"
@@ -74,7 +77,14 @@ export default function SignupForm({ imageLoaded }) {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
-        <AuthSubmitButton>Get Yoked</AuthSubmitButton>
+        <AuthSubmitButton type={'submit'}>Get Yoked</AuthSubmitButton>
+				<div className='auth__subhead'>Already have an account?</div>
+        <AuthSubmitButton
+          type={"button"}
+					onClick={() => history.push("/login")}
+        >
+          Login
+        </AuthSubmitButton>
       </form>
     </>
   );
