@@ -16,9 +16,7 @@ router.put(
   "/:exerciseId",
   asyncHandler(async (req, res) => {
     try {
-			console.log('backend req.body',req.body);
       const {wasSuccessful} = req.body;
-      console.log('was successful backend',wasSuccessful);
       const id = parseInt(req.params.exerciseId, 10);
       // const set = await Set.findOne({where: id});
       const exercise = await Exercise.update({ wasSuccessful }, { where: { id } });
@@ -27,7 +25,7 @@ router.put(
 			// return (res.json(id));
       // await Set.update({where:{id: setId}})
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   })
 );

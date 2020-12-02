@@ -83,19 +83,6 @@ router.get(
       ],
     };
     let workouts = await Workout.findAll(grabWorkoutSpecs);
-    // console.log(workouts[1].WorkoutNote.description);
-    // for(let i = 0; i < workouts.length; i ++) {
-    // 	console.log('hits');
-    // 	// workouts[i].WorkoutNote = null;
-    // 	console.log(workouts[i].WorkoutNote);
-    // 	// delete workouts[i].WorkoutNote.description;
-    // 	//workouts[i].WorkoutNote.description);
-    // };
-    // // workouts.map((workout)=>{
-    // // // 	const {workoutNote} = workout.WorkoutNote;
-    // // workout.WorkoutNote = workout.WorkoutNote.description;
-    // // return workout;
-    // // })
     return res.json({ workouts });
   })
 );
@@ -105,8 +92,6 @@ router.post(
   asyncHandler(async (req, res) => {
     const userId = parseInt(req.params.userId, 10);
     let wwValues = [null, null, null, null, null];
-    console.log("line108", req.body === true);
-    console.log(req.body.wwValues === true);
     if (req.body.wwValues) {
       wwValues = req.body.wwValues;
 
@@ -144,7 +129,6 @@ router.post(
         wwValues[4]
       );
       await Set.createBasicSets(rowId, 5);
-      console.log("hits", rowId);
 
       workoutId = newWorkout.id;
       const { id: squatId } = await Exercise.createNext(
@@ -178,8 +162,6 @@ router.post(
       return res.json({ newWorkout });
     } else {
       let workoutId;
-      console.log("hits line 179");
-      console.log(wwValues);
       try {
         //first check that no incomplete workouts exist
         const incompleteId = await Workout.getIncompleteId(userId);
@@ -265,7 +247,7 @@ router.post(
         newWorkout = await Workout.findOne(grabWorkoutSpecs);
         return res.json({ newWorkout });
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   })
@@ -283,7 +265,7 @@ router.put(
       );
       return res.json({ workout });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   })
 );
@@ -357,7 +339,7 @@ router.delete(
       await Workout.destroy({ where: { id } });
       return res.json({ deleted: true, exerciseIds: exerciseIdArr, setIds: setIdArr });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       return res.json({ deleted: false });
     }
   })

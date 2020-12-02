@@ -16,9 +16,7 @@ router.put(
   "/:setId",
   asyncHandler(async (req, res) => {
     try {
-			console.log('backend req.body',req.body);
       const {numRepsActual} = req.body;
-      console.log('numRepsActual backend',numRepsActual);
       const id = parseInt(req.params.setId, 10);
       // const set = await Set.findOne({where: id});
       const set = await Set.update({ numRepsActual }, { where: { id } });
@@ -27,7 +25,7 @@ router.put(
 			// return (res.json(id));
       // await Set.update({where:{id: setId}})
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   })
 );

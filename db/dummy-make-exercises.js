@@ -77,7 +77,7 @@ let pr = 25;
 let startWorkoutId = 13;
 let numWorkouts = 6;
 
-console.log(makeExercises(startWorkoutId, numWorkouts, sq, op, dl, bp, pr));
+// console.log(makeExercises(startWorkoutId, numWorkouts, sq, op, dl, bp, pr));
 
 //the following was cut from add workouts seeders - adding exercises and sets takes too damn long
 let workoutsId18to40 = [

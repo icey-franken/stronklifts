@@ -27,7 +27,7 @@ export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
       dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
       return res;
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 };

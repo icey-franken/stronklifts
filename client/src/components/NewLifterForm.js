@@ -19,7 +19,6 @@ const useStyles = makeStyles({
 });
 
 export default function NewLifterForm() {
-  console.log("hits");
   const userId = useSelector((state) => state.auth.id);
   //add workingWeight and exerciseNames to store - hack for now
   // const [WW, setWW] = useState(false);
