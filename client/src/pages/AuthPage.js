@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch, Redirect } from "react-router-dom";
 import "./AuthPage.css"; //remove this import if I use material UI
 import { Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -40,9 +40,9 @@ export default function AuthPage() {
       />
       {match.path === "/signup" ? (
         <SignupForm imageLoaded={imageLoaded} />
-      ) : (
+      ) : match.path === '/login' ? (
         <LoginForm imageLoaded={imageLoaded} />
-      )}
+      ) : <Redirect to='/login'/>}
     </Container>
   );
 }

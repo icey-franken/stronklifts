@@ -7,9 +7,9 @@ import { workoutThunks } from "../store/workouts";
 
 import AuthPage from "./AuthPage";
 import WorkoutHistoryPage from "./WorkoutHistoryPage";
-import CalendarPage from "./CalendarPage";
+// import CalendarPage from "./CalendarPage";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
-import DemosPage from "./DemosPage";
+// import DemosPage from "./DemosPage";
 import GraphPage from "./GraphPage";
 import EditWorkoutPage from "./EditWorkoutPageContainer";
 import NewLifterForm from "../components/NewLifterForm";
@@ -28,8 +28,8 @@ export default function Pages() {
   return userId && !workoutsLoaded ? null : (
     <Switch>
       <AuthRoute
-				path={["/login", "/signup",'/']}
-				exact={true}
+        path={["/login", "/signup"]}
+        exact={true}
         component={AuthPage}
       />
       <ProtectedRoute
@@ -37,14 +37,12 @@ export default function Pages() {
         exact={true}
         component={WorkoutHistoryPage}
       />
-      <ProtectedRoute path="/calendar" exact={true} component={CalendarPage} />
+      <ProtectedRoute path="/progress" exact={true} component={GraphPage} />
       <ProtectedRoute
         path="/workout/new"
         exact={true}
         component={NewWorkoutPage}
       />
-      <ProtectedRoute path="/demos" exact={true} component={DemosPage} />
-      <ProtectedRoute path="/progress" exact={true} component={GraphPage} />
       <ProtectedRoute
         path="/workout/edit/:workoutId"
         exact={true}
@@ -55,6 +53,13 @@ export default function Pages() {
         exact={true}
         component={NewLifterForm}
       />
+      {/* I want to add demos and calendar at some point */}
+      {/* <ProtectedRoute path="/calendar" exact={true} component={CalendarPage} />
+      <ProtectedRoute path="/demos" exact={true} component={DemosPage} /> */}
+
+      {/* these routes catch everything else instead of a 404 page. If logged in -- sent to /progress, otherwise sent to /login */}
+      <AuthRoute path="/" component={AuthPage} />
+      <ProtectedRoute path="/" component={GraphPage} />
     </Switch>
   );
 }
