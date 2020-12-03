@@ -7,9 +7,9 @@ import exercises from "./exercises";
 import sets from "./sets";
 import graph from "./graph";
 import graphData from "./graphData";
-
+import {authActionTypes} from './auth'
 //change graph to be about graph settings and user options?
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   auth,
   workouts,
   progress,
@@ -18,6 +18,15 @@ const rootReducer = combineReducers({
   graph,
   graphData,
 });
+// using rootReducer in this manner (returning appReducer) we clear the redux store on logout. See: https://stackoverflow.com/questions/35622588/how-to-reset-the-state-of-a-redux-store
+// answer from Dan Abramov so.... this is the way
+const rootReducer = (state, action) => {
+	if(action.type === authActionTypes.REMOVE_USER) {
+		state = undefined
+	}
+
+	return appReducer(state, action)
+}
 
 let storeEnhancer;
 
