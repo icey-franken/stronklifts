@@ -4,7 +4,8 @@ import { useSelector } from "react-redux";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
   const needLogin = useSelector((state) => !state.auth.id);
-  const { hasWorkouts } = useSelector((state) => state.workouts);
+	const { hasWorkouts } = useSelector((state) => state.workouts);
+	console.log(hasWorkouts)
   return needLogin ? (
 		//not logged in? send to login
     <Redirect to="/login" />
