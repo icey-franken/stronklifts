@@ -14,7 +14,7 @@ import GraphPage from "./GraphPage";
 import EditWorkoutPage from "./EditWorkoutPageContainer";
 import NewLifterForm from "../components/NewLifterForm";
 
-export default function Pages() {
+export default function PageRouter() {
   const userId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
   const { workoutsLoaded } = useSelector((state) => state.workouts);
