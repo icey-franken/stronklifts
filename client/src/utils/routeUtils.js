@@ -5,16 +5,16 @@ import { useSelector } from "react-redux";
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
   const needLogin = useSelector((state) => !state.auth.id);
 	const { hasWorkouts } = useSelector((state) => state.workouts);
-	console.log(hasWorkouts)
-	console.log(Component.name)
+	const history = useHistory();
+	const path = history.location.pathname.toLowerCase();
   return needLogin ? (
 		//not logged in? send to login
     <Redirect to="/login" />
 		//no workouts and trying to go anywhere but new lifter form? send to new lifter form
-  ) : !hasWorkouts && Component.name !== "NewLifterForm" ? (
+  ) : !hasWorkouts && path !== "/newlifterform" ? (
     <Redirect to="/newLifterForm" />
 		//have workouts and trying to go to new lifter form (usually the case is a new user just filled out new lifter form) ? Send to new workout page
-  ) : hasWorkouts && Component.name === "NewLifterForm" ? (
+  ) : hasWorkouts &&  path === "/newlifterform" ? (
     <Redirect to="/workout/new" />
   ) : (
 		//otherwise, send to where you were trying to go
