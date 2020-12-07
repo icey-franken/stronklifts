@@ -17,6 +17,12 @@ export default function NavBar({ needLogin }) {
             className="nav"
             activeClassName="navActive"
             exact
+            to="/about"
+          >About</NavLink>
+          <NavLink
+            className="nav"
+            activeClassName="navActive"
+            exact
             to="/history"
           >
             History

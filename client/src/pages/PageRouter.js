@@ -6,6 +6,7 @@ import { ProtectedRoute, AuthRoute } from "../utils/routeUtils";
 import { workoutThunks } from "../store/workouts";
 
 import AuthPage from "./AuthPage";
+import AboutPage from './AboutPage';
 import WorkoutHistoryPage from "./WorkoutHistoryPage";
 // import CalendarPage from "./CalendarPage";
 import NewWorkoutPage from "./NewWorkoutPageContainer";
@@ -31,6 +32,11 @@ export default function PageRouter() {
         path={["/login", "/signup"]}
         exact={true}
         component={AuthPage}
+      />
+			<ProtectedRoute
+        path="/about"
+        exact={true}
+        component={AboutPage}
       />
       <ProtectedRoute
         path="/history"
