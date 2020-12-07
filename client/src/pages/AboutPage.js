@@ -1,4 +1,5 @@
 import React from "react";
+import "./AboutPage.css";
 
 export default function AboutPage() {
   return (
@@ -7,9 +8,9 @@ export default function AboutPage() {
       <div>
         This site is intended for novice lifters making their first foray into
         powerlifting. At present the program implemented is the{" "}
-        <span style={{ "font-weight": "bold" }}>Stronglifts 5x5</span> program.
-        More programs will be added in the future, but if you're new to
-        powerlifting this is a great place to start.
+        <span className="bold">Stronglifts 5x5</span> program. More programs
+        will be added in the future, but if you're new to powerlifting and
+        looking to add functional strength fast this is a great place to start.
       </div>
       <h1>What is Stronglifts 5x5?</h1>
       <h2>Overview</h2>
@@ -18,9 +19,13 @@ export default function AboutPage() {
         Strength. In my opinion it is the best place to start for new lifters
         because of its simplicity. The intention of this site is to make an
         already simple program as simple as possible. My aim is to remove all of
-        the guesswork and allow you to focus 100% on lifting.
+        the guesswork and allow you to focus 100% on lifting. An explanation of
+        the program follows
       </div>
-      <p>The program involves five exercises, all performed with a barbell:</p>
+      <p>
+        The program involves five compound exercises, all performed with a
+        barbell:
+      </p>
       <ul>
         <li>Squat</li>
         <li>Overhead Press</li>
@@ -29,63 +34,92 @@ export default function AboutPage() {
         <li>Pendlay Row</li>
       </ul>
       <div>These exercises are split into two workouts, A and B:</div>
-      <div>
-        <h3>Workout A</h3>
-        <ul>
-          <li>Squat</li>
-          <li>Overhead Press</li>
-          <li>Deadlift</li>
-        </ul>
-        <h3>Workout B</h3>
-        <ul>
-          <li>Squat</li>
-          <li>Bench Press</li>
-          <li>Pendlay Row</li>
-        </ul>
+      <div className="split">
+        <div>
+          <h3>Workout A</h3>
+          <ul>
+            <li>Squat</li>
+            <li>Overhead Press</li>
+            <li>Deadlift</li>
+          </ul>
+        </div>
+        <div style={{ "padding-left": "16px" }}>
+          <h3>Workout B</h3>
+          <ul>
+            <li>Squat</li>
+            <li>Bench Press</li>
+            <li>Pendlay Row</li>
+          </ul>
+        </div>
       </div>
       <div>
         Workouts are performed in an alternating fashion, ideally three times a
-        week, with at least one day of rest between each workout. For example,
-        you could do Workout A on Monday, Workout B on Wednesday, and Workout A
-        on Friday one week. The next week you would do Workout B on Monday,
-        Workout A on Wednesday and Workout B on Friday. Repeat for 3-6 months.
-        After 3-6 months it's time to move on to a more advanced program
-        like&nbsp;
+        week, with at least one day of rest between each workout. Below is an
+        example two week split:
+        <div className="split">
+          <div>
+            <h3>Week 1</h3>
+            <ul>
+              <li>Monday: Workout A</li>
+              <li className="ital">Tuesday: Rest</li>
+              <li>Wednesday: Workout B</li>
+              <li className="ital">Thursday: Rest</li>
+              <li>Friday: Workout A</li>
+              <li className="ital">Saturday: Rest</li>
+              <li className="ital">Sunday: Rest</li>
+            </ul>
+          </div>
+          <div style={{ "padding-left": "16px" }}>
+            <h3>Week 2</h3>
+            <ul>
+              <li>Monday: Workout B</li>
+              <li className="ital">Tuesday: Rest</li>
+              <li>Wednesday: Workout A</li>
+              <li className="ital">Thursday: Rest</li>
+              <li>Friday: Workout B</li>
+              <li className="ital">Saturday: Rest</li>
+              <li className="ital">Sunday: Rest</li>
+            </ul>
+          </div>
+        </div>
+        These two weeks would be repeated for 3-6 months. After 3-6 months it's
+        time to move on to a more advanced program like{" "}
         <a
           target="_blank"
-          title="Linke to 3x5 Program reference"
-          href="#"
-          style={{ color: "#d22e2e", "font-weight": "bold" }}
+          title="Link to 3x5 Program reference"
+          href="https://startingstrength.com/get-started/programs"
+          className="link"
         >
-          3x5
+          3x5 (AKA Starting Strength)
         </a>
-        ,&nbsp;
+        ,{" "}
         <a
           target="_blank"
           title="Link to Madcow Program reference"
-          href="#"
-          style={{ color: "#d22e2e", "font-weight": "bold" }}
+          href="https://stronglifts.com/madcow-5x5/"
+          className="link"
         >
           Madcow
         </a>
-        , or the&nbsp;
+        , or the{" "}
         <a
           target="_blank"
           title="Link to Texas Method reference"
-          href="#"
-          style={{ color: "#d22e2e", "font-weight": "bold" }}
+          href="https://www.t-nation.com/training/texas-method"
+          className="link"
         >
           Texas Method
         </a>
-        . <h2>*** add working links ***</h2>
+        .
       </div>
       <h2>Set and Rep Ranges</h2>
       <div>
-        For each exercise you will perform 5 sets of 5 reps at your working
-        weight. "Working weight" is your current top level weight. For most
-        folks with little to no experience with weightlifting it is recommended
-        to start at 45 lbs (empty barbell) for all exercises except deadlift. A
-        good place to start for deadlift is 95 lbs.
+        For each exercise except for deadlift you will perform 5 sets of 5 reps
+        at your working weight. For deadlift, only 1 set of 5 reps at your
+        working weight is performed. "Working weight" is your current top level
+        weight. For most folks with little to no experience with weightlifting
+        it is recommended to start at 45 lbs (empty barbell) for all exercises
+        except deadlift. A good place to start for deadlift is 95 lbs.
         <p>
           Warm-up sets (performed with a weight less than your working weight)
           should be added as needed. For example, if you have a squat working
@@ -106,24 +140,31 @@ export default function AboutPage() {
       <div>
         The progression in Stronglifts 5x5 is what I think makes it the best
         beginner program. The weight increases are rapid enough to take
-        advantage of novice lifters' ability to quickly add weight (AKA noob
-        gains) while also simple enough for anyone to implement.
+        advantage of novice lifters' ability to quickly add weight (AKA{" "}
+        <a
+          target="_blank"
+          title="Link to noob gains reference"
+          href="https://www.gains.af/blog/what-to-expect"
+          className="link"
+        >
+          noob gains
+        </a>
+        ) while also simple enough for anyone to implement.
       </div>
       <p>
         The skinny is this: each exercise is completed one at a time, always
         beginning with the squat. If 5 sets of 5 reps of a particular exercise
         are successfully completed with{" "}
-        <span style={{ "font-weight": "bold" }}>proper form</span>,
-        congratulations! During your next workout with this exercise you will
-        add - wait for it -{" "}
-        <span style={{ "font-weight": "bold" }}>5 POUNDS</span> to your working
-        weight! It is not uncommon for lifters to be able to add 50-100+ lbs to
-        their working weights before their first failure. But fret not - failure
-        is the name of the game here. Failure means that the program is working.
-        Failure means that you have reached your present limit, which you will
-        soon smash through, one way or another.
+        <span className="bold">proper form</span>, congratulations! During your
+        next workout with this exercise you will add - wait for it -{" "}
+        <span className="bold">5 POUNDS</span> to your working weight! It is not
+        uncommon for lifters to be able to add 50-100+ lbs to their working
+        weights before their first failure. But fret not - failure is the name
+        of the game here. Failure means that the program is working. Failure
+        means that you have reached your present limit, which you will soon
+        smash through, one way or another.
       </p>
-      <h2>Failure and Deloading</h2>
+      <h2>Failure</h2>
       <div>
         In my experience the "lifting mentality" of conceptualizing failure as a
         good thing, and in a sense as the GOAL of lifting, has helped me in
@@ -140,6 +181,34 @@ export default function AboutPage() {
         period you will be able to complete your next set of 5. Then, during
         your next workout, instead of adding 5 lbs to your working weight you
         will repeat the working weight that you failed at.
+      </p>
+      <p>
+        During your next workout, if you successfully complete 5 sets of 5 reps
+        while repeating your working weight, great! Continue progressing as
+        usual (i.e. add 5 lbs during your next workout). If you are unable to
+        complete all 5 sets of 5 reps, that's okay - remember: failure is the
+        goal! You will repeat this process a second time - your working weight
+        will remain the same during your next workout, which will be your third
+        attempt at the same working weight. If you fail on your third attempt at
+        a particular working weight, then it's time to deload.
+      </p>
+      <h2>Deloading</h2>
+      <p>
+        It's time to deload when you've failed three times at the same working
+        weight. For most folks this can be disheartening, but like I said
+        before: failure is the goal! Please drill this into your brain because
+        it is extremely important.{" "}
+        <span className="bold">Failure is the goal.</span> This is an exciting
+        time. It means you've reached your current strength capacity, and you
+        will soon blast through it.
+      </p>
+      <p>
+        In this program, deloading means decreasing your working weight by 20%
+        and trying again following the same progression. For example, if your
+        working weight was 150 lbs you would deload to 120 lbs following your
+        third failure. From there, everything is the same as before. If this
+        seems like a pain to keep track of, don't worry - this app takes care of
+        all of that for you.
       </p>
     </>
   );

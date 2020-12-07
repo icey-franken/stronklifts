@@ -1,0 +1,17 @@
+.link {
+  color: #d22e2e;
+  font-weight: bold;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.ital {
+  font-style: italic;
+}
+
+.split {
+  display: flex;
+  padding-left: 16px;
+}
