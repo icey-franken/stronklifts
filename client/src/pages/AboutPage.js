@@ -20,22 +20,98 @@ export default function AboutPage() {
         because of its simplicity. The intention of this site is to make an
         already simple program as simple as possible. My aim is to remove all of
         the guesswork and allow you to focus 100% on lifting. An explanation of
-        the program follows
+        the program follows.
       </div>
       <p>
         The program involves five compound exercises, all performed with a
         barbell:
       </p>
       <ul>
-        <li>Squat</li>
-        <li>Overhead Press</li>
-        <li>Deadlift</li>
-        <li>Bench Press</li>
-        <li>Pendlay Row</li>
+        <li>
+          <a
+            className="link"
+            title="Link to squat video"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=nhoikoUEI8U"
+          >
+            Low Bar Squat
+          </a>
+        </li>
+        <li>
+          <a
+            className="link"
+            title="Link to overhead press video"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=8dacy5hjaE8"
+          >
+            Overhead Press
+          </a>
+        </li>
+        <li>
+          <a
+            className="link"
+            title="Link to deadlift video"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=wYREQkVtvEc"
+          >
+            Deadlift
+          </a>
+        </li>
+        <li>
+          <a
+            className="link"
+            title="Link to bench press video"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=rxD321l2svE"
+          >
+            Bench Press
+          </a>
+        </li>
+        <li>
+          <a
+            className="link"
+            title="Link to pendlay row video"
+            target="_blank"
+            href="https://www.youtube.com/watch?v=RQU8wZPbioA"
+          >
+            Pendlay Row
+          </a>
+        </li>
       </ul>
+      <p>
+        Click on an exercise above for information to get you started.{" "}
+        <a
+          className="link"
+          title="Link to Alan Thrall's youtube page"
+          href="https://www.youtube.com/channel/UCRLOLGZl3-QTaJfLmAKgoAw"
+          target="_blank"
+        >
+          Alan Thrall
+        </a>{" "}
+        is a great beginner resource with a ton of informational videos.{" "}
+        <a
+          className="link"
+          title="Link to Mark Rippetoe's youtube page"
+          target="_blank"
+          href="https://www.youtube.com/c/AasgaardCoStartingStrength/featured"
+        >
+          Mark Rippetoe
+        </a>{" "}
+        is another great resource for those with a little more experience. For
+        an exhaustive explanation of each lift, check out{" "}
+        <a
+          className="link"
+          title="Link to Starting Strength (book) purchase page"
+          target="_blank"
+          href="https://aasgaardco.com/store/books-posters-dvd/books/starting-strength-basic-barbell-training/"
+        >
+          "Starting Strength" (AKA the barbell bible)
+        </a>{" "}
+        by Mark Rippetoe.
+      </p>
       <div>These exercises are split into two workouts, A and B:</div>
       <div className="split">
-        <div>
+        <div style={{ "padding-left": "16px" }}>
           <h3>Workout A</h3>
           <ul>
             <li>Squat</li>
@@ -57,7 +133,7 @@ export default function AboutPage() {
         week, with at least one day of rest between each workout. Below is an
         example two week split:
         <div className="split">
-          <div>
+          <div style={{ "padding-left": "16px" }}>
             <h3>Week 1</h3>
             <ul>
               <li>Monday: Workout A</li>
@@ -114,19 +190,66 @@ export default function AboutPage() {
       </div>
       <h2>Set and Rep Ranges</h2>
       <div>
-        For each exercise except for deadlift you will perform 5 sets of 5 reps
-        at your working weight. For deadlift, only 1 set of 5 reps at your
-        working weight is performed. "Working weight" is your current top level
-        weight. For most folks with little to no experience with weightlifting
-        it is recommended to start at 45 lbs (empty barbell) for all exercises
-        except deadlift. A good place to start for deadlift is 95 lbs.
+        <div>
+          <p style={{ "margin-top": "0px" }}>
+            For each exercise except for deadlift you will perform 5 sets of 5
+            reps at your working weight. For deadlift, only 1 set of 5 reps at
+            your working weight is performed. "Working weight" is your current
+            top level weight. For most folks with little to no experience with
+            weightlifting it is recommended to start at 45 lbs (empty barbell)
+            for all exercises except deadlift. A good place to start for
+            deadlift is 95 lbs.
+          </p>
+          <p></p>
+
+          <p id="about-table">
+            <table>
+              <tbody>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Sets</th>
+                  <th>Start Weight</th>
+                </tr>
+                <tr>
+                  <td>Squat</td>
+                  <td>5</td>
+                  <td>45 lbs</td>
+                </tr>{" "}
+                <tr>
+                  <td>Overhead Press</td>
+                  <td>5</td>
+                  <td>45 lbs</td>
+                </tr>{" "}
+                <tr>
+                  <td>Deadlift</td>
+                  <td>1</td>
+                  <td>95 lbs</td>
+                </tr>{" "}
+                <tr>
+                  <td>Bench Press</td>
+                  <td>5</td>
+                  <td>45 lbs</td>
+                </tr>{" "}
+                <tr>
+                  <td>Pendlay Row</td>
+                  <td>5</td>
+                  <td>45 lbs</td>
+                </tr>
+              </tbody>
+            </table>
+          </p>
+        </div>
+
         <p>
           Warm-up sets (performed with a weight less than your working weight)
           should be added as needed. For example, if you have a squat working
           weight of 225 lbs, a typical warm-up progression might be sets of 5
           reps at 95 lbs, 135 lbs, and 185 lbs before attempting your working
-          weight of 225 lbs. In general, jumps of 40-50 lbs between warm-up sets
-          until working weight is reached is what works best for me.
+          weight of 225 lbs. In general,{" "}
+          <span className="ital">
+            jumps of 40-50 lbs between warm-up sets until working weight is
+            reached is what works best for me.
+          </span>
         </p>
         <p>
           Once your warm-up is complete you will begin sets at your working
@@ -136,6 +259,7 @@ export default function AboutPage() {
           much you are cheating yourself out of strength gains.
         </p>
       </div>
+
       <h2>Progression</h2>
       <div>
         The progression in Stronglifts 5x5 is what I think makes it the best
@@ -210,6 +334,30 @@ export default function AboutPage() {
         seems like a pain to keep track of, don't worry - this app takes care of
         all of that for you.
       </p>
+      <h3>
+        Thanks for reading! If you have any questions, thoughts,
+        recommendations, WHATEVER, feel free to reach out to me using any of the
+        links in the footer. If you're looking to hire a software developer,
+        check out my{" "}
+        <a
+          className="link"
+          title="My Portfolio"
+          target="_blank"
+          href="https://www.isaacfinken.dev/"
+        >
+          portfolio site
+        </a>{" "}
+        or contact me on{" "}
+        <a
+          className="link"
+          title="My Portfolio"
+          target="_blank"
+          href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
+        >
+          LinkedIn
+        </a>
+        .
+      </h3>
     </>
   );
 }

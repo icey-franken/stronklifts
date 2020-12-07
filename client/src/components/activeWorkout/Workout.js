@@ -23,7 +23,7 @@ export default function Workout({ workoutId }) {
           return <Exercise key={index} exerciseId={exerciseId} />;
         })}
       </div>
-      <div className="workout__note">Notes: {workout.note}</div>
+      {/* <div className="workout__note">Notes: {workout.note}</div> */}
     </div>
   );
 }

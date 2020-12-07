@@ -12,6 +12,35 @@
 }
 
 .split {
-  display: flex;
-  padding-left: 16px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	margin: 0 auto;
+	/* min-width: 560px; */
+	/* margin: 0 auto; */
+	/* padding-left: 16px; */
+	justify-content: flex-start;
+}
+
+.split>div{
+	/* min-width: 220px; */
+	max-width: 220px;
+}
+.split-left{
+	/* max-width: fit-content; */
+	/* padding-right: 16px; */
+}
+
+
+#about-table{
+	min-width: 280px;
+	margin: 0 auto;
+}
+
+td{
+	padding: 0 8px;
+	text-align: center;
+}
+th{
+	padding: 0 8px;
 }

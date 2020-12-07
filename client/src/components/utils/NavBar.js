@@ -36,7 +36,7 @@ export default function NavBar({ needLogin }) {
             activeClassName="navActive"
             to="/workout/new"
           >
-            Workout
+            New Workout
           </NavLink>
           <div
             className="nav"
