@@ -20,7 +20,7 @@ export default function WorkoutHistoryPage() {
               return <WorkoutHistory key={index} workout={workouts[workoutId]} workoutId={workoutId} />;
             })}
           </div>
-					<div style={{'margin-bottom': '16px', 'font-weight':'bold'}}>Note: red exercise name indicates a failed or incomplete set; red working weight indicates a deload.</div>
+					<div style={{'marginBottom': '16px', 'fontWeight':'bold'}}>Note: red exercise name indicates a failed or incomplete set; red working weight indicates a deload.</div>
         </div>
     </div>
   );

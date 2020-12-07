@@ -32,7 +32,7 @@ export default function AboutPage() {
           <a
             className="link"
             title="Link to squat video"
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.youtube.com/watch?v=nhoikoUEI8U"
           >
             Low Bar Squat
@@ -42,7 +42,7 @@ export default function AboutPage() {
           <a
             className="link"
             title="Link to overhead press video"
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.youtube.com/watch?v=8dacy5hjaE8"
           >
             Overhead Press
@@ -52,7 +52,7 @@ export default function AboutPage() {
           <a
             className="link"
             title="Link to deadlift video"
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.youtube.com/watch?v=wYREQkVtvEc"
           >
             Deadlift
@@ -62,7 +62,7 @@ export default function AboutPage() {
           <a
             className="link"
             title="Link to bench press video"
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.youtube.com/watch?v=rxD321l2svE"
           >
             Bench Press
@@ -72,7 +72,7 @@ export default function AboutPage() {
           <a
             className="link"
             title="Link to pendlay row video"
-            target="_blank"
+            target="_blank" rel="noopener noreferrer"
             href="https://www.youtube.com/watch?v=RQU8wZPbioA"
           >
             Pendlay Row
@@ -85,7 +85,7 @@ export default function AboutPage() {
           className="link"
           title="Link to Alan Thrall's youtube page"
           href="https://www.youtube.com/channel/UCRLOLGZl3-QTaJfLmAKgoAw"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
         >
           Alan Thrall
         </a>{" "}
@@ -93,7 +93,7 @@ export default function AboutPage() {
         <a
           className="link"
           title="Link to Mark Rippetoe's youtube page"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           href="https://www.youtube.com/c/AasgaardCoStartingStrength/featured"
         >
           Mark Rippetoe
@@ -103,7 +103,7 @@ export default function AboutPage() {
         <a
           className="link"
           title="Link to Starting Strength (book) purchase page"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           href="https://aasgaardco.com/store/books-posters-dvd/books/starting-strength-basic-barbell-training/"
         >
           "Starting Strength" (AKA the barbell bible)
@@ -113,7 +113,7 @@ export default function AboutPage() {
       <h2>Workouts</h2>
       <div>These exercises are split into two workouts, A and B:</div>
       <div className="split">
-        <div style={{ "padding-left": "16px" }}>
+        <div style={{ "paddingLeft": "16px" }}>
           <h3>Workout A</h3>
           <ul>
             <li>Squat</li>
@@ -121,7 +121,7 @@ export default function AboutPage() {
             <li>Deadlift</li>
           </ul>
         </div>
-        <div style={{ "padding-left": "16px" }}>
+        <div style={{ "paddingLeft": "16px" }}>
           <h3>Workout B</h3>
           <ul>
             <li>Squat</li>
@@ -135,7 +135,7 @@ export default function AboutPage() {
         week, with at least one day of rest between each workout. Below is an
         example two week split:
         <div className="split">
-          <div style={{ "padding-left": "16px" }}>
+          <div style={{ "paddingLeft": "16px" }}>
             <h3>Week 1</h3>
             <ul>
               <li>Monday: Workout A</li>
@@ -147,7 +147,7 @@ export default function AboutPage() {
               <li className="ital">Sunday: Rest</li>
             </ul>
           </div>
-          <div style={{ "padding-left": "16px" }}>
+          <div style={{ "paddingLeft": "16px" }}>
             <h3>Week 2</h3>
             <ul>
               <li>Monday: Workout B</li>
@@ -163,7 +163,7 @@ export default function AboutPage() {
         These two weeks would be repeated for 3-6 months. After 3-6 months it's
         time to move on to a more advanced program like{" "}
         <a
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           title="Link to 3x5 Program reference"
           href="https://startingstrength.com/get-started/programs"
           className="link"
@@ -172,7 +172,7 @@ export default function AboutPage() {
         </a>
         ,{" "}
         <a
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           title="Link to Madcow Program reference"
           href="https://stronglifts.com/madcow-5x5/"
           className="link"
@@ -181,7 +181,7 @@ export default function AboutPage() {
         </a>
         , or the{" "}
         <a
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           title="Link to Texas Method reference"
           href="https://www.t-nation.com/training/texas-method"
           className="link"
@@ -193,7 +193,7 @@ export default function AboutPage() {
       <h2>Set and Rep Ranges</h2>
       <div>
         <div>
-          <p style={{ "margin-top": "0px" }}>
+          <p style={{ "marginTop": "0px" }}>
             For each exercise except for deadlift you will perform 5 sets of 5
             reps at your working weight. For deadlift, only 1 set of 5 reps at
             your working weight is performed. "Working weight" is your current
@@ -204,7 +204,7 @@ export default function AboutPage() {
           </p>
           <p></p>
 
-          <p id="about-table">
+          <div id="about-table">
             <table>
               <tbody>
                 <tr>
@@ -216,22 +216,22 @@ export default function AboutPage() {
                   <td>Squat</td>
                   <td>5</td>
                   <td>45 lbs</td>
-                </tr>{" "}
+                </tr>
                 <tr>
                   <td>Overhead Press</td>
                   <td>5</td>
                   <td>45 lbs</td>
-                </tr>{" "}
+                </tr>
                 <tr>
                   <td>Deadlift</td>
                   <td>1</td>
                   <td>95 lbs</td>
-                </tr>{" "}
+                </tr>
                 <tr>
                   <td>Bench Press</td>
                   <td>5</td>
                   <td>45 lbs</td>
-                </tr>{" "}
+                </tr>
                 <tr>
                   <td>Pendlay Row</td>
                   <td>5</td>
@@ -239,7 +239,7 @@ export default function AboutPage() {
                 </tr>
               </tbody>
             </table>
-          </p>
+          </div>
         </div>
 
         <p>
@@ -269,7 +269,7 @@ export default function AboutPage() {
         beginner program. The weight increases are rapid enough to take
         advantage of novice lifters' ability to quickly add weight (AKA{" "}
         <a
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           title="Link to noob gains reference"
           href="https://www.gains.af/blog/what-to-expect"
           className="link"
@@ -345,7 +345,7 @@ export default function AboutPage() {
         <a
           className="link"
           title="My Portfolio"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           href="https://www.isaacfinken.dev/"
         >
           portfolio site
@@ -354,7 +354,7 @@ export default function AboutPage() {
         <a
           className="link"
           title="My Portfolio"
-          target="_blank"
+          target="_blank" rel="noopener noreferrer"
           href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
         >
           LinkedIn
