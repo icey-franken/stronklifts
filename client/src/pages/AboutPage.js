@@ -5,23 +5,24 @@ export default function AboutPage() {
   return (
     <>
       <h1>Who is this site for?</h1>
-      <div>
+      <p>
         This site is intended for novice lifters making their first foray into
         powerlifting. At present the program implemented is the{" "}
         <span className="bold">Stronglifts 5x5</span> program. More programs
         will be added in the future, but if you're new to powerlifting and
         looking to add functional strength fast this is a great place to start.
-      </div>
+      </p>
       <h1>What is Stronglifts 5x5?</h1>
       <h2>Overview</h2>
-      <div>
+      <p>
         Stronglifts 5x5 is a beginner powerlifting program similar to Starting
         Strength. In my opinion it is the best place to start for new lifters
         because of its simplicity. The intention of this site is to make an
         already simple program as simple as possible. My aim is to remove all of
         the guesswork and allow you to focus 100% on lifting. An explanation of
         the program follows.
-      </div>
+      </p>
+      <h2>Exercises</h2>
       <p>
         The program involves five compound exercises, all performed with a
         barbell:
@@ -109,6 +110,7 @@ export default function AboutPage() {
         </a>{" "}
         by Mark Rippetoe.
       </p>
+      <h2>Workouts</h2>
       <div>These exercises are split into two workouts, A and B:</div>
       <div className="split">
         <div style={{ "padding-left": "16px" }}>
@@ -248,8 +250,9 @@ export default function AboutPage() {
           weight of 225 lbs. In general,{" "}
           <span className="ital">
             jumps of 40-50 lbs between warm-up sets until working weight is
-            reached is what works best for me.
-          </span>
+            reached
+          </span>{" "}
+          is what works best for me.
         </p>
         <p>
           Once your warm-up is complete you will begin sets at your working
@@ -358,6 +361,7 @@ export default function AboutPage() {
         </a>
         .
       </h3>
+      <h2>Happy lifting - you can do it!!!</h2>
     </>
   );
 }
