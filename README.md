@@ -1,5 +1,5 @@
 # Stronklifts
-_By Isaac Finken - [Stronklifts live site](https://stronklifts.herokuapp.com/)_
+_Created by [Isaac Finken](https://isaacfinken.dev) - [Stronklifts live site](https://stronklifts.herokuapp.com/)_
 
 __Table of Contents__
 * [Stronklifts at a Glance](#stronklifts-at-a-glance)
