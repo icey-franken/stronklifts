@@ -15,7 +15,7 @@ Stronklifts is a fullstack [PERN](https://www.geeksforgeeks.org/what-is-pern-sta
 
 Users can interact with a graph of their progress over time for multiple exercises used in the 5x5 program.
 
-![](https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif | width=100px)
+![](https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif|width=100px)
 ~add gif of screwing around with progress page~
 
 Users can complete individual workouts with a few clicks without ever thinking about what weight they should be lifting. Programmatic progession (adding weight) and deloading (removing weight) is done automatically.
