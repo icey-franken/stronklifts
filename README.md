@@ -1,3 +1,3 @@
 # stronklifts
 Web browser version of Stronglifts 5x5 app using React/Redux.
-[Sites Using React](https://github.com/facebook/react/wiki/Sites-Using-React)
+[Check out the Stronklifts Wiki to learn more.](https://github.com/icey-franken/stronklifts/wiki)
