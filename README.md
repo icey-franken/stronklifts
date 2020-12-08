@@ -1,5 +1,5 @@
 # Stronklifts
-~By Isaac Finken - [Stronklifts live site](https://stronklifts.herokuapp.com/)~
+_By Isaac Finken - [Stronklifts live site](https://stronklifts.herokuapp.com/)_
 
 ### Table of Contents
 * [Stronklifts at a Glance](#stronklifts-at-a-glance)
@@ -9,12 +9,12 @@
 * [Conclusion & Next Steps](#conclusion-&-next-steps)
 
 
-# Stronklifts at a Glance
+## Stronklifts at a Glance
 
-# Application Architecture & Technologies Used
+## Application Architecture & Technologies Used
 
-# Frontend Overview
+## Frontend Overview
 
-# Backend Overview
+## Backend Overview
 
-# Conclusion & Next Steps
+## Conclusion & Next Steps
