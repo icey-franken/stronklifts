@@ -17,11 +17,9 @@ Users can interact with a graph of their progress over time for multiple exercis
 
 <img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=500px>
 
-~add gif of screwing around with progress page~
-
 Users can complete individual workouts with a few clicks without ever thinking about what weight they should be lifting. Programmatic progession (adding weight) and deloading (removing weight) is done automatically.
 
-~add gif of user completing a workout, with programmed deload~
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-workout.gif" width=500px>
 
 ## Application Architecture
 
