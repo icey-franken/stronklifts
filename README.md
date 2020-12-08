@@ -11,6 +11,16 @@ __Table of Contents__
 
 ## Stronklifts at a Glance
 
+Stronklifts is a fullstack [PERN](https://www.geeksforgeeks.org/what-is-pern-stack/) single page app that allows the user to track their workout progress while following the 5x5 powerlifting program. 
+
+Users can interact with a graph of their progress over time for multiple exercises used in the 5x5 program.
+
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=500px>
+
+Users can complete individual workouts with a few clicks without ever thinking about what weight they should be lifting. Programmatic progession (adding weight) and deloading (removing weight) is done automatically.
+
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-workout.gif" width=500px>
+
 ## Application Architecture
 
 ## Frontend Overview
