@@ -15,7 +15,7 @@ Stronklifts is a fullstack [PERN](https://www.geeksforgeeks.org/what-is-pern-sta
 
 Users can interact with a graph of their progress over time for multiple exercises used in the 5x5 program.
 
-<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=400px>
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=500px>
 
 ~add gif of screwing around with progress page~
 
