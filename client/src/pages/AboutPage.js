@@ -355,7 +355,7 @@ export default function AboutPage() {
           className="link"
           title="My Portfolio"
           target="_blank" rel="noopener noreferrer"
-          href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
+          href="https://www.linkedin.com/in/isaac-finken/"
         >
           LinkedIn
         </a>

@@ -21,7 +21,7 @@ export default function Footer() {
         About Me
       </a>
       <a
-        href="https://www.linkedin.com/in/isaac-finken-1bb09447/"
+        href="https://www.linkedin.com/in/isaac-finken/"
         title="LinkedIn"
 				target="_blank"
 				rel="noopener noreferrer"
