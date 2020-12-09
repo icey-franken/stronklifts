@@ -1,5 +1,5 @@
 # Stronklifts
-_By Isaac Finken - [Stronklifts live site](https://stronklifts.herokuapp.com/)_
+_Created by [Isaac Finken](https://isaacfinken.dev) - [Stronklifts live site](https://stronklifts.herokuapp.com/)_
 
 __Table of Contents__
 * [Stronklifts at a Glance](#stronklifts-at-a-glance)
@@ -15,11 +15,13 @@ Stronklifts is a fullstack [PERN](https://www.geeksforgeeks.org/what-is-pern-sta
 
 Users can interact with a graph of their progress over time for multiple exercises used in the 5x5 program.
 
-<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=500px>
+##### Stronklifts Progress Page
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-progress.gif" width=500px alt="Stronklifts Progress Page">
 
-Users can complete individual workouts with a few clicks without ever thinking about what weight they should be lifting. Programmatic progession (adding weight) and deloading (removing weight) is done automatically.
+Users can complete individual workouts with a few clicks without ever thinking about what weight they should be lifting. Programmatic progession (adding weight) and deloading (removing weight) is done automatically, leaving the user to focus on one thing - [lifting heavy weights](https://www.youtube.com/watch?v=4UlgXIL0-3g).
 
-<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-workout.gif" width=500px>
+##### Stronklifts Workout Page
+<img src="https://github.com/icey-franken/stronklifts/raw/master/readme-resources/stronklifts-workout.gif" width=500px alt="Stronklifts Workout Page">
 
 ## Application Architecture
 
