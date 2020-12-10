@@ -28,7 +28,7 @@ export default function Graph() {
         height={height}
         role="img"
       >
-        <title id="title">this shit doesn't show up anyways</title>
+        <title id="title">A plot of your progress over time</title>
         <GraphAxes />
         <g>
           {userExDisp.map((userExDispId, index) => (
