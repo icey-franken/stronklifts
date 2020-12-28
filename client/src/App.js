@@ -1,3 +1,4 @@
+import ReactGA from "react-ga";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -27,6 +28,11 @@ const theme = createMuiTheme({
     },
   },
 });
+
+(function initializeReactGA() {
+  ReactGA.initialize("G-9YL0VHFLCF");
+  ReactGA.pageview("/homepage");
+})();
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -60,7 +66,7 @@ function App() {
         <CssBaseline />
         <BrowserRouter>
           <div className="pageContainer">
-            <NavBar needLogin={needLogin}/>
+            <NavBar needLogin={needLogin} />
             <div className="content">
               <PageRouter />
             </div>
