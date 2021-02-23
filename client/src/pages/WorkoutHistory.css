@@ -80,6 +80,9 @@
 .deload, .fail{
 	color: red;
 }
+.deload{
+	font-weight: bold;
+}
 
 .workout-history__sets-container{
 	display:flex;

@@ -13,9 +13,8 @@ export default function Set({ setId }) {
 
 
   const handleClick = (e) => {
-		let num;
 		let success = null;
-		(e.target.innerHTML === '') ? (num = '') : (num = parseInt(e.target.innerHTML,10));
+		let num = (e.target.innerHTML === '') ? '' : parseInt(e.target.innerHTML,10);
 
     if (num === "") {
 			set.numRepsActual = 5;
