@@ -13,7 +13,7 @@ export const updateExerciseSuccess = (exerciseId, wasSuccessful) => ({
 
 export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
   return async (dispatch) => {
-		console.log('hits')
+    console.log("hits");
     try {
       const body = JSON.stringify({ wasSuccessful });
       const res = await fetch(`/api/exercises/${exerciseId}`, {
@@ -24,9 +24,9 @@ export const updateExerciseSuccessThunk = (exerciseId, wasSuccessful) => {
         },
         body,
       });
-			console.log(exerciseId, wasSuccessful)
+      console.log(exerciseId, wasSuccessful);
       if (!res.ok) throw res;
-			dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
+      dispatch(updateExerciseSuccess(exerciseId, wasSuccessful));
 
       return res;
     } catch (err) {
@@ -47,14 +47,16 @@ export default function exerciseReducer(state = {}, action) {
       });
       return newState;
     case authActionTypes.REMOVE_USER:
-      const exerciseIds2 = Object.keys(newState);
-
-      exerciseIds2.forEach((exerciseId) => {
-        delete newState[exerciseId].userId;
-      });
-      return newState;
+			return {}
+			// //!!! delete
+			// const exerciseIds2 = Object.keys(newState);
+      // // exerciseIds;
+      // exerciseIds2.forEach((exerciseId) => {
+      //   delete newState[exerciseId].userId;
+      // });
+      // return newState;
     case workoutActionTypes.GET_WORKOUTS:
-			if (action.hasWorkouts === false) {
+      if (action.hasWorkouts === false) {
         return {};
       }
       const exerciseIds3 = Object.keys(action.exercises);
@@ -126,18 +128,10 @@ export default function exerciseReducer(state = {}, action) {
       delete action.exercises;
       return newState;
     case UPDATE_SUCCESS:
-			const {exerciseId, wasSuccessful} = action;
-			let newExerciseState = Object.assign({}, state[exerciseId]);
-			console.log(newExerciseState)
-			newExerciseState.wasSuccessful = wasSuccessful;
-			newState[exerciseId] = newExerciseState;
-      // newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
+      newState[action.exerciseId].wasSuccessful = action.wasSuccessful;
       return newState;
     case workoutActionTypes.DELETE_WORKOUT:
-      const exerciseIds5 = action.exerciseIds;
-      exerciseIds5.forEach((id) => {
-        delete newState[id];
-      });
+      action.exerciseIds.forEach((id) => delete newState[id]);
       return newState;
     default:
       return state;

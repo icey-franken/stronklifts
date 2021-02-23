@@ -44,10 +44,12 @@ export default function setReducer(state = {}, action) {
       });
       return newState;
     case authActionTypes.REMOVE_USER:
-      setIds.forEach((setId) => {
-        delete newState[setId].userId;
-      });
-      return newState;
+			return {};
+			// !!! delete
+      // setIds.forEach((setId) => {
+      //   delete newState[setId].userId;
+      // });
+      // return newState;
     case workoutActionTypes.GET_WORKOUTS:
 			if (action.hasWorkouts === false) {
         return {};
