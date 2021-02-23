@@ -173,7 +173,8 @@ export default function GraphPage() {
     const dateRange = calculateDateRange(userDayDiff, relDPO);
     dispatch(graphActions.setDateRange(dateRange));
     dispatch(graphActions.setWeightRange(weightRange));
-    setIsLoaded(true);
+		setIsLoaded(true);
+		// eslint-disable-next-line
   }, [userDayDiff, userExDisp]);
 
   return !isLoaded ? null : (

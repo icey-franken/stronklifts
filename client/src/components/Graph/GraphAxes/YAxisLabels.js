@@ -35,6 +35,7 @@ export default function YAxisLabels() {
 	useEffect(()=>{
 		setYLabels(makeYLabels(weightRange))
 		setIsLoaded(true);
+		// eslint-disable-next-line
 	}, [weightRange, dateRange])
 
 

@@ -29,7 +29,8 @@ export default function GraphPlotArea({ userExDispId }) {
     const mappedWeightData = mapYIdxToDataPoints(yDataIdx, yRange);
     const plotArea = buildPlotArea(mappedDateData, mappedWeightData);
     setPlotArea(plotArea);
-    setIsLoaded(true);
+		setIsLoaded(true);
+		// eslint-disable-next-line
   }, [dateRange, weightRange]);
 
   //GENERATE IDX ARRAYS FROM RELEVANT DATA---------------------
