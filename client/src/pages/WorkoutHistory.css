@@ -100,15 +100,12 @@
 	font-weight: 500;
 	border-radius: 5px;
 	border: 2px solid #d22e2e;
-	transition: transform 0.5s ease-out;
-  transition: border 0.5s ease-out;
+	transition: transform 0.2s ease-out, border 0.3s ease-out;;
+  /* transition:  */
 }
 
 .workout-history__button:hover{
 	cursor: pointer;
 	border-color: black;
-	/* rgb(240, 46, 46); */
 	transform: translate(2px,-2px);
-
-
 }
