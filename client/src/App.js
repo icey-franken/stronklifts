@@ -11,6 +11,7 @@ import NavBar from "./components/utils/NavBar";
 import Footer from "./components/utils/Footer";
 import "./App.css";
 
+
 //pass in an object with overrides - override MuiCssBaseline
 const theme = createMuiTheme({
   overrides: {
