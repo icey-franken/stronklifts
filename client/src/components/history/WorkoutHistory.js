@@ -35,8 +35,8 @@ export default function WorkoutHistory({ workout }) {
         ))}
       </div>
       <span className="workout-history__button-container">
-        <button onClick={handleEdit}>Edit</button>
-        <button onClick={handleDelete}>Delete</button>
+        <div className="workout-history__button" onClick={handleEdit}>Edit</div>
+        <div className="workout-history__button" onClick={handleDelete}>Delete</div>
       </span>
     </div>
   );
