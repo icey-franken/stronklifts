@@ -48,14 +48,12 @@ const getWorkoutsThunk = (userId) => {
     }
     try {
       const res = await fetch(`/api/workouts/${userId}`);
-      if (!res.ok) {
-        throw res;
-      }
+      if (!res.ok) throw res;
       res.data = await res.json();
       dispatch(getWorkouts(res.data.workouts));
       return res;
-    } catch (e) {
-      console.error(e);
+    } catch (err) {
+      console.error(err);
     }
   };
 };
@@ -164,9 +162,6 @@ export default function workoutReducer(
   Object.freeze(state);
   let newState = Object.assign({}, state);
   switch (action.type) {
-    // case NEW_USER:
-    //   newState.workoutsLoaded = true;
-    //   return newState;
     case GET_WORKOUTS:
       if (action.workouts.length === 0) {
         action.hasWorkouts = false;
@@ -176,107 +171,23 @@ export default function workoutReducer(
         return newState;
       }
       newState.hasWorkouts = true;
+
       action.exercises = {};
       action.workouts.forEach((workout) => {
-        // const workoutId = workout.id;
-        const {
-          id: workoutId,
-          workoutDate,
-          workoutComplete,
-          workoutSplit,
-        } = workout;
-        newState[workoutId] = {
-          id: workoutId,
-          workoutDate,
-          workoutComplete,
-          workoutSplit,
-        };
-
-        newState[workoutId].workoutNote = null;
-        const { WorkoutNote } = workout;
-        if (WorkoutNote) {
-          newState[workoutId].workoutNote = WorkoutNote.description;
-        }
-        //pull exercises object off of workout
-        const exercises = workout.Exercises;
-        const exerciseIds = [];
-        //get exercise ids from exercises object
-        const workoutSetIds = [];
-        exercises.forEach((exercise) => {
-          exercise.workoutId = workoutId;
-          exercise.workoutDate = workoutDate;
-          exerciseIds.push(exercise.id);
-          const exerciseSetIds = [];
-          exercise.Sets.forEach((set) => {
-            exerciseSetIds.push(set.id);
-          });
-          exercise.setIds = exerciseSetIds;
-          workoutSetIds.push(...exerciseSetIds);
-          newState[workoutId].setIds = workoutSetIds;
-          newState[workoutId].exerciseIds = exerciseIds;
-          workout.Exercises.forEach((exercise) => {
-            const exerciseCopy = Object.assign({}, exercise);
-            action.exercises[exercise.id] = exerciseCopy;
-          });
-        });
+        handleGetAndCreateWorkout(newState, workout, action);
       });
       delete action.workouts;
       newState.workoutsLoaded = true;
       return newState;
     case CREATE_WORKOUT:
+      const { workout } = action;
       //if workout already exists, just return state as is
-      if (newState[action.workout.id]) {
-        action.workout = "duplicate";
+      if (newState[workout.id]) {
+        workout = "duplicate";
         return newState;
       } else {
         action.exercises = {};
-        const workout = action.workout;
-        // const workoutId = workout.id;
-        const {
-          id: workoutId,
-          workoutDate,
-          workoutComplete,
-          workoutSplit,
-        } = workout;
-        newState[workoutId] = {
-          id: workoutId,
-          workoutDate,
-          workoutComplete,
-          workoutSplit,
-        };
-        newState[workoutId].workoutNote = null;
-        const { WorkoutNote } = workout;
-        if (WorkoutNote) {
-          newState[workoutId].workoutNote = WorkoutNote.description;
-        }
-        //pull exercises object off of workout
-
-				// const exercises = workout.Exercises;
-
-				extractExercises(action, newState, workoutId)
-
-        // const exerciseIds = [];
-        // //get exercise ids from exercises object
-        // const workoutSetIds = [];
-        // if (exercises) {
-        //   exercises.forEach((exercise) => {
-        //     exercise.workoutId = workoutId;
-        //     exercise.workoutDate = workoutDate;
-        //     exerciseIds.push(exercise.id);
-        //     const exerciseSetIds = [];
-        //     exercise.Sets.forEach((set) => {
-        //       exerciseSetIds.push(set.id);
-        //     });
-        //     exercise.setIds = exerciseSetIds;
-        //     workoutSetIds.push(...exerciseSetIds);
-        //     newState[workoutId].setIds = workoutSetIds;
-        //     newState[workoutId].exerciseIds = exerciseIds;
-        //     workout.Exercises.forEach((exercise) => {
-        //       const exerciseCopy = Object.assign({}, exercise);
-        //       action.exercises[exercise.id] = exerciseCopy;
-        //     });
-        //   });
-        // }
+        handleGetAndCreateWorkout(newState, workout, action);
         delete action.workout;
       }
       newState.hasWorkouts = true;
@@ -286,6 +197,7 @@ export default function workoutReducer(
       return newState;
     case DELETE_WORKOUT:
       delete newState[action.workoutId];
+      // workouts slice always has "workoutsLoaded" and "hasWorkouts" properties - if length < 3 then no workouts exist
       if (Object.keys(newState).length < 3) {
         newState.hasWorkouts = false;
       }
@@ -295,17 +207,16 @@ export default function workoutReducer(
   }
 }
 
-function extractExercises(action, newState, workoutId) {
-	//pull exercises object off of workout
-	const workout = action.workout
-  const exercises = workout.Exercises;
-  const exerciseIds = [];
-  //get exercise ids from exercises object
+function createExerciseSliceAndExtractIds(newState, workout, action) {
+  const { id: workoutId, workoutDate } = workout;
+  //gather exercise ids and set ids to define on workout slice
+  const workoutExerciseIds = [];
   const workoutSetIds = [];
-  exercises.forEach((exercise) => {
+  workout.Exercises.forEach((exercise) => {
     exercise.workoutId = workoutId;
-    // exercise.workoutDate = workoutDate;
-    exerciseIds.push(exercise.id);
+    exercise.workoutDate = workoutDate;
+    workoutExerciseIds.push(exercise.id);
+    // gather set ids to define on exercise slice
     const exerciseSetIds = [];
     exercise.Sets.forEach((set) => {
       exerciseSetIds.push(set.id);
@@ -313,11 +224,30 @@ function extractExercises(action, newState, workoutId) {
     exercise.setIds = exerciseSetIds;
     workoutSetIds.push(...exerciseSetIds);
     newState[workoutId].setIds = workoutSetIds;
-    newState[workoutId].exerciseIds = exerciseIds;
-    workout.Exercises.forEach((exercise) => {
-      const exerciseCopy = Object.assign({}, exercise);
-      action.exercises[exercise.id] = exerciseCopy;
-    });
-	});
-	return action
+    newState[workoutId].exerciseIds = workoutExerciseIds;
+    action.exercises[exercise.id] = Object.assign({}, exercise);
+  });
+  return action;
+}
+
+function extractAndSetWorkoutNote(newState, workout) {
+  const { WorkoutNote, id } = workout;
+  newState[id].workoutNote = WorkoutNote ? WorkoutNote.description : null;
+}
+
+function extractAndSetWorkoutSlice(newState, workout) {
+  // const workout = action.workout;
+  const { id: workoutId, workoutDate, workoutComplete, workoutSplit } = workout;
+  newState[workoutId] = {
+    id: workoutId,
+    workoutDate,
+    workoutComplete,
+    workoutSplit,
+  };
+}
+
+function handleGetAndCreateWorkout(newState, workout, action) {
+  extractAndSetWorkoutSlice(newState, workout);
+  extractAndSetWorkoutNote(newState, workout);
+  createExerciseSliceAndExtractIds(newState, workout, action);
 }
